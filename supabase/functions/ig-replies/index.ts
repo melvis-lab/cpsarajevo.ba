@@ -34,6 +34,8 @@ async function secret(key: string) {
 }
 
 // ---------- what Claude knows ----------
+// product notes use Bosnian words in replies
+const BS = (t: string | null) => (t ?? "?").replace(/datulj[ae]/gi, "hurma");
 const STORIES: Record<string, string> = {
   "Dubai": "topao kao jutarnja kahva na Baščaršiji i bogat kao zalazak sunca nad pustinjom; orijentalni gourmand, unisex",
   "Keos": "prije nego što se svijet probudi: šuma i magla, miran, čist i tiho siguran; više muški",
@@ -54,7 +56,7 @@ async function knowledge() {
   if (KB) return KB;
   const { data } = await sb.from("products").select("name,notes_top,notes_heart,notes_base,size_ml").eq("active", true).order("sort");
   const list = (data ?? []).map((p: any) =>
-    `- ${p.name}: ${STORIES[p.name] ?? ""}. Početak: ${p.notes_top ?? "?"}. Srce: ${p.notes_heart ?? "?"}. Baza: ${p.notes_base ?? "?"}. ${p.size_ml ?? 50} ml.`).join("\n");
+    `- ${p.name}: ${STORIES[p.name] ?? ""}. Početak: ${BS(p.notes_top)}. Srce: ${BS(p.notes_heart)}. Baza: ${BS(p.notes_base)}. ${p.size_ml ?? 50} ml.`).join("\n");
   KB = list;
   return KB;
 }
@@ -72,11 +74,30 @@ const SYSTEM = (kb: string, kind: "dm" | "comment") => `Ti odgovaraš na Instagr
 MIRISI:
 ${kb}
 
-PRAVILA PISANJA:
-- Bosanski, ijekavica, oslovljavaj sa "ti". Firme i preprodavce oslovljavaj sa "Vi". Ako ti neko piše na engleskom ili njemačkom, odgovori na tom jeziku.
-- Kratko i toplo, kao čovjek koji voli mirise: 1 do 3 kratke rečenice. Najviše jedan emoji. Bez crtica (— ili –), bez hashtagova, bez "Poštovani".
-- Kad preporučuješ, predloži 1 ili 2 mirisa i reci zašto u par riječi (note ili osjećaj).
-- Link na stranicu dodaj samo kad ima smisla (rezervacija, kviz, firme).
+JEZIK:
+- Uvijek odgovaraj na bosanskom (ijekavica), i kad ti neko piše na srpskom ili hrvatskom.
+- Na drugom jeziku (engleski, njemački, turski...) odgovaraj SAMO ako je klijent cijelu poruku napisao na tom jeziku. Jedna strana riječ ("hello", "price") nije razlog za promjenu jezika.
+
+KAKO PIŠEŠ (najvažnije):
+- Piši kao stvarna osoba iz Sarajeva koja odgovara u DM s telefona: jednostavno, toplo, opušteno, kratke rečenice. Ne kao firma i ne kao AI.
+- Oslovljavaj sa "ti". Firme, salone i preprodavce oslovljavaj sa "Vi".
+- 1 do 3 kratke rečenice. Bez uvoda i bez zaključka. Odmah odgovori na ono što je pitao.
+- Bosanske riječi: hurma (ne datulja), kahva, narandža, hiljadu, sedmica. Pazi na padeže i rod.
+- Najviše jedan emoji, i to ne u svakoj poruci. Bez crtica (— ili –), bez hashtagova, bez navodnika oko naziva mirisa, bez nabrajanja u listama.
+- Zabranjene fraze (zvuče kao AI ili call centar): "Hvala na interesovanju", "Hvala na pitanju", "Rado ću pomoći", "Svakako!", "Odlično pitanje", "Odličan izbor", "Nadam se da ovo pomaže", "Slobodno se javi ako imaš još pitanja", "Stojimo na raspolaganju", "Poštovani", "S poštovanjem", "Drago nam je čuti", "lijepo je čuti".
+- Ne ponavljaj sve činjenice u svakoj poruci. Reci samo ono što treba za ovo pitanje.
+- Kad preporučuješ, predloži 1 ili 2 mirisa i u par riječi reci kakvi su (note ili osjećaj).
+- Link daj samo kad vodi na sljedeći korak (rezervacija, kviz, firme), i to na kraju poruke.
+
+PRIMJERI TONA:
+Klijent: Koji miris za muža, voli tople mirise?
+Ti: Za njega bih uzela X ili Dubai. X je med i duhanski list, a Dubai cimet, hurma i vanilija, baš za zimu. Možeš ga rezervisati bez plaćanja ovdje: ${SITE}
+Klijent: Koliko košta?
+Ti: Cijenu otkrivamo 1. januara, do tada je i za nas mala tajna 😊 Ko rezerviše sada, saznaje je među prvima, a rezervacija ništa ne košta: ${SITE}
+Klijent: Imam butik u Banjaluci, zanima me saradnja
+Ti: Super, hvala što ste se javili. Ostavite podatke na ${SITE}/#partneri i javljamo Vam se u roku od 2 radna dana s ponudom.
+Klijent: Gdje ste tačno u Sarajevu?
+Ti: Tačnu lokaciju još nismo objavili. Čim bude, javljamo ovdje na profilu. (status: ceka)
 
 NIKAD:
 - Ne navodi niti nagađaj cijenu, popust, raspon cijene ili poređenje cijena.
@@ -84,21 +105,30 @@ NIKAD:
 - Ne izmišljaj adresu, radno vrijeme, dostavu, načine plaćanja, rokove ni akcije. Ne spominji imena vlasnika ili zaposlenih.
 - Ne daj medicinske savjete (alergije, trudnoća, koža).
 
-needs_human = true kada: neko traži cijenu i nakon što je čuo da je zapečaćena, žali se ili je ljut, firma ili preprodavač želi uslove ili veću količinu, pita za dostavu, plaćanje, adresu, termin ili nešto što nije u činjenicama, pita nešto lično ili zdravstveno, ili nisi siguran. I tada napiši najbolji prijedlog odgovora (bez izmišljanja), da ga vlasnik samo odobri ili doradi.
-skip = true kada poruka ne traži odgovor (samo emoji, "hvala", spam, reklama, uvreda bez pitanja).
+STATUS:
+- ceka: neko traži cijenu i nakon što je čuo da je zapečaćena, žali se ili je ljut, firma ili preprodavač želi uslove ili veću količinu, pita za dostavu, plaćanje, adresu, termin, original/kopiju ili nešto što nije u činjenicama, pita nešto lično ili zdravstveno, ili nisi siguran. I tada napiši najbolji prijedlog odgovora (bez izmišljanja), da ga vlasnik samo odobri ili doradi.
+- preskoci: poruka ne traži odgovor (samo emoji, "hvala", spam, reklama, uvreda bez pitanja).
+- auto: sve ostalo, kad si siguran da je odgovor tačan i u duhu pravila.
 
-Vrati SAMO JSON: {"reply": "...", "needs_human": true|false, "skip": true|false, "reason": "kratko zašto, na bosanskom"}`;
+Odgovori TAČNO u ovom obliku, bez ičega drugog:
+<odgovor>tekst poruke koju šaljemo klijentu</odgovor>
+<status>auto ili ceka ili preskoci</status>
+<razlog>kratko zašto, na bosanskom</razlog>`;
 
-async function askClaude(kind: "dm" | "comment", text: string, history: { direction: string; text: string | null; draft: string | null }[]) {
+async function askClaude(kind: "dm" | "comment", text: string, history: { status: string; text: string | null; draft: string | null }[]) {
   const key = anthropicKey();
   if (!key) throw new Error("ANTHROPIC_API_KEY nije postavljen");
   const msgs: { role: "user" | "assistant"; content: string }[] = [];
-  for (const h of history) {
-    const role = h.direction === "out" ? "assistant" : "user";
-    const content = (h.direction === "out" ? h.draft ?? h.text : h.text) ?? "";
-    if (!content) continue;
+  const push = (role: "user" | "assistant", content: string) => {
+    if (!content) return;
     if (msgs.length && msgs[msgs.length - 1].role === role) msgs[msgs.length - 1].content += "\n" + content;
-    else msgs.push({ role, content: role === "assistant" ? JSON.stringify({ reply: content, needs_human: false, skip: false, reason: "" }) : content });
+    else msgs.push({ role, content });
+  };
+  // each stored row is one incoming message plus the reply we actually sent (if any)
+  for (const h of history) {
+    push("user", h.text ?? "");
+    if ((h.status === "poslano_auto" || h.status === "poslano") && h.draft)
+      push("assistant", `<odgovor>${h.draft}</odgovor>\n<status>auto</status>\n<razlog></razlog>`);
   }
   if (msgs.length && msgs[0].role === "assistant") msgs.shift();
   if (msgs.length && msgs[msgs.length - 1].role === "user") msgs[msgs.length - 1].content += "\n" + text;
@@ -112,9 +142,11 @@ async function askClaude(kind: "dm" | "comment", text: string, history: { direct
   if (!res.ok) throw new Error(`Claude ${res.status}: ${(await res.text()).slice(0, 300)}`);
   const out = await res.json();
   const raw = (out.content ?? []).map((c: any) => c.text ?? "").join("");
-  const m = raw.match(/\{[\s\S]*\}/);
-  let r: { reply?: string; needs_human?: boolean; skip?: boolean; reason?: string } = {};
-  try { r = JSON.parse(m ? m[0] : raw); } catch { r = { reply: raw.trim(), needs_human: true, reason: "Odgovor nije bio u očekivanom obliku" }; }
+  const tag = (n: string) => raw.match(new RegExp(`<${n}>([\\s\\S]*?)</${n}>`))?.[1]?.trim();
+  const status = (tag("status") ?? "").toLowerCase();
+  const r = tag("odgovor") !== undefined
+    ? { reply: tag("odgovor"), needs_human: status !== "auto" && status !== "preskoci", skip: status === "preskoci", reason: tag("razlog") ?? "" }
+    : { reply: raw.trim(), needs_human: true, skip: false, reason: "Odgovor nije bio u očekivanom obliku" };
   let reply = String(r.reply ?? "").replace(/\s*[—–]\s*/g, ", ").trim();
   // last safety net for brand rules
   const banned = /(kopij|original|replik|dupe|inspirisan|\d+\s?(km|kn|eur|€|bam)\b)/i;
@@ -187,7 +219,7 @@ async function handleDM(ownId: string, ev: any) {
     .select("id").single();
   if (error) return;                                       // duplicate delivery from Meta
 
-  const { data: hist } = await sb.from("ig_messages").select("direction,text,draft")
+  const { data: hist } = await sb.from("ig_messages").select("status,text,draft")
     .eq("ig_user_id", senderId).lt("id", row.id).in("status", ["poslano_auto", "poslano", "nova", "ceka", "preskoceno"])
     .order("created_at", { ascending: false }).limit(8);
 
