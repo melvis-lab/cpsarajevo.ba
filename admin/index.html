@@ -102,6 +102,7 @@
   <nav><div class="wrap" role="tablist">
     <button role="tab" type="button" data-tab="danas" aria-selected="true">Pregled</button>
     <button role="tab" type="button" data-tab="rezervacije">Rezervacije<span class="count" id="newCount" hidden></span></button>
+    <button role="tab" type="button" data-tab="firme">Firme<span class="count" id="b2bCount" hidden></span></button>
     <button role="tab" type="button" data-tab="stranica">Šta ljudi klikaju</button>
     <button role="tab" type="button" data-tab="izvori">Odakle dolaze</button>
     <button role="tab" type="button" data-tab="uzivo">Uživo</button>
@@ -120,6 +121,12 @@
         <div class="row"><div><h2>Kako stranica radi</h2><p class="sub" style="margin:0">Brojimo samo posjetioce koji su prihvatili kolačiće.</p></div>
           <div class="seg" id="period"><button type="button" data-d="1" aria-pressed="false">Danas</button><button type="button" data-d="7" aria-pressed="true">7 dana</button><button type="button" data-d="30" aria-pressed="false">30 dana</button></div></div>
         <div class="tiles" id="tiles"></div>
+      </div>
+
+      <div class="block">
+        <h2>Koji miris najviše zanima ljude</h2>
+        <p class="sub" id="scentSub">Bodovi iz klikova: otvorio bočicu 1, pogledao film 2, dobio miris u kvizu 2, podijelio 2, otvorio rezervaciju 3, rezervisao bočicu 10. Prati period iznad.</p>
+        <div class="panel scroll"><table id="scents"></table></div>
       </div>
 
       <div class="block">
@@ -152,6 +159,13 @@
       </div>
       <div class="row"><input type="search" id="search" placeholder="Traži po imenu, telefonu, emailu ili gradu"></div>
       <div class="panel scroll"><table id="resTable"></table></div>
+    </section>
+
+    <!-- FIRME -->
+    <section data-panel="firme" hidden>
+      <h2>Firme i preprodavači</h2>
+      <p class="sub">Registracije s forme "Za firme" na stranici: korporativni pokloni, saloni, butici i preprodavači.</p>
+      <div class="panel scroll"><table id="b2bTable"></table></div>
     </section>
 
     <!-- KLIKOVI -->
@@ -248,7 +262,7 @@
       ? '<div class="empty">Još nema posjeta u ovom periodu. Brojke se pojave čim prvi posjetioci prihvate kolačiće.</div>'
       : steps.map(([l, n], i) => '<div class="step"><div>' + l + '</div><div class="track"><div class="fill" style="width:' + Math.max(0.5, 100 * n / top) + '%"></div></div><div class="v"><b>' + n + '</b> <small>' + (i ? Math.round(100 * n / top) + '% posjetilaca' : '') + '</small></div></div>').join('');
   }
-  document.querySelectorAll('#period button').forEach((b) => b.addEventListener('click', () => { period = Number(b.dataset.d); renderPeriod(); }));
+  document.querySelectorAll('#period button').forEach((b) => b.addEventListener('click', () => { period = Number(b.dataset.d); renderPeriod(); loadScents(); }));
 
   function renderTodo() {
     const open = reservations.filter((r) => r.status === 'nova');
@@ -265,6 +279,21 @@
       '<div class="actions"><a class="btn wa" href="https://wa.me/' + d + '?text=' + msg + '" target="_blank" rel="noopener">WhatsApp</a>' +
       '<a class="btn" href="tel:+' + d + '">Pozovi</a>' +
       '<button class="btn dark" type="button" data-set="kontaktirana" data-id="' + r.id + '">Kontaktirao/la sam</button></div></div>';
+  }
+
+  async function loadScents() {
+    const { data, error } = await sb.rpc('admin_scent_interest', { days: period });
+    const rows = (data || []).map((r, i) => Object.assign({ rank: i + 1 }, r));
+    const max = Math.max(1, ...rows.map((r) => r.bodovi));
+    const top = rows[0] && rows[0].bodovi > 0 ? rows[0] : null;
+    $('scentSub').innerHTML = (top ? '<b>Najzanimljiviji ' + (period === 1 ? 'danas' : 'zadnjih ' + period + ' dana') + ': ' + esc(top.name) + '.</b> ' : '') +
+      'Bodovi: otvorio bočicu 1, film 2, kviz 2, podijelio 2, otvorio rezervaciju 3, rezervisao bočicu 10.';
+    table($('scents'), [
+      { h: '#', k: 'rank', num: 1 }, { h: 'Miris', html: (r) => '<b>' + esc(r.name) + '</b>' },
+      { h: 'Bodovi', k: 'bodovi', num: 1 }, barCol('bodovi', max),
+      { h: 'Otvorili', k: 'pogledi', num: 1 }, { h: 'Film', k: 'filmovi', num: 1 }, { h: 'Kviz', k: 'kviz', num: 1 },
+      { h: 'Htjeli rezervisati', k: 'otvorio_rezervaciju', num: 1 }, { h: 'Rezervisano', k: 'rezervisano', num: 1 },
+    ], error ? [] : rows, error ? 'Podaci se nisu učitali. Osvježi stranicu.' : 'Još nema klikova na mirise.');
   }
 
   async function loadOverview() {
@@ -339,7 +368,32 @@
   }
   $('refreshLive').addEventListener('click', loadLive);
 
-  function loadAll() { loadOverview(); loadReservations(); loadClicks(); loadSources(); }
+  // ---- business registrations ----
+  const B2B_STATUS = { nova: 'Nova', kontaktirana: 'Kontaktirana', dogovoreno: 'Dogovoreno', odbijeno: 'Odbijeno' };
+  const B2B_KIND = { firma: 'Firma (pokloni)', preprodavac: 'Preprodavač', salon: 'Salon / butik', drugo: 'Drugo' };
+  let b2b = [];
+  async function loadB2b() {
+    const { data } = await sb.from('partner_requests').select('*').order('created_at', { ascending: false }).limit(1000);
+    b2b = data || [];
+    const n = b2b.filter((r) => r.status === 'nova').length;
+    $('b2bCount').hidden = !n; $('b2bCount').textContent = n;
+    table($('b2bTable'), [
+      { h: 'Kada', html: (r) => when(r.created_at) },
+      { h: 'Firma', html: (r) => '<b>' + esc(r.company) + '</b><div class="muted">' + esc(B2B_KIND[r.kind] || r.kind) + (r.city ? ' · ' + esc(r.city) : '') + '</div>' },
+      { h: 'Kontakt', html: (r) => esc(r.contact_name) + '<div class="muted">' + esc(r.phone) + (r.email ? '<br>' + esc(r.email) : '') + '</div>' },
+      { h: 'Količina', k: 'volume' },
+      { h: 'Poruka', html: (r) => esc(r.note) },
+      { h: 'Status', html: (r) => '<select data-b2b="' + r.id + '" aria-label="Status">' + Object.keys(B2B_STATUS).map((v) => '<option value="' + v + '"' + (v === r.status ? ' selected' : '') + '>' + B2B_STATUS[v] + '</option>').join('') + '</select>' },
+      { h: '', html: (r) => { const d = phoneDigits(r.phone); const msg = encodeURIComponent('Poštovani/a ' + (r.contact_name || '') + ', hvala na registraciji ' + (r.company || '') + ' kod Collection Premium Sarajevo. Kada vam odgovara kratki razgovor o ponudi?'); return '<div class="actions"><a class="btn wa" href="https://wa.me/' + d + '?text=' + msg + '" target="_blank" rel="noopener">WhatsApp</a><a class="btn" href="tel:+' + d + '">Pozovi</a></div>'; } },
+    ], b2b, 'Još nema registracija firmi. Pojave se ovdje čim neko pošalje formu "Za firme" na stranici.');
+  }
+  $('b2bTable').addEventListener('change', async (e) => {
+    const sel = e.target.closest('select[data-b2b]'); if (!sel) return;
+    const { error } = await sb.from('partner_requests').update({ status: sel.value }).eq('id', sel.dataset.b2b);
+    toast(error ? 'Status nije sačuvan.' : 'Sačuvano: ' + B2B_STATUS[sel.value]); if (!error) loadB2b();
+  });
+
+  function loadAll() { loadOverview(); loadScents(); loadB2b(); loadReservations(); loadClicks(); loadSources(); }
 
   async function start() {
     const user = await CP.auth.user();

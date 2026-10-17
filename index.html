@@ -586,6 +586,22 @@ form.order .fine{font-size:.78rem;color:var(--muted);text-align:center}
   .rv-in{transform:none}
   .drawer{transition:none}
 }
+.b2b{background:var(--ink-2);padding:14vh var(--pad);position:relative;z-index:2;overflow:hidden}
+.b2b::before{content:"";position:absolute;inset:0;background:radial-gradient(50% 60% at 18% 30%,rgba(201,164,106,.12),transparent 70%);pointer-events:none}
+.b2b-grid{position:relative;max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,6vw,90px);align-items:start}
+.b2b h2 em{color:var(--gold-2)}
+.b2b p.lead{color:var(--muted);margin:1.3rem 0 1.6rem;max-width:32rem;font-size:1.05rem}
+.b2b ul{list-style:none;display:grid;gap:.75rem;margin:0 0 1.8rem;padding:0}
+.b2b li{display:flex;gap:.8rem;align-items:baseline;color:var(--cream)}
+.b2b li::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;background:var(--gold);transform:translateY(-2px)}
+.b2b-kinds{display:flex;flex-wrap:wrap;gap:.6rem}
+.b2b-kinds span{border:1px solid var(--line);border-radius:999px;padding:.45rem .95rem;font-size:.82rem;color:var(--gold-2)}
+.b2b-card{background:var(--ink);border:1px solid var(--line);border-radius:24px;box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
+.b2b-card h3{font-family:var(--serif);font-weight:500;font-size:1.5rem;padding:1.6rem 1.6rem 0}
+.b2b-card .done{display:none;padding:2.2rem 1.6rem;text-align:center}
+.b2b-card.sent form{display:none}.b2b-card.sent .done{display:block}
+.b2b-card .err{color:#e8a08a;font-size:.86rem;text-align:center;min-height:1em}
+@media (max-width:860px){.b2b-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -677,6 +693,7 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
     <a href="#kolekcija" data-en="Collection">Kolekcija</a>
     <a href="#kviz" data-en="Quiz">Kviz</a>
     <a href="#poklon" data-en="Gifts">Pokloni</a>
+    <a href="#partneri" data-en="For business">Za firme</a>
   </div>
   <div style="display:flex;gap:.5rem;align-items:center"><button class="lang" id="lang" aria-label="Promijeni jezik / Change language"><span data-l="bs">BS</span> / <span data-l="en">EN</span></button><button class="btn btn-gold" data-order="dubai" data-en="Reserve">Rezerviši</button></div>
 </nav>
@@ -965,6 +982,54 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
         <div><b style="font-weight:300" data-en="Travel spray: your scent in your pocket">Travel spray: miris u džepu</b> <span data-en="Soon">Uskoro</span></div>
         <div><b style="font-weight:300" data-en="Home and car fragrances">Mirisi za dom i auto</b> <span data-en="Soon">Uskoro</span></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- B2B -->
+<section class="b2b" id="partneri" aria-labelledby="b2bTitle">
+  <div class="b2b-grid">
+    <div>
+      <span class="eyebrow" data-en="For companies and resellers">Za firme i preprodavače</span>
+      <h2 id="b2bTitle" style="margin-top:1rem" data-en="A gift for your team. <em>A shelf for your shop.</em>">Poklon za vaš tim. <em>Polica za vaš salon.</em></h2>
+      <p class="lead" data-en="Companies can order scents as gifts for employees and clients, for Bajram, New Year or a company anniversary. Salons, boutiques and resellers across Bosnia and Herzegovina can become Collection Premium Sarajevo partners. Register now and we will contact you with an offer before we open on 1 January.">Firme mogu naručiti mirise kao poklone za zaposlenike i klijente, za Bajram, Novu godinu ili godišnjicu firme. Saloni, butici i preprodavači širom BiH mogu postati partneri Collection Premium Sarajevo. Registrujte se sada i javit ćemo vam se s ponudom prije otvaranja 1. januara.</p>
+      <ul>
+        <li data-en="Corporate gifts in the white box, with your message on the card">Korporativni pokloni u bijeloj kutiji, s vašom porukom na čestitki</li>
+        <li data-en="Partner terms for salons, boutiques and resellers">Partnerski uslovi za salone, butike i preprodavače</li>
+        <li data-en="Testers and scent strips for your space">Testeri i mirisne trake za vaš prostor</li>
+        <li data-en="Delivery across Bosnia and Herzegovina">Dostava širom BiH</li>
+      </ul>
+      <div class="b2b-kinds"><span data-en="Companies">Firme</span><span data-en="Salons">Saloni</span><span data-en="Boutiques">Butici</span><span data-en="Resellers">Preprodavači</span><span data-en="Hotels">Hoteli</span></div>
+    </div>
+    <div class="b2b-card" id="b2bCard">
+      <h3 data-en="Register your company">Registrujte firmu</h3>
+      <form class="order" id="b2bForm" novalidate>
+        <p class="hp"><label>Ne popunjavati <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <label><span data-en="You are">Vi ste</span><select name="kind" required>
+          <option value="firma" data-en="A company (gifts for team or clients)">Firma (pokloni za tim ili klijente)</option>
+          <option value="preprodavac" data-en="A reseller">Preprodavač</option>
+          <option value="salon" data-en="A salon or boutique">Salon ili butik</option>
+          <option value="drugo" data-en="Something else">Nešto drugo</option></select></label>
+        <div class="two">
+          <label><span data-en="Company name">Naziv firme</span><input name="company" required autocomplete="organization"></label>
+          <label><span data-en="Contact person">Kontakt osoba</span><input name="contact_name" required autocomplete="name"></label>
+        </div>
+        <div class="two">
+          <label><span data-en="Phone">Telefon</span><input name="phone" type="tel" required autocomplete="tel" placeholder="+387 …"></label>
+          <label>Email<input name="email" type="email" autocomplete="email"></label>
+        </div>
+        <div class="two">
+          <label><span data-en="City">Grad</span><input name="city" autocomplete="address-level2" value="Sarajevo"></label>
+          <label><span data-en="Approx. quantity">Okvirna količina</span><select name="volume">
+            <option value="do 10">do 10</option><option value="10–50">10–50</option><option value="50–200">50–200</option><option value="200+">200+</option><option value="ne znam još" data-en="not sure yet">ne znam još</option></select></label>
+        </div>
+        <label><span data-en="Message">Poruka</span><textarea name="note" rows="3" placeholder="Npr. pokloni za 40 zaposlenika do Nove godine" data-ph-en="E.g. gifts for 40 employees before New Year"></textarea></label>
+        <label style="display:flex;gap:.6rem;align-items:flex-start;font-size:.86rem;line-height:1.4;text-transform:none;letter-spacing:0"><input type="checkbox" name="consent" required style="width:auto;margin-top:.2rem"><span data-en="I agree to be contacted about a business offer.">Slažem se da me kontaktirate u vezi s poslovnom ponudom.</span></label>
+        <button class="btn btn-gold" type="submit" data-en="Register">Registruj se</button>
+        <p class="err" id="b2bErr" role="alert"></p>
+        <p class="fine" data-en="No obligation. We reply within 2 working days.">Bez obaveze. Javljamo se u roku od 2 radna dana.</p>
+      </form>
+      <div class="done"><h3 style="padding:0" data-en="Thank you!">Hvala!</h3><p style="color:var(--muted);margin-top:.6rem" data-en="We received your request and will contact you within 2 working days.">Primili smo vaš zahtjev i javit ćemo vam se u roku od 2 radna dana.</p></div>
     </div>
   </div>
 </section>
@@ -1495,7 +1560,7 @@ const src=id=>'film/bottles/'+id+'-'+(LANG==='en'?'en':'bs')+'.mp4';
 function fill(id){
   const p=P.find(x=>x.id===id), d=D[id], i=P.indexOf(p), n=p[LANG], f=FILMS[id];
   if(!seen.includes(id)){seen.push(id);try{localStorage.setItem('seen',JSON.stringify(seen))}catch(e){}}
-  cur=id; $('shPanel').style.setProperty('--c',p.c);
+  cur=id; $('shPanel').style.setProperty('--c',p.c); try{window.CP&&CP.track('product_view',{element:'miris',label:id});}catch(e){}
   $('shTag').textContent=L(...GL[p.g])+' · Extrait de parfum'; $('shNum').textContent=String(i+1).padStart(2,'0')+' / 12';
   $('shName').textContent=p.name; $('shHook').textContent=L(...d.h); $('shDesc').textContent=L(...d.d);
   $('shPyr').innerHTML=[[L('Početak','Top'),n[0]],[L('Srce','Heart'),n[1]],[L('Baza','Base'),n[2]]].map(r=>`<div><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join('');
@@ -1514,7 +1579,7 @@ function open(id,from){
 }
 function close(){ sh.classList.remove('open'); document.body.style.overflow=''; v.pause();
   document.querySelectorAll('.p.lift').forEach(x=>x.classList.remove('lift')); if(last)last.focus({preventScroll:true}); }
-$('shPlay').addEventListener('click',()=>{v.src=src(cur);v.controls=true;media.classList.add('playing');v.play().catch(()=>{});});
+$('shPlay').addEventListener('click',()=>{try{window.CP&&CP.track('video_play',{element:'film',label:cur});}catch(e){} v.src=src(cur);v.controls=true;media.classList.add('playing');v.play().catch(()=>{});});
 v.addEventListener('ended',()=>{media.classList.remove('playing');v.controls=false;});
 $('shClose').addEventListener('click',close);
 sh.addEventListener('click',e=>{if(e.target===sh)close();});
@@ -1545,5 +1610,18 @@ if(window.gsap&&window.ScrollTrigger){const st=document.getElementById('stage');
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
 <script src="js/cp-backend.js" defer></script>
+<script>
+(()=>{const f=document.getElementById('b2bForm'),card=document.getElementById('b2bCard'),err=document.getElementById('b2bErr');
+if(location.hash==='#partneri'||/[?&]partneri/.test(location.search))setTimeout(()=>document.getElementById('partneri').scrollIntoView({behavior:'smooth'}),900);
+f.addEventListener('submit',async e=>{e.preventDefault();err.textContent='';
+  const d=Object.fromEntries(new FormData(f));
+  if(d['bot-field'])return;
+  if(!f.reportValidity())return;
+  const b=f.querySelector('button[type=submit]');b.disabled=true;
+  const r=window.CP&&CP.partner?await CP.partner({kind:d.kind,company:d.company,contact_name:d.contact_name,phone:d.phone,email:d.email,city:d.city,volume:d.volume,note:d.note,consent:!!d.consent}):{error:'offline'};
+  b.disabled=false;
+  if(r.ok){card.classList.add('sent');}else{err.textContent=(document.documentElement.lang==='en'?'Sending failed. Please try again or message us on Instagram.':'Slanje nije uspjelo. Pokušajte ponovo ili nam pišite na Instagram.');}
+});})();
+</script>
 </body>
 </html>

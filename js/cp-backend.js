@@ -149,6 +149,24 @@
     return { ok: true };
   }
 
+  // ---------- business / reseller registration ----------
+  async function partner(f) {
+    if (!f || f.consent !== true) return { error: 'consent' };
+    const row = {
+      kind: ['firma', 'preprodavac', 'salon', 'drugo'].includes(f.kind) ? f.kind : 'drugo',
+      company: cut((f.company || '').trim(), 160), contact_name: cut((f.contact_name || '').trim(), 120),
+      phone: cut((f.phone || '').trim(), 40), email: f.email ? cut(f.email.trim(), 160) : null,
+      city: cut(f.city, 80), volume: cut(f.volume, 80), note: cut(f.note, 1000), consent: true,
+      utm_source: cut(utm.utm_source, 80), utm_medium: cut(utm.utm_medium, 80), utm_campaign: cut(utm.utm_campaign, 120),
+      session_id: sessionId(),
+    };
+    const { error } = await sb.from('partner_requests').insert(row);
+    if (error) return { error: error.message };
+    track('partner_submit', { element: 'partneri', label: row.kind + ' · ' + row.volume });
+    if (window.fbq) window.fbq('track', 'Lead', { content_name: 'b2b-' + row.kind });
+    return { ok: true };
+  }
+
   // ---------- auth (magic link) ----------
   const auth = {
     async sendLink(email, redirectPath) {
@@ -162,7 +180,7 @@
     async signOut() { await sb.auth.signOut(); },
   };
 
-  window.CP = { sb, track, reserve, auth, consent, utm };
+  window.CP = { sb, track, reserve, partner, auth, consent, utm };
 
   function boot() {
     banner();
