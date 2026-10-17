@@ -448,26 +448,72 @@ section.trust{background:radial-gradient(70% 70% at 50% 45%,rgba(14,11,9,.82),rg
 .quiz{background:var(--ink);padding:14vh var(--pad);position:relative;z-index:2;overflow:hidden}
 .quiz-box{max-width:900px;margin:0 auto;text-align:center}
 .quiz h2{margin:1rem auto 1rem;max-width:16ch}
-.q-step{margin-top:3rem}
-.q-progress{display:flex;justify-content:center;gap:8px;margin-bottom:1.6rem}
-.q-progress i{width:28px;height:2px;background:rgba(201,164,106,.25);transition:background-color 300ms ease}
-.q-progress i.on{background:var(--gold)}
-.q-title{font-family:var(--serif2);font-size:clamp(1.6rem,3vw,2.3rem);margin-bottom:1.6rem}
-.q-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:640px;margin:0 auto}
-.q-opts button{padding:1.2rem 1.2rem;border-radius:16px;border:1px solid var(--line);text-align:left;font-size:1rem;transition:border-color 200ms ease,background-color 200ms ease,transform 160ms var(--ease-out)}
-.q-opts button small{display:block;color:var(--muted);font-size:.8rem;margin-top:.2rem}
-.q-opts button:active{transform:scale(.98)}
-@media (hover:hover) and (pointer:fine){.q-opts button:hover{border-color:var(--gold);background:rgba(201,164,106,.06)}}
-.q-anim{animation:qin 380ms var(--ease-out)}
-@keyframes qin{from{opacity:0;transform:translateY(10px);filter:blur(2px)}to{opacity:1;transform:none;filter:none}}
-.result{display:grid;grid-template-columns:240px 1fr;gap:2rem;align-items:center;text-align:left;max-width:760px;margin:0 auto;padding:2rem;border:1px solid var(--line);border-radius:26px;background:radial-gradient(circle at 20% 30%,color-mix(in srgb,var(--c) 30%,transparent),transparent 70%)}
-.result img{height:300px;width:auto;margin:0 auto;filter:drop-shadow(0 30px 30px rgba(0,0,0,.5))}
-.result h3{font-size:2.6rem;margin:.3rem 0 .6rem}
-.result p{color:var(--cream-2)}
-.result .alts{margin-top:1rem;font-size:.86rem;color:var(--muted)}
-.result .alts b{color:var(--cream-2);font-weight:400}
-.result .ctas{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.4rem}
-@media (max-width:700px){.q-opts{grid-template-columns:1fr}.result{grid-template-columns:1fr;text-align:center}.result img{height:220px}.result .ctas{justify-content:center}}
+/* ---------- QUIZ: Koji si ti? ---------- */
+.qz-start{margin-top:2.4rem;display:grid;justify-items:center;gap:1.6rem}
+.qz-fan{display:flex;justify-content:center;align-items:flex-end;height:210px;margin-bottom:.4rem}
+.qz-fan img{height:170px;width:auto;margin:0 -16px;filter:drop-shadow(0 22px 22px rgba(0,0,0,.55));transform:rotate(var(--r)) translateY(var(--y));transition:transform 500ms var(--ease-out)}
+.qz-fan img:nth-child(3){height:205px;z-index:2}
+@media (hover:hover) and (pointer:fine){.qz-start:hover .qz-fan img{transform:rotate(calc(var(--r)*1.5)) translateY(calc(var(--y) - 6px))}}
+.qz-go{font-size:1.05rem;padding:1.05rem 2.2rem}
+.qz-meta{color:var(--muted);font-size:.86rem;letter-spacing:.04em}
+.qz{position:fixed;inset:0;z-index:120;background:var(--ink);color:var(--cream);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 320ms var(--ease-out)}
+.qz.on{opacity:1;pointer-events:auto}
+.qz-bg{position:absolute;inset:-40px;background:center/cover no-repeat;filter:blur(28px) brightness(.32) saturate(1.1);transition:background-image 400ms ease;z-index:0}
+.qz-top{position:relative;z-index:2;padding:calc(14px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.qz-bars{display:flex;gap:5px}
+.qz-bars i{flex:1;height:3px;border-radius:2px;background:rgba(246,239,227,.22);overflow:hidden;position:relative}
+.qz-bars i::after{content:"";position:absolute;inset:0;background:var(--gold-2);transform:scaleX(0);transform-origin:left;transition:transform 420ms var(--ease-out)}
+.qz-bars i.on::after{transform:scaleX(1)}
+.qz-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;min-height:40px}
+.qz-row .qz-brand{font-size:.72rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase}
+.qz-icon{width:40px;height:40px;border-radius:50%;border:1px solid rgba(246,239,227,.2);display:grid;place-items:center;color:var(--cream);background:rgba(14,11,9,.35);font-size:1.2rem;line-height:1}
+.qz-icon[hidden]{display:none}
+.qz-body{position:relative;z-index:2;flex:1;overflow:auto;display:flex;flex-direction:column;justify-content:center;padding:12px max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.qz-q{max-width:760px;width:100%;margin:0 auto;text-align:center}
+.qz-n{font-size:.74rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase}
+.qz-t{font-family:var(--serif);font-weight:500;font-size:clamp(2rem,7vw,3.4rem);line-height:1.08;margin:.6rem 0 1.6rem;text-wrap:balance}
+.qz-t em{color:var(--gold-2);font-style:italic;font-weight:400}
+.qz-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.qz-o{position:relative;display:flex;flex-direction:column;justify-content:flex-end;text-align:left;min-height:clamp(150px,24vh,220px);border-radius:20px;overflow:hidden;border:1px solid rgba(246,239,227,.14);background:var(--sw,#221a14);padding:14px;color:var(--cream);transition:transform 200ms var(--ease-out),border-color 200ms ease,box-shadow 200ms ease;isolation:isolate}
+.qz-o img.ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 600ms var(--ease-out)}
+.qz-o img.bt{position:absolute;right:8%;top:10%;height:62%;width:auto;z-index:-1;filter:drop-shadow(0 14px 14px rgba(0,0,0,.45));transition:transform 500ms var(--ease-out)}
+.qz-o::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 30%,rgba(14,11,9,.82))}
+.qz-o b{font-family:var(--serif);font-weight:500;font-size:clamp(1.25rem,4.2vw,1.6rem);line-height:1.1}
+.qz-o small{display:block;color:var(--cream-2);opacity:.85;font-size:.82rem;margin-top:.25rem}
+.qz-o .word{font-family:var(--serif);font-style:italic;font-size:clamp(1.9rem,6vw,2.6rem);line-height:1}
+.qz-o .ring{position:absolute;top:36%;left:50%;width:calc(var(--n) * 34px + 26px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);z-index:-1;background:radial-gradient(circle,var(--gold-2) 0 7px,rgba(226,197,143,.32) 8px 34%,rgba(226,197,143,.14) 35% 60%,rgba(226,197,143,.05) 61% 70%,transparent 71%)}
+.qz-o:active{transform:scale(.97)}
+.qz-o.pick{border-color:var(--gold-2);box-shadow:0 0 0 2px var(--gold-2) inset,0 18px 40px rgba(0,0,0,.4);transform:scale(1.02)}
+@media (hover:hover) and (pointer:fine){.qz-o:hover{border-color:rgba(226,197,143,.7)}.qz-o:hover img.ph{transform:scale(1.05)}.qz-o:hover img.bt{transform:translateY(-6px) rotate(-3deg)}}
+.qz-in{animation:qzin 460ms var(--ease-out) both}
+.qz-in .qz-o{animation:qzin 520ms var(--ease-out) both}
+.qz-in .qz-o:nth-child(2){animation-delay:60ms}.qz-in .qz-o:nth-child(3){animation-delay:120ms}.qz-in .qz-o:nth-child(4){animation-delay:180ms}
+@keyframes qzin{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+/* thinking */
+.qz-think{text-align:center;display:grid;justify-items:center;gap:1.4rem}
+.qz-think img{height:min(42vh,320px);width:auto;filter:drop-shadow(0 30px 30px rgba(0,0,0,.6));animation:qzpop 140ms ease}
+.qz-think p{font-family:var(--serif);font-style:italic;font-size:1.5rem;color:var(--gold-2)}
+@keyframes qzpop{from{opacity:.4;transform:scale(.96)}to{opacity:1;transform:none}}
+/* result */
+.qz-res{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;justify-content:flex-end}
+.qz-res video,.qz-res .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.qz-res::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(14,11,9,.25) 0%,rgba(14,11,9,.15) 35%,rgba(14,11,9,.88) 68%,var(--ink) 100%)}
+.qz-card{max-width:760px;width:100%;margin:0 auto;padding:0 max(16px,env(safe-area-inset-right,0px)) calc(22px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));animation:qzin 700ms var(--ease-out) both}
+.qz-you{font-size:.76rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase}
+.qz-type{font-family:var(--serif);font-weight:500;font-size:clamp(2.8rem,11vw,5.2rem);line-height:.98;margin:.35rem 0 .5rem;text-wrap:balance}
+.qz-line{font-family:var(--serif);font-style:italic;font-size:clamp(1.1rem,3.6vw,1.4rem);color:var(--cream-2);margin:0 0 1rem}
+.qz-match{display:inline-flex;align-items:center;gap:.6rem;border:1px solid rgba(226,197,143,.45);border-radius:999px;padding:.45rem .9rem;background:rgba(14,11,9,.45);font-size:.9rem}
+.qz-match b{color:var(--gold-2);font-weight:500;letter-spacing:.08em}
+.qz-notes{display:flex;flex-wrap:wrap;gap:6px;margin:1rem 0 1.2rem}
+.qz-notes span{font-size:.8rem;padding:.35rem .7rem;border-radius:999px;background:rgba(246,239,227,.08);border:1px solid rgba(246,239,227,.12);color:var(--cream-2)}
+.qz-notes span em{color:var(--gold);font-style:normal;margin-right:.35rem}
+.qz-ctas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qz-ctas .btn{justify-content:center;text-align:center;width:100%}
+.qz-ctas .wide{grid-column:1/-1}
+.qz-alt{margin-top:1rem;font-size:.86rem;color:var(--muted);display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.qz-alt button{color:var(--cream-2);border-bottom:1px solid rgba(226,197,143,.5);padding:.1rem 0}
+@media (min-width:860px){.qz-opts{grid-template-columns:repeat(4,1fr)}.qz-o{min-height:260px}}
+@media (prefers-reduced-motion:reduce){.qz-in,.qz-in .qz-o,.qz-card,.qz-think img{animation:none}.qz-o,.qz-fan img{transition:none}}
 
 /* reviews */
 .reviews{background:linear-gradient(180deg,rgba(23,18,14,.9),rgba(23,18,14,.82)),url(img/scene/sarajevo-couple.webp) center 35%/cover no-repeat;padding:14vh 0;position:relative;z-index:2;overflow:hidden}
@@ -886,8 +932,8 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
 <section class="quiz" id="kviz">
   <div class="quiz-box">
     <span class="eyebrow" data-en="Quiz · 30 seconds">Kviz · 30 sekundi</span>
-    <h2 data-en="Which scent <em>is yours?</em>">Koji je miris <em>tvoj?</em></h2>
-    <p class="lead" style="margin:0 auto" data-en="Three questions. One recommendation. No guesswork.">Tri pitanja. Jedna preporuka. Bez nagađanja.</p>
+    <h2 data-en="Which one <em>are you?</em>">Koji si <em>ti?</em></h2>
+    <p class="lead" style="margin:0 auto" data-en="Five quick questions. Your scent, your type, and a card to share.">Pet brzih pitanja. Tvoj miris, tvoj tip i kartica za Story.</p>
     <div id="quizMount"></div>
   </div>
 </section>
@@ -968,6 +1014,7 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
     </div>
     <label><span data-en="Referral code (optional)">Kod preporuke (opcionalno)</span><input name="kod" id="dCode" autocomplete="off" autocapitalize="characters" placeholder="npr. AMINA" data-ph-en="e.g. AMINA"></label>
     <label><span data-en="Note">Napomena</span><textarea name="napomena" rows="3" placeholder="Npr. poklon pakovanje ili poruka na čestitki" data-ph-en="E.g. gift wrapping or a message on the card"></textarea></label>
+    <label style="display:flex;gap:.6rem;align-items:flex-start;font-size:.86rem;line-height:1.4"><input type="checkbox" name="saglasnost" value="da" required style="width:auto;margin-top:.2rem"><span data-en="I agree to be contacted about my reservation. See the privacy note.">Slažem se da me kontaktirate u vezi s rezervacijom.</span></label>
     <button class="btn btn-gold" type="submit" data-en="Reserve now">Rezerviši</button>
     <p class="fine" data-en="No payment now. We open on 1 January and you’ll hear from us first, before anyone else.">Bez plaćanja sada. Otvaramo 1. januara, a tebi ćemo se javiti prvom, prije svih.</p>
   </form>
@@ -1054,42 +1101,173 @@ function renderReviews(){
 }
 
 /* ---------- QUIZ ---------- */
+/* ---------- QUIZ: Koji si ti? ---------- */
+const TYPES={
+ 'safyr':['Jutarnji tip','The early bird','Kafa u sedam, sve završeno do podne.','Coffee at seven, everything done by noon.'],
+ 'arabian-nights':['Noćna ptica','The night owl','Najbolji razgovori ti počnu poslije ponoći.','Your best conversations start after midnight.'],
+ 'love':['Romantična duša','The romantic','I dalje čuvaš kartu s prvog izlaska.','You still keep the ticket from your first date.'],
+ 'x':['Ti si atmosfera','You are the atmosphere','Uđeš u prostoriju i svi se okrenu.','You walk into a room and everyone turns.'],
+ 'gourmand':['Nedjelja kod nane','Sunday at grandma’s','Dom ti miriše na kolače i ruže na stolu.','Home smells of cake and roses on the table.'],
+ 'dubai':['Topla duša','The warm soul','Gdje god da si, ljudi se uz tebe osjećaju kao kod kuće.','Wherever you are, people feel at home with you.'],
+ 'vanille':['Vječno ljeto','Endless summer','Ljeto nosiš sa sobom i u decembru.','You carry summer with you, even in December.'],
+ 'oud-secret':['Tajanstveni tip','The mystery','Ne pričaš puno, ali te svi zapamte.','You don’t say much, but nobody forgets you.'],
+ 'alya':['Zlatni sat','Golden hour','Tvoje vrijeme počinje kad sunce zalazi.','Your time starts when the sun goes down.'],
+ 'keos':['Tihi mir','Quiet calm','Mir ti je najveći luksuz.','Calm is your greatest luxury.'],
+ 'bellissima':['Elegancija s pričom','Elegance with a story','Tvoj stil se prenosi s generacije na generaciju.','Your style is passed down through generations.'],
+ 'belle-parisienne':['Pariški duh','Parisian spirit','Jedan kofer i cijeli novi svijet.','One suitcase and a whole new world.']
+};
+const sw=(a,b)=>`linear-gradient(150deg,${a},${b})`;
+// option: [labelBs,labelEn, subBs,subEn, visual, effect]
 const Q=[
- {t:['Za koga biraš?','Who is it for?'],o:[[['Za sebe','Me'],['ženski miris','a women’s scent'],'z'],[['Za sebe','Me'],['muški miris','a men’s scent'],'m'],[['Poklon','A gift'],['za nekog posebnog','for someone special'],'gift'],[['Svejedno','Either'],['iznenadi me','surprise me'],'any']]},
- {t:['Kada ćeš ga najčešće nositi?','When will you wear it most?'],o:[[['Svaki dan','Every day'],['posao, grad, kafa','work, the city, coffee'],'day'],[['Navečer','Evenings'],['izlasci i večere','nights out and dinners'],'night'],[['Za posebne prilike','Special occasions'],['svadbe, Bajram, slavlja','weddings, Bajram, celebrations'],'event'],[['Ljeti','Summer'],['more, sunce, putovanja','the sea, sun and travel'],'summer']]},
- {t:['Kakav osjećaj tražiš?','What feeling are you after?'],o:[[['Toplo i slatko','Warm and sweet'],['vanilija, karamel, praline','vanilla, caramel, praline'],'slatko'],[['Tajanstveno','Mysterious'],['oud, dim, drvo','oud, smoke, wood'],'oud'],[['Svježe i čisto','Fresh and clean'],['citrusi, mošus','citrus, musk'],'svjeze'],[['Nježno i cvjetno','Soft and floral'],['ruža, jasmin','rose, jasmine'],'cvjetno']]}
+ {t:['Za koga <em>biraš?</em>','Who is it <em>for?</em>'],o:[
+  ['Za sebe','For me','ženski miris','a women’s scent',{bt:'belle-parisienne',sw:sw('#5a3a38','#1d1512')},{who:'z'}],
+  ['Za sebe','For me','muški miris','a men’s scent',{bt:'keos',sw:sw('#4a3a26','#17120e')},{who:'m'}],
+  ['Poklon','A gift','za nekog posebnog','for someone special',{ph:'img/scene/dubai-gift-sm.webp'},{who:'gift'}],
+  ['Iznenadi me','Surprise me','bilo koji miris','any scent',{ph:'img/story/vial.webp'},{who:'any'}]]},
+ {t:['Gdje ćeš ga <em>najviše nositi?</em>','Where will you <em>wear it most?</em>'],o:[
+  ['Posao i grad','Work and the city','kafa, sastanci, šetnja','coffee, meetings, walks',{ph:'img/scene/sarajevo-coffee-sm.webp'},{svjeze:2,drvo:2}],
+  ['Večer i izlasci','Evenings out','večere, muzika, noć','dinners, music, nights',{ph:'img/scene/sarajevo-night-sm.webp'},{oud:2,slatko:1.5,boost:{'arabian-nights':1.4}}],
+  ['Svadbe i Bajram','Weddings and Bajram','velike prilike','big occasions',{ph:'img/scene/dubai-box-m.webp'},{cvjetno:1.5,event:1}],
+  ['Ljeto i putovanja','Summer and travel','more, sunce, aerodrom','sea, sun, airports',{bt:'safyr',sw:sw('#2f5a4f','#121a17')},{svjeze:2.5}]]},
+ {t:['Izaberi <em>desert.</em>','Pick a <em>dessert.</em>'],o:[
+  ['Baklava i kahva','Baklava and coffee','toplo i slatko','warm and sweet',{sw:sw('#a8692f','#3a2414'),word:'Med'},{slatko:3,boost:{'dubai':0.3,'love':0.5}}],
+  ['Limunada s mentom','Mint lemonade','svježe i lagano','fresh and light',{sw:sw('#5f9c78','#1c3328'),word:'Led'},{svjeze:3}],
+  ['Tamna čokolada','Dark chocolate','gorko i duboko','bitter and deep',{sw:sw('#4a2a22','#140c0a'),word:'Noć'},{oud:3,boost:{'arabian-nights':0.8,'oud-secret':0.4}}],
+  ['Ružin lokum','Rose lokum','nježno i cvjetno','soft and floral',{sw:sw('#b85d6e','#3a1820'),word:'Ruža'},{cvjetno:3}]]},
+ {t:['Kakav trag <em>želiš ostaviti?</em>','What trail do you <em>want to leave?</em>'],o:[
+  ['Šapat','A whisper','osjeti se samo izbliza','close to the skin',{sw:sw('#3b3530','#17120e'),ring:1},{svjeze:1.5,cvjetno:1}],
+  ['Kompliment','A compliment','da me primijete','so people notice',{sw:sw('#6b5532','#1f170e'),ring:2},{slatko:1,cvjetno:1,drvo:1}],
+  ['Legenda','A legend','da me pamte satima','remembered for hours',{sw:sw('#8a6a2f','#241a0c'),ring:3},{oud:2,slatko:1}],
+  ['Iznenađenje','A surprise','nešto drugačije','something different',{sw:sw('#3c4a5a','#11161c'),word:'?'},{drvo:1.5,oud:1}]]},
+ {t:['Jedna riječ <em>za tebe.</em>','One word <em>for you.</em>'],o:[
+  ['Toplina','Warmth','','',{sw:sw('#c07a3e','#3a2210')},{slatko:2}],
+  ['Misterija','Mystery','','',{sw:sw('#3d2c3f','#120c14')},{oud:2}],
+  ['Sloboda','Freedom','','',{sw:sw('#3f7f8c','#0f2226')},{svjeze:2}],
+  ['Nježnost','Tenderness','','',{sw:sw('#c98a9a','#3a1d26')},{cvjetno:2}]]}
 ];
-let qi=0, qa=[];
+let qi=0, qa=[], qzOpen=false;
 const mount=document.getElementById('quizMount');
+const qt=(type,label)=>{try{window.CP&&CP.track(type,{element:'kviz',label});}catch(e){}};
 function renderQ(){
-  if(qi>=Q.length) return renderResult();
+  const fan=['love','dubai','arabian-nights','safyr','x'];
+  mount.innerHTML=`<div class="qz-start"><div class="qz-fan" aria-hidden="true">${fan.map((id,i)=>`<img src="img/${id}.webp" alt="" style="--r:${(i-2)*9}deg;--y:${Math.abs(i-2)*10}px" loading="lazy">`).join('')}</div>
+   <button class="btn btn-gold qz-go" type="button" id="qzGo" data-track="kviz-start">${L('Započni kviz','Start the quiz')}</button>
+   <span class="qz-meta">${L('5 pitanja · 30 sekundi · tvoj miris i tvoj tip','5 questions · 30 seconds · your scent and your type')}</span></div>`;
+  document.getElementById('qzGo').onclick=openQuiz;
+  if(qzOpen) drawQ();
+}
+let qz;
+function ensureQz(){
+  if(qz) return qz;
+  qz=document.createElement('div'); qz.className='qz'; qz.setAttribute('role','dialog'); qz.setAttribute('aria-modal','true'); qz.setAttribute('aria-label',L('Kviz: koji si ti?','Quiz: which one are you?'));
+  qz.innerHTML=`<div class="qz-bg"></div><div class="qz-top"><div class="qz-bars">${Q.map(()=>'<i></i>').join('')}</div>
+   <div class="qz-row"><button class="qz-icon" type="button" id="qzBack" aria-label="${L('Nazad','Back')}">‹</button><span class="qz-brand">Collection Premium</span><button class="qz-icon" type="button" id="qzClose" aria-label="${L('Zatvori','Close')}">×</button></div></div><div class="qz-body" id="qzBody"></div>`;
+  document.body.appendChild(qz);
+  qz.querySelector('#qzClose').onclick=closeQuiz;
+  qz.querySelector('#qzBack').onclick=()=>{ if(qi>0){qi--;qa.length=qi;drawQ();} };
+  document.addEventListener('keydown',e=>{ if(qzOpen&&e.key==='Escape') closeQuiz(); });
+  return qz;
+}
+function openQuiz(){ ensureQz(); qi=0; qa=[]; qzOpen=true; document.body.style.overflow='hidden'; drawQ(); requestAnimationFrame(()=>qz.classList.add('on')); qt('quiz_start'); }
+function closeQuiz(){ if(!qz) return; qzOpen=false; qz.classList.remove('on'); document.body.style.overflow=''; const v=qz.querySelector('video'); if(v) v.pause(); }
+function visual(v){
+  if(v.ph) return `<img class="ph" src="${v.ph}" alt="" loading="eager">`;
+  let h=''; if(v.bt) h+=`<img class="bt" src="img/${v.bt}.webp" alt="">`;
+  if(v.word) h+=`<span class="word" aria-hidden="true">${v.word}</span>`;
+  if(v.ring) h+=`<span class="ring" aria-hidden="true" style="--n:${v.ring}"></span>`;
+  return h;
+}
+function drawQ(){
+  const body=qz.querySelector('#qzBody');
+  qz.querySelectorAll('.qz-bars i').forEach((b,i)=>b.classList.toggle('on',i<qi||(qi>=Q.length)));
+  qz.querySelector('#qzBack').hidden=qi===0||qi>=Q.length;
+  if(qi>=Q.length) return think();
   const q=Q[qi];
-  mount.innerHTML=`<div class="q-step q-anim"><div class="q-progress">${Q.map((_,i)=>`<i class="${i<=qi?'on':''}"></i>`).join('')}</div>
-   <div class="q-title">${L(...q.t)}</div><div class="q-opts">${q.o.map((o,i)=>`<button data-i="${i}">${L(...o[0])}<small>${L(...o[1])}</small></button>`).join('')}</div></div>`;
-  mount.querySelectorAll('.q-opts button').forEach(b=>b.onclick=()=>{qa[qi]=q.o[b.dataset.i][2];qi++;renderQ();});
+  const ph=q.o.map(o=>o[4].ph).find(Boolean);
+  qz.querySelector('.qz-bg').style.backgroundImage=ph?`url(${ph})`:'none';
+  body.innerHTML=`<div class="qz-q qz-in"><div class="qz-n">${qi+1} / ${Q.length}</div><h2 class="qz-t">${L(...q.t)}</h2><div class="qz-opts">${q.o.map((o,i)=>{
+    const v=o[4];
+    return `<button class="qz-o" type="button" data-i="${i}" style="--sw:${v.sw||'#221a14'}">${visual(v)}${v.word&&!v.ph?'':''}<b>${L(o[0],o[1])}</b>${o[2]?`<small>${L(o[2],o[3])}</small>`:''}</button>`;}).join('')}</div></div>`;
+  body.querySelectorAll('.qz-o').forEach(b=>b.onclick=()=>{
+    if(b.classList.contains('pick')) return;
+    b.classList.add('pick'); qa[qi]=q.o[b.dataset.i][5];
+    setTimeout(()=>{qi++;drawQ();},340);
+  });
+  const first=body.querySelector('.qz-o'); first&&first.focus({preventScroll:true});
 }
-function score(p){
-  let s=0; const [who,when,feel]=qa;
-  if(p.t.includes(feel)) s+=5;
-  if(who==='z'&&p.g==='m') s-=9; if(who==='m'&&p.g==='z') s-=9;
-  if(who==='z'&&p.g==='z') s+=1.5; if(who==='m'&&p.g==='m') s+=2;
-  if(who==='gift'&&['dubai','love','vanille','belle-parisienne'].includes(p.id)) s+=1.2;
-  if(when==='night'&&(p.t.includes('oud')||p.t.includes('slatko'))) s+=2;
-  if(when==='day'&&(p.t.includes('svjeze')||p.t.includes('drvo'))) s+=2;
-  if(when==='summer'&&p.t.includes('svjeze')) s+=2.5;
-  if(when==='event'&&(p.t.includes('cvjetno')||['dubai','oud-secret'].includes(p.id))) s+=2;
-  return s + (P.length-P.indexOf(p))*0.01;
+function scoreAll(){
+  const w={slatko:0,oud:0,svjeze:0,cvjetno:0,drvo:0}; let who='any', event=false;
+  const bo={}; qa.forEach(a=>{ for(const k in a){ if(k==='who') who=a.who; else if(k==='event') event=true; else if(k==='boost'){ for(const id in a.boost) bo[id]=(bo[id]||0)+a.boost[id]; } else w[k]+=a[k]; } });
+  return P.map(p=>{
+    let s=p.t.reduce((a,t)=>a+(w[t]||0),0)/Math.sqrt(p.t.length);
+    if(who==='z'&&p.g==='m') s-=20; if(who==='m'&&p.g==='z') s-=20;
+    if(who==='z'&&p.g==='z') s+=1.5; if(who==='m'&&p.g==='m') s+=2;
+    if(who==='gift'&&['dubai','love','vanille','belle-parisienne'].includes(p.id)) s+=1.2;
+    if(event&&['dubai','oud-secret','bellissima'].includes(p.id)) s+=1.5;
+    s+=bo[p.id]||0;
+    return {p,s:s+(P.length-P.indexOf(p))*0.01};
+  }).sort((a,b)=>b.s-a.s);
 }
-function renderResult(){
-  const r=[...P].sort((a,b)=>score(b)-score(a)); const p=r[0], n=notes(p);
-  mount.innerHTML=`<div class="q-step q-anim"><div class="result" style="--c:${p.c}">
-   <img src="img/${p.id}.webp" alt="${p.name}">
-   <div><span class="eyebrow">${L('Tvoj miris','Your scent')}</span><h3>${p.name}</h3>
-   <p>${L('Gornje note','Top notes')}: ${n[0].toLowerCase()}.<br>${L('Srce','Heart')}: ${n[1].toLowerCase()}.<br>${L('Baza','Base')}: ${n[2].toLowerCase()}.</p>
-   <p class="alts">${L('Probaj i','You might also like')}: <b>${r[1].name}</b>, <b>${r[2].name}</b></p>
-   <div class="ctas"><button class="btn btn-gold" data-order="${p.id}">${L('Rezerviši','Reserve')} ${p.name}</button><button class="btn btn-ghost" id="qAgain">${L('Ponovi kviz','Start again')}</button></div></div></div></div>`;
-  document.getElementById('qAgain').onclick=()=>{qi=0;qa=[];renderQ();};
+function think(){
+  const body=qz.querySelector('#qzBody'); const order=[...P].sort(()=>Math.random()-.5);
+  body.innerHTML=`<div class="qz-think"><img id="qzSpin" src="img/${order[0].id}.webp" alt=""><p>${L('Tražim tvoj miris…','Finding your scent…')}</p></div>`;
+  let k=0; const img=body.querySelector('#qzSpin');
+  const iv=setInterval(()=>{k++; img.src=`img/${order[k%order.length].id}.webp`;},110);
+  setTimeout(()=>{clearInterval(iv); const r=scoreAll(); showResult(r[0].p,r,Math.min(99,Math.max(88,Math.round(90+(r[0].s-r[1].s)*3))));},1500);
 }
+function showResult(p,r,pct){
+  const T=TYPES[p.id]||[p.name,p.name,'',''], n=notes(p), alts=r.filter(x=>x.p!==p).slice(0,2).map(x=>x.p);
+  qz.querySelector('.qz-bg').style.backgroundImage='none';
+  qz.querySelectorAll('.qz-bars i').forEach(b=>b.classList.add('on'));
+  qz.querySelector('#qzBack').hidden=true;
+  const film=`film/bottles/${p.id}-${LANG==='en'?'en':'bs'}.mp4`;
+  qz.querySelector('#qzBody').innerHTML=`<div class="qz-res" style="--c:${p.c}">
+    <img class="poster" src="img/${p.id}.webp" alt="" style="object-fit:contain;padding:9vh 22vw 50vh;transition:opacity 400ms ease;background:radial-gradient(circle at 50% 22%,${p.c}55,transparent 55%)">
+    <video src="${film}" muted autoplay playsinline loop preload="auto" aria-hidden="true"></video>
+    <div class="qz-card">
+      <div class="qz-you">${L('Ti si','You are')}</div>
+      <div class="qz-type">${L(T[0],T[1])}</div>
+      <p class="qz-line">${L(T[2],T[3])}</p>
+      <div class="qz-match">${L('Tvoj miris','Your scent')} <b>${p.name.toUpperCase()}</b> · ${pct}% ${L('podudaranje','match')}</div>
+      <div class="qz-notes"><span><em>${L('Početak','Top')}</em>${n[0]}</span><span><em>${L('Srce','Heart')}</em>${n[1]}</span><span><em>${L('Baza','Base')}</em>${n[2]}</span></div>
+      <div class="qz-ctas">
+        <button class="btn btn-gold wide" type="button" data-order="${p.id}" data-track="kviz-rezervisi">${L('Rezerviši','Reserve')} ${p.name}</button>
+        <button class="btn btn-ghost" type="button" id="qzShare" data-track="kviz-share">${L('Podijeli u Story','Share to Story')}</button>
+        <button class="btn btn-ghost" type="button" id="qzAgain">${L('Ponovi kviz','Start again')}</button>
+      </div>
+      <div class="qz-alt">${L('Probaj i','Also try')}: ${alts.map(a=>`<button type="button" data-alt="${a.id}">${a.name}</button>`).join(' · ')}</div>
+    </div></div>`;
+  const v=qz.querySelector('video'); v.addEventListener('canplay',()=>{qz.querySelector('.poster').style.opacity='0';},{once:true}); v.play&&v.play().catch(()=>{});
+  qz.querySelector('[data-order]').addEventListener('click',()=>{ qt('reserve_open',p.id); closeQuiz(); });
+  qz.querySelector('#qzAgain').onclick=()=>{qi=0;qa=[];drawQ();qt('quiz_start');};
+  qz.querySelector('#qzShare').onclick=()=>shareCard(p,T);
+  qz.querySelectorAll('[data-alt]').forEach(b=>b.onclick=()=>showResult(byId(b.dataset.alt),r,Math.max(80,pct-6)));
+  qt('quiz_result',p.id);
+}
+async function shareCard(p,T){
+  const W=1080,H=1920,c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+  try{await document.fonts.ready;}catch(e){}
+  const g=x.createRadialGradient(W/2,720,60,W/2,820,1100); g.addColorStop(0,p.c); g.addColorStop(.55,'#2a1f17'); g.addColorStop(1,'#0e0b09');
+  x.fillStyle=g; x.fillRect(0,0,W,H);
+  const img=await new Promise(res=>{const i=new Image(); i.onload=()=>res(i); i.onerror=()=>res(null); i.src=`img/${p.id}.webp`;});
+  if(img){const h=860,w=img.width*h/img.height; x.save(); x.shadowColor='rgba(0,0,0,.55)'; x.shadowBlur=60; x.shadowOffsetY=40; x.drawImage(img,(W-w)/2,330,w,h); x.restore();}
+  x.textAlign='center'; x.fillStyle='#c9a46a'; x.font='500 30px Jost, sans-serif';
+  x.fillText('C O L L E C T I O N   P R E M I U M   ·   S A R A J E V O',W/2,170);
+  x.fillStyle='#e2c58f'; x.font='500 34px Jost, sans-serif'; x.fillText(L('J A    S A M','I    A M'),W/2,1330);
+  x.fillStyle='#f6efe3'; let fs=118; x.font=`500 ${fs}px "Playfair Display", Georgia, serif`;
+  const tt=L(T[0],T[1]); while(x.measureText(tt).width>W-120&&fs>60){fs-=6;x.font=`500 ${fs}px "Playfair Display", Georgia, serif`;}
+  x.fillText(tt,W/2,1470);
+  x.fillStyle='#ece1cf'; x.font='italic 400 44px "Playfair Display", Georgia, serif'; x.fillText(L('Moj miris je ','My scent is ')+p.name+'.',W/2,1560);
+  x.fillStyle='rgba(201,164,106,.6)'; x.fillRect(W/2-60,1630,120,2);
+  x.fillStyle='#f6efe3'; x.font='500 46px Jost, sans-serif'; x.fillText(L('Koji si ti?','Which one are you?'),W/2,1720);
+  x.fillStyle='#c9a46a'; x.font='400 36px Jost, sans-serif'; x.fillText(location.host.replace(/^www\./,'')+'/#kviz',W/2,1785);
+  const blob=await new Promise(res=>c.toBlob(res,'image/png'));
+  const file=new File([blob],`moj-miris-${p.id}.png`,{type:'image/png'});
+  qt('share',p.id);
+  if(navigator.canShare&&navigator.canShare({files:[file]})){ try{await navigator.share({files:[file],text:L('Moj miris je ','My scent is ')+p.name+'. '+L('Koji si ti?','Which one are you?')+' '+location.origin+'/#kviz'});return;}catch(e){ if(e&&e.name==='AbortError') return; } }
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=file.name; document.body.appendChild(a); a.click(); a.remove();
+}
+if(location.hash==='#kviz') setTimeout(()=>{ const go=document.getElementById('qzGo'); if(go) openQuiz(); },900);
 
 /* ---------- APPLY LANGUAGE ---------- */
 function applyLang(){
@@ -1122,6 +1300,7 @@ let lastFocus=null;
 function setProd(p){window.__curProd=p;document.getElementById('dImg').src=`img/${p.id}.webp`;document.getElementById('dName').textContent=p.name;document.getElementById('dPrice').textContent=L('50 ml · cijena se otkriva 1. januara','50 ml · price revealed on 1 January');sel.value=p.name;}
 window.__setProd=setProd;
 function openOrder(id){
+  try{window.CP&&CP.track('reserve_open',{label:id});}catch(e){}
   setProd(byId(id)||P[0]); drawer.classList.remove('sent'); lastFocus=document.activeElement;
   root.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
   setTimeout(()=>drawer.querySelector('input[name=ime]').focus({preventScroll:true}),350);
@@ -1134,6 +1313,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'&&root.classList.contains('ope
 drawer.querySelector('form').addEventListener('submit',async e=>{
   e.preventDefault(); const f=e.target, btn=f.querySelector('button[type=submit]'); btn.disabled=true; btn.textContent=L('Šaljem…','Sending…');
   const fd=new FormData(f); fd.set('jezik',LANG);
+  try{ if(window.CP&&!fd.get('bot-field')){ const pr=P.find(x=>x.name===fd.get('miris')); CP.reserve({full_name:fd.get('ime'),phone:fd.get('telefon'),email:fd.get('email')||null,product_slug:pr?pr.id:'dubai',quantity:fd.get('kolicina'),city:fd.get('grad'),address:fd.get('adresa'),note:fd.get('napomena'),referral_code:fd.get('kod'),consent:true}); } }catch(err){}
   try{
     const res=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(fd).toString()});
     if(!res.ok) throw new Error(res.status);
@@ -1359,5 +1539,7 @@ const el=document.getElementById('dCode');if(el&&v)el.value=v;}catch(e){}})();
 (()=>{const wbs=document.querySelectorAll('.world .wb');const io=new IntersectionObserver(e=>e.forEach(x=>{x.target.classList.toggle('in',x.isIntersecting);}),{rootMargin:'0px 0px -12% 0px',threshold:.2});wbs.forEach(w=>io.observe(w));
 if(window.gsap&&window.ScrollTrigger){const st=document.getElementById('stage');gsap.matchMedia().add('(max-width: 860px)',()=>{const t=gsap.to(st,{opacity:0,ease:'none',scrollTrigger:{trigger:'#svjetovi',start:'top 85%',end:'top 35%',scrub:true,onLeave:()=>st.style.visibility='hidden',onEnterBack:()=>st.style.visibility='visible'}});return()=>{t.scrollTrigger&&t.scrollTrigger.kill();t.kill();st.style.opacity='';st.style.visibility='';};});}})();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
+<script src="js/cp-backend.js" defer></script>
 </body>
 </html>
