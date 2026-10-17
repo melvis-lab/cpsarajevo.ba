@@ -164,6 +164,10 @@ async function render(t: string, d: Record<string, any>, to: string): Promise<{ 
       subject: `Nova firma: ${d.company} (${KIND[d.kind] ?? d.kind}) · čeka odobrenje`,
       html: layout({ pre: `${d.company} se registrovala kao ${KIND[d.kind] ?? d.kind}.`, eyebrow: "Admin · firme i preprodavači", title: esc(d.company),
         body: rows([["Tip", KIND[d.kind] ?? d.kind], ["Kontakt", d.contact_name], ["Telefon", d.phone], ["Email", d.email], ["Grad", d.city], ["Količina", d.volume], ["Poruka", d.note]]) + button("Odobri u adminu", `${admin}#firme`) }) };
+    case "admin_ig_message": return {
+      subject: `Instagram: ${d.username ? "@" + d.username : "nova poruka"} čeka tvoj odgovor`,
+      html: layout({ pre: String(d.text ?? "").slice(0, 90), eyebrow: d.kind === "comment" ? "Admin · Instagram komentar" : "Admin · Instagram poruka", title: d.username ? "@" + esc(d.username) : "Nova poruka",
+        body: rows([["Poruka", d.text], ["Claude predlaže", d.draft], ["Zašto čeka tebe", d.reason]]) + button("Odgovori u adminu", `${admin}#instagram`) }) };
   }
   throw new Error("unknown template " + t);
 }
