@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="bs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moj račun · Collection Premium Sarajevo</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#0e0b09; --ink2:#17120e; --ink3:#221a14; --cream:#f6efe3; --muted:#a89882; --gold:#c9a46a; --gold2:#e2c58f; --line:#c9a46a33; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--ink); color:var(--cream); font:16px/1.55 Jost, system-ui, sans-serif; }
+  main { max-width:560px; margin:0 auto; padding:48px 16px 80px; }
+  a { color:var(--gold2); }
+  .brand { letter-spacing:.32em; font-size:12px; color:var(--gold); text-transform:uppercase; text-decoration:none; }
+  h1 { font:500 40px/1.15 'Playfair Display', serif; margin:28px 0 8px; }
+  h1 em { color:var(--gold2); font-weight:400; }
+  h2 { font:500 22px/1.3 'Playfair Display', serif; margin:36px 0 12px; }
+  p.lead { color:var(--muted); margin:0 0 28px; }
+  .card { background:var(--ink2); border:1px solid var(--line); border-radius:16px; padding:20px; }
+  label { display:block; font-size:13px; color:var(--muted); margin:14px 0 6px; }
+  input { width:100%; background:var(--ink3); border:1px solid #ffffff1a; color:var(--cream); border-radius:10px; padding:12px 14px; font:inherit; }
+  input:focus { outline:2px solid var(--gold); outline-offset:1px; }
+  button { background:var(--gold); color:var(--ink); border:0; border-radius:999px; padding:12px 22px; font:600 15px Jost, sans-serif; cursor:pointer; margin-top:18px; }
+  button.ghost { background:none; color:var(--cream); border:1px solid #f6efe355; }
+  .msg { margin-top:14px; font-size:14px; color:var(--gold2); min-height:1.4em; }
+  .res { display:flex; justify-content:space-between; gap:12px; padding:14px 0; border-bottom:1px solid #ffffff12; }
+  .res:last-child { border-bottom:0; }
+  .res b { font-weight:600; }
+  .pill { font-size:12px; letter-spacing:.06em; border:1px solid var(--line); color:var(--gold2); border-radius:999px; padding:3px 10px; white-space:nowrap; align-self:center; }
+  .muted { color:var(--muted); font-size:14px; }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<main>
+  <a class="brand" href="/">Collection Premium · Sarajevo</a>
+
+  <section id="login">
+    <h1>Moj <em>račun</em></h1>
+    <p class="lead">Upiši email i poslat ćemo ti link za prijavu. Bez lozinke.</p>
+    <form class="card" id="loginForm">
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email" required placeholder="ime@primjer.ba">
+      <button type="submit" data-track="login-send-link">Pošalji link</button>
+      <div class="msg" id="loginMsg" role="status"></div>
+    </form>
+  </section>
+
+  <section id="account" hidden>
+    <h1>Zdravo, <em id="hello">dobro došao/la</em></h1>
+    <p class="lead" id="who"></p>
+
+    <h2>Moje rezervacije</h2>
+    <div class="card" id="resList"><span class="muted">Učitavam…</span></div>
+
+    <h2>Moji podaci</h2>
+    <form class="card" id="profileForm">
+      <label for="full_name">Ime i prezime</label><input id="full_name" autocomplete="name">
+      <label for="phone">Telefon</label><input id="phone" autocomplete="tel">
+      <label for="city">Grad</label><input id="city" autocomplete="address-level2">
+      <label for="address">Adresa za dostavu</label><input id="address" autocomplete="street-address">
+      <button type="submit" data-track="profile-save">Sačuvaj</button>
+      <div class="msg" id="profileMsg" role="status"></div>
+    </form>
+
+    <button class="ghost" id="logout" data-track="logout">Odjavi se</button>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/js/cp-backend.js"></script>
+<script>
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  const STATUS = { nova: 'Primljena', kontaktirana: 'Kontaktirali smo te', potvrdjena: 'Potvrđena', isporucena: 'Isporučena', otkazana: 'Otkazana' };
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  $('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    $('loginMsg').textContent = 'Šaljem…';
+    const r = await CP.auth.sendLink($('email').value, '/racun/');
+    $('loginMsg').textContent = r.ok ? 'Provjeri email i klikni na link. Može potrajati minut.' : 'Nije uspjelo: ' + r.error;
+  });
+
+  async function show() {
+    const user = await CP.auth.user();
+    $('login').hidden = !!user;
+    $('account').hidden = !user;
+    if (!user) return;
+    CP.track('login', { element: 'account' });
+    $('who').textContent = 'Prijavljen/a kao ' + user.email;
+
+    const { data: p } = await CP.sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
+    if (p) {
+      ['full_name', 'phone', 'city', 'address'].forEach((k) => { $(k).value = p[k] || ''; });
+      if (p.full_name) $('hello').textContent = p.full_name.split(' ')[0];
+    }
+
+    const { data: rs, error } = await CP.sb.from('reservations')
+      .select('created_at, quantity, status, products(name)').order('created_at', { ascending: false });
+    if (error) { $('resList').innerHTML = '<span class="muted">Rezervacije trenutno nisu dostupne.</span>'; return; }
+    $('resList').innerHTML = rs.length
+      ? rs.map((r) => '<div class="res"><div><b>' + esc(r.products && r.products.name) + '</b> × ' + r.quantity +
+          '<div class="muted">' + new Date(r.created_at).toLocaleDateString('bs-BA') + '</div></div><span class="pill">' +
+          esc(STATUS[r.status] || r.status) + '</span></div>').join('')
+      : '<span class="muted">Još nemaš rezervacija. <a href="/#kolekcija">Pogledaj kolekciju</a>.</span>';
+  }
+
+  $('profileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const user = await CP.auth.user();
+    const row = { id: user.id };
+    ['full_name', 'phone', 'city', 'address'].forEach((k) => { row[k] = $(k).value.trim() || null; });
+    const { error } = await CP.sb.from('profiles').upsert(row);
+    $('profileMsg').textContent = error ? 'Nije sačuvano, pokušaj ponovo.' : 'Sačuvano.';
+  });
+
+  $('logout').addEventListener('click', async () => { await CP.auth.signOut(); show(); });
+  CP.sb.auth.onAuthStateChange(() => show());
+  show();
+})();
+</script>
+</body>
+</html>

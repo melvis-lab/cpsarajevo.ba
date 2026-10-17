@@ -1,0 +1,1363 @@
+<!doctype html>
+<html lang="bs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Collection Premium Paris · by MESO · Sarajevo</title>
+<meta name="description" content="Extrait de parfum iz Pariza, sa do 30% mirisnih ulja. Službeni partner Collection Premium Paris by MESO za Sarajevo.">
+<meta property="og:title" content="Collection Premium Paris · by MESO · Sarajevo">
+<meta property="og:description" content="Nevidljiv oku. Nezaboravan duši. Extrait de parfum iz Pariza, sada i službeno u Sarajevu.">
+<meta property="og:image" content="https://collection-premium-sarajevo.netlify.app/img/brand/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://collection-premium-sarajevo.netlify.app/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0e0b09">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e0b09'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' fill='%23c9a46a' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&family=Noto+Sans+Cuneiform&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0e0b09; --ink-2:#17120e; --ink-3:#221a14;
+  --cream:#f6efe3; --cream-2:#ece1cf; --paper:#f1e8da;
+  --gold:#c9a46a; --gold-2:#e2c58f; --muted:#bcae99; --line:rgba(201,164,106,.22);
+  --ease-out:cubic-bezier(.23,1,.32,1); --ease-io:cubic-bezier(.77,0,.175,1); --ease-drawer:cubic-bezier(.32,.72,0,1);
+  --serif:"Playfair Display",Georgia,serif;--serif2:"EB Garamond",Georgia,serif; --sans:"Jost",system-ui,sans-serif;
+  --pad:clamp(16px,5vw,72px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--ink);color:var(--cream);font-family:var(--sans);font-weight:400;line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--gold);color:var(--ink)}
+.serif{font-family:var(--serif)}
+.eyebrow{font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:400}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.08;letter-spacing:-.01em}
+h2{font-size:clamp(2.1rem,4.8vw,4.1rem)}
+h2 em,h1 em{font-style:italic;color:var(--gold-2)}
+p.lead{font-size:clamp(1.02rem,1.35vw,1.2rem);color:var(--cream-2);max-width:34rem}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:.6rem;padding:1rem 1.6rem;border-radius:999px;font-size:.82rem;letter-spacing:.16em;text-transform:uppercase;font-weight:400;transition:transform 160ms var(--ease-out),background-color 200ms ease,color 200ms ease,border-color 200ms ease}
+.btn:active{transform:scale(.97)}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-ghost{border:1px solid var(--line);color:var(--cream)}
+.btn-dark{background:var(--ink);color:var(--cream)}
+@media (hover:hover) and (pointer:fine){
+  .btn-gold:hover{background:var(--gold-2)}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold-2)}
+  .btn-dark:hover{background:var(--ink-3)}
+}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:18px var(--pad);transition:background-color 300ms ease,backdrop-filter 300ms ease,padding 300ms var(--ease-out)}
+.nav.solid{background:rgba(14,11,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding-block:12px}
+.logo{position:relative;display:block;width:200px;height:38px}
+.logo img{position:absolute;left:0;top:0;width:auto;transition:opacity 300ms ease,transform 450ms var(--ease-out);transform-origin:top left}
+.logo .lg-full{height:118px;opacity:1}
+.logo .lg-nav{height:34px;top:2px;opacity:0;transform:scale(.96)}
+.nav.solid .logo .lg-full{opacity:0;transform:scale(.4)}
+.nav.solid .logo .lg-nav{opacity:1;transform:none}
+.nav{align-items:flex-start}.nav.solid{align-items:center}
+@media (max-width:860px){.logo{width:120px;height:30px}.logo .lg-full{height:78px}.logo .lg-nav{height:28px;top:1px}}
+@media (prefers-reduced-motion:reduce){.logo img{transition:opacity 200ms ease}}
+.logo b{font-family:var(--sans);font-weight:500;letter-spacing:.2em;font-size:.72rem}
+.logo span{font-family:var(--serif);font-size:1.15rem;letter-spacing:.14em;color:var(--gold-2)}
+.nav-links{display:flex;gap:2rem;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cream-2)}
+.nav-links a{transition:color 200ms ease}
+@media (hover:hover) and (pointer:fine){.nav-links a:hover{color:var(--gold-2)}}
+.nav .btn{padding:.7rem 1.2rem;font-size:.72rem}
+@media (max-width:860px){.nav-links{display:none}}
+
+.lang{font-size:.72rem;letter-spacing:.14em;color:var(--muted);padding:.6rem .7rem;border-radius:999px;transition:color 200ms ease,transform 160ms var(--ease-out)}
+.lang:active{transform:scale(.96)}
+.lang .on{color:var(--gold-2)}
+html[lang=en] .hero h1{font-size:clamp(2.4rem,5.2vw,4.9rem)}
+.stat b{white-space:nowrap}
+.stat b small{font-size:.38em;letter-spacing:.06em;margin-right:.25em;color:var(--muted)}
+.cune{font-family:"Noto Sans Cuneiform",serif;color:var(--gold);opacity:.55;letter-spacing:.35em;line-height:1;user-select:none;white-space:nowrap;overflow:hidden}
+.divider{display:flex;justify-content:center;padding:0 var(--pad);font-size:1.1rem;position:relative;z-index:2}
+.story .wm{position:absolute;right:-2%;top:6%;font-size:clamp(5rem,13vw,11rem);opacity:.05;letter-spacing:.1em;pointer-events:none}
+footer .cune{font-size:.9rem;opacity:.5}
+/* bottle stage (real product photos) */
+#stage{position:fixed;inset:0;z-index:1;pointer-events:none}
+@media (max-width:860px){#stage{position:absolute;inset:auto;top:0;left:0;right:0;height:100svh;contain:layout paint}#stage .sheen{display:none}#bwrap{will-change:transform}}
+#dust{position:absolute;inset:0;width:100%;height:100%}
+.glow{position:absolute;width:70vmin;height:70vmin;border-radius:50%;left:50%;top:50%;
+  transform:translate(calc(-50% + var(--gx,22vw)),-50%);background:radial-gradient(circle,var(--gc,rgba(227,154,98,.34)),transparent 62%);
+  transition:background 900ms ease;filter:blur(10px)}
+.b-wrap{position:absolute;left:50%;top:50%;height:min(66vh,640px);aspect-ratio:524/1400;will-change:transform}
+.b-tilt{position:absolute;inset:0;transform-style:preserve-3d}
+.b{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transform:translateY(14px) scale(.985);filter:blur(6px);
+  transition:opacity 700ms var(--ease-out),transform 900ms var(--ease-out),filter 700ms var(--ease-out);
+  filter:drop-shadow(0 0 0 transparent) blur(6px)}
+.b.on{opacity:1;transform:none;filter:drop-shadow(0 40px 40px rgba(0,0,0,.55)) blur(0)}
+.sheen{position:absolute;inset:0;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;
+  background:linear-gradient(105deg,transparent calc(var(--sh,0%) - 14%),rgba(255,255,255,.28) var(--sh,0%),transparent calc(var(--sh,0%) + 14%));mix-blend-mode:screen}
+.b-shadow{position:absolute;left:8%;right:8%;bottom:-3%;height:5%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.6),transparent);filter:blur(6px)}
+@media (max-width:860px){.b-wrap{height:40svh}.glow{width:90vmin;height:90vmin}}
+/* hero */
+.hero{min-height:100svh;display:grid;align-items:center;padding:170px var(--pad) 64px;position:relative;overflow:hidden;
+  background:radial-gradient(60% 60% at 72% 48%,rgba(201,140,80,.22),transparent 70%),radial-gradient(40% 40% at 20% 90%,rgba(120,70,30,.18),transparent 70%),var(--ink)}
+.hero-inner{max-width:46rem}
+.hero h1{font-size:clamp(2.6rem,6.2vw,5.8rem);margin:1.4rem 0 1.6rem}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2.2rem}
+.badge{display:inline-flex;align-items:center;gap:.6rem;padding:.45rem .9rem;border:1px solid var(--line);border-radius:999px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cream-2)}
+.badge i{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.scroll-cue{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:10px}
+.scroll-cue::after{content:"";width:1px;height:42px;background:linear-gradient(var(--gold),transparent);animation:cue 2.4s var(--ease-io) infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.hero-fallback{position:absolute;right:6vw;top:50%;transform:translateY(-50%);width:min(36vw,420px)}
+@media (max-width:860px){
+  .hero{align-items:end;padding-top:52svh}
+  .hero h1{margin:1rem 0 1rem}
+  .hero-fallback{right:50%;top:30%;transform:translate(50%,-50%);width:58vw}
+}
+
+/* worlds */
+.worlds{position:relative}
+.world{min-height:100svh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:0 var(--pad);position:relative;overflow:hidden;transition:background-color 600ms ease}
+.world .txt{grid-column:2;max-width:32rem;position:relative;z-index:2}
+.world .num{font-family:var(--serif);font-size:.95rem;color:var(--gold);letter-spacing:.2em}
+.world h3{font-size:clamp(2.8rem,6.2vw,5.4rem);margin:.6rem 0 .2rem}
+.world .fam{font-family:var(--serif2);font-style:italic;font-size:1.35rem;color:var(--gold-2);margin-bottom:1.2rem}
+.world p{color:var(--cream-2);font-size:1.08rem}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem}
+.chip{padding:.4rem .85rem;border:1px solid var(--line);border-radius:999px;font-size:.78rem;letter-spacing:.06em;color:var(--cream-2)}
+.world .bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+.ing{position:absolute;width:var(--s,90px);height:var(--s,90px);color:var(--gold);opacity:.55;animation:float var(--d,9s) ease-in-out infinite alternate;z-index:0}
+.ing svg{width:100%;height:100%}
+@keyframes float{from{transform:translate3d(0,-14px,0) rotate(var(--r0,-6deg))}to{transform:translate3d(0,14px,0) rotate(var(--r1,8deg))}}
+.w-intro{padding:18vh var(--pad) 6vh;text-align:center;position:relative;z-index:2}
+.w-intro h2{max-width:14ch;margin:1rem auto 0}
+@media (max-width:860px){
+  .world{grid-template-columns:1fr;align-items:end;padding-top:48svh;padding-bottom:12svh}
+  .world .txt{grid-column:1}
+  .ing.lo{display:none}
+  .scroll-cue{display:none}
+}
+
+/* story */
+.story{background:linear-gradient(var(--ink),var(--ink-2));padding:16vh var(--pad);position:relative;z-index:2;overflow:hidden}
+.story-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(32px,6vw,96px);align-items:center;max-width:1280px;margin:0 auto}
+.story h2{font-size:clamp(2.2rem,4.6vw,4rem);margin:1.2rem 0 1.6rem}
+.story p{color:var(--cream-2);margin-bottom:1rem;max-width:36rem}
+
+
+
+
+
+
+
+
+.film{margin-top:2.4rem;display:flex;align-items:center;gap:1.1rem;padding:1.1rem 1.3rem;border:1px solid var(--line);border-radius:18px;max-width:30rem;background:rgba(201,164,106,.04)}
+.film .play{flex:none;width:52px;height:52px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center}
+.film .play svg{width:16px;margin-left:3px;fill:var(--gold)}
+.film b{display:block;font-family:var(--serif);font-weight:500;font-size:1.35rem;letter-spacing:.12em}
+.film small{color:var(--muted);font-size:.8rem;letter-spacing:.08em}
+@media (max-width:860px){.story-grid{grid-template-columns:1fr}}
+
+.mapcard{border-radius:26px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 80px -30px rgba(0,0,0,.85)}
+
+
+
+
+
+/* mobile-sized backgrounds */
+@media (max-width:860px){
+ .story{background-image:linear-gradient(180deg,rgba(14,11,9,.9),rgba(14,11,9,.82)),url(img/scene/sarajevo-night-sm.webp)!important}
+ section.trust{background-image:radial-gradient(70% 70% at 50% 45%,rgba(14,11,9,.82),rgba(14,11,9,.5)),url(img/scene/sarajevo-coffee-sm.webp)!important}
+ .reviews{background-image:linear-gradient(180deg,rgba(23,18,14,.9),rgba(23,18,14,.82)),url(img/scene/sarajevo-couple-sm.webp)!important}
+}
+/* film grain for depth & texture */
+body::after{content:"";position:fixed;inset:-50%;z-index:30;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.mapcard{position:relative}
+.mapcard::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:26px;
+ background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.55)),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .02' numOctaves='4'/%3E%3CfeColorMatrix values='0 0 0 0 .79  0 0 0 0 .64  0 0 0 0 .42  0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");mix-blend-mode:soft-light}
+/* film */
+.cinema{position:relative;padding:clamp(90px,12vw,160px) 24px clamp(80px,10vw,140px);background:#070605;overflow:hidden}
+.cinema::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 55%,rgba(201,164,106,.10),transparent 70%),linear-gradient(var(--ink),transparent 18%,transparent 82%,var(--ink));pointer-events:none}
+.cinema-head{position:relative;text-align:center;max-width:46rem;margin:0 auto clamp(36px,5vw,64px)}
+.cinema-head h2{font-size:clamp(3rem,8vw,6.5rem);letter-spacing:.12em;margin:.6rem 0 .4rem;font-weight:400}
+.cinema-head .tag{font-family:var(--serif);font-style:italic;font-size:clamp(1.15rem,2vw,1.5rem);color:var(--cream-2)}
+.cinema-head .tag em{color:var(--gold-2)}
+.cinema-head p{color:var(--muted);margin:1.1rem auto 0;max-width:34rem}
+.screen{position:relative;max-width:1200px;margin:0 auto;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 0 0 1px var(--line),0 60px 120px -40px rgba(0,0,0,.9),0 0 140px -30px rgba(201,164,106,.18)}
+.screen video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.screen .cover{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:1.1rem;border:0;padding:0;cursor:pointer;color:var(--cream);background:#000 url(film/poster.webp) center/cover;transition:opacity 260ms cubic-bezier(.23,1,.32,1),visibility 260ms}
+.screen .cover::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.15),rgba(0,0,0,.6) 75%)}
+.screen .cover>*{position:relative}
+.play{width:clamp(72px,8vw,96px);height:clamp(72px,8vw,96px);border-radius:50%;display:grid;place-items:center;background:rgba(14,11,9,.45);border:1px solid var(--gold);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:transform 160ms ease-out,background-color 200ms ease}
+.play svg{width:30%;margin-left:8%;fill:var(--gold-2)}
+.cover-label{font-size:.75rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cream)}
+.screen .cover:active .play{transform:scale(.96)}
+@media (hover:hover) and (pointer:fine){.screen .cover:hover .play{transform:scale(1.05);background:rgba(201,164,106,.22)}}
+.screen.playing .cover{opacity:0;visibility:hidden}
+.credits{position:relative;display:flex;justify-content:center;flex-wrap:wrap;gap:.6rem 2.4rem;margin:1.8rem auto 0;font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.credits b{color:var(--gold);font-weight:400;margin-right:.6em}
+@media (max-width:860px){.screen{border-radius:12px;margin:0 -8px}}
+/* bottle stories */
+.p .img{position:relative}
+.p{cursor:pointer}
+.p.lift{transform:translateY(-14px) scale(1.02);box-shadow:0 30px 60px -24px rgba(0,0,0,.6)}
+@media (hover:hover) and (pointer:fine){.p:hover{transform:translateY(-4px)}.p:hover .img img{transform:translateY(-4px) rotate(-1.5deg)}}
+.p .seen{position:absolute;top:14px;right:14px;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:#6b5a48;opacity:0;transition:opacity 300ms ease}
+.p.was .seen{opacity:1}
+.sheet{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px;background:rgba(7,6,5,.84);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity 260ms cubic-bezier(.23,1,.32,1),visibility 260ms}
+.sheet.open{opacity:1;visibility:visible}
+.sheet .panel{position:relative;width:min(1080px,100%);max-height:calc(100vh - 48px);display:grid;grid-template-columns:auto 1fr;border-radius:24px;overflow:hidden;background:var(--ink-2);box-shadow:0 0 0 1px var(--line),0 60px 140px -40px rgba(0,0,0,.95);transform:translateY(24px) scale(.97);transition:transform 380ms cubic-bezier(.32,.72,0,1)}
+.sheet.open .panel{transform:none}
+.sheet .media{position:relative;height:min(calc(100vh - 48px),760px);aspect-ratio:9/16;background:#000 center/cover no-repeat}
+.sheet .media video{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 300ms ease}.sheet .media.playing video{opacity:1}
+.sheet .media .go{position:absolute;inset:0;display:grid;place-items:center;align-content:end;gap:.7rem;padding-bottom:12%;border:0;background:linear-gradient(transparent 50%,rgba(0,0,0,.65));color:var(--cream);cursor:pointer;font:inherit;transition:opacity 240ms ease}
+.sheet .media .go .ring{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--gold);background:rgba(14,11,9,.45);backdrop-filter:blur(6px);transition:transform 160ms ease-out}
+.sheet .media .go svg{width:24px;margin-left:4px;fill:var(--gold-2)}
+.sheet .media .go span{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase}
+.sheet .media .go:active .ring{transform:scale(.95)}
+.sheet .media.playing .go{opacity:0;pointer-events:none}
+.sheet .body{overflow:auto;padding:clamp(28px,4vw,52px);display:flex;flex-direction:column;gap:1.2rem;background:radial-gradient(80% 60% at 100% 0,color-mix(in srgb,var(--c) 18%,transparent),transparent 70%)}
+.sheet .meta{display:flex;justify-content:space-between;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+.sheet h3{font-size:clamp(2.4rem,4.4vw,3.6rem);line-height:1}
+.sheet .hook{font-family:var(--serif);font-style:italic;font-size:clamp(1.3rem,2vw,1.65rem);color:var(--gold-2);line-height:1.3}
+.sheet .desc{color:var(--cream-2);font-size:1rem}
+.sheet .pyr{display:grid;gap:.1rem;border-top:1px solid var(--line)}
+.sheet .pyr div{display:grid;grid-template-columns:7.5rem 1fr;gap:1rem;padding:.7rem 0;border-bottom:1px solid var(--line);font-size:.92rem}
+.sheet .pyr dt{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding-top:.2rem}
+.sheet .pyr dd{margin:0;color:var(--cream)}
+.sheet .wear{display:flex;flex-wrap:wrap;gap:.5rem}
+.sheet .wear span{font-size:.75rem;padding:.4rem .8rem;border-radius:999px;border:1px solid var(--line);color:var(--cream-2)}
+.sheet .buy{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:.3rem}
+.sheet .buy .price{font-family:var(--serif);font-size:1.7rem}
+.sheet .buy .price small{font-family:var(--sans);font-size:.75rem;color:var(--muted);margin-left:.4rem}
+.sheet .next{margin-left:auto;background:none;border:0;color:var(--cream);font:inherit;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;padding:.6rem 0;transition:color 200ms ease}
+@media (hover:hover) and (pointer:fine){.sheet .next:hover{color:var(--gold-2)}.sheet .media .go:hover .ring{transform:scale(1.05)}}
+.sheet .prog{display:flex;align-items:center;gap:.8rem;font-size:.75rem;color:var(--muted)}
+.sheet .dots{display:flex;gap:5px}
+.sheet .dots i{width:7px;height:7px;border-radius:50%;background:rgba(201,164,106,.22);transition:background-color 300ms ease}
+.sheet .dots i.on{background:var(--gold)}
+.sheet .x{position:absolute;top:14px;right:14px;z-index:3;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(14,11,9,.7);color:var(--cream);font-size:1.3rem;cursor:pointer;transition:transform 160ms ease-out}
+.sheet .x:active{transform:scale(.95)}
+@media (max-width:860px){.sheet{padding:0;place-items:end stretch}.sheet .panel{grid-template-columns:1fr;max-height:94vh;border-radius:22px 22px 0 0;overflow:auto;transform:translateY(100%)}
+ .sheet .media{height:auto;width:100%;aspect-ratio:auto;height:62vh}.sheet .body{overflow:visible;padding:26px 20px 36px}.sheet .pyr div{grid-template-columns:6rem 1fr}}
+@media (prefers-reduced-motion:reduce){.sheet .panel{transition:none;transform:none}.p.lift{transform:none}}
+/* launch / seal */
+.launch{display:flex;align-items:center;gap:1rem;margin-top:1.8rem;font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.launch .lbl{color:var(--gold)}
+.launch .cd{display:flex;align-items:baseline;gap:.25rem;font-variant-numeric:tabular-nums;letter-spacing:.06em}
+.launch .cd b{font-family:var(--serif);font-weight:400;font-size:1.25rem;color:var(--cream);letter-spacing:0}
+.launch .cd i{font-style:normal;margin-right:.55rem;color:var(--muted)}
+.wax{width:34px;height:34px;flex:none}
+.wax path{fill:#8e2a22;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.wax text{font-family:var(--serif);font-size:15px;fill:#e9b7a6;font-style:italic}
+.price.seal{display:flex;align-items:center;gap:.6rem;font-size:inherit}
+.price.seal small{font-family:var(--sans);font-size:.68rem;letter-spacing:.08em;line-height:1.3;color:#6b5a48;margin:0;max-width:7.5rem}
+.sheet .buy .price.seal small{color:var(--muted);font-size:.78rem;max-width:12rem}
+/* saga (story) */
+.saga{position:relative;height:560vh;background:#070605}
+.saga-pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.saga-vid,.saga-map{position:absolute;inset:0;width:100%;height:100%}
+.saga-vid{object-fit:cover;filter:brightness(.62) saturate(.9)}
+.saga-map{opacity:0;display:grid;place-items:center;background:#1a140d}
+.saga-map .mapstage{position:absolute;width:max(100%,160vh);aspect-ratio:2000/1250;left:50%;top:50%;translate:-50% -50%}
+.saga-map img{filter:sepia(.55) saturate(.85) contrast(1.06) brightness(1.04)}
+.saga-map::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(100% 80% at 55% 50%,transparent 45%,rgba(10,7,4,.75)),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.008 .012' numOctaves='5'/%3E%3CfeColorMatrix values='0 0 0 0 .55  0 0 0 0 .42  0 0 0 0 .26  0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");mix-blend-mode:multiply}
+.compass{position:absolute;right:4vw;top:12vh;width:clamp(70px,9vw,130px);z-index:2;opacity:.55}
+.compass circle{fill:none;stroke:#d9bd8a;stroke-width:.8}.compass path{fill:#d9bd8a}.compass text{font-family:var(--serif);font-size:9px;fill:#d9bd8a}
+.saga-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(7,6,5,.78),rgba(7,6,5,.25) 45%,transparent 70%),linear-gradient(transparent 70%,rgba(7,6,5,.7))}
+.saga-intro{position:absolute;left:clamp(24px,7vw,110px);bottom:16vh;max-width:44rem;z-index:3}
+.saga-intro h2{font-size:clamp(2.6rem,6vw,5.2rem);margin:1rem 0 1.4rem}
+.saga-intro .cune{font-size:1rem;margin-bottom:1rem}
+.saga-intro .cue{font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.chap{position:absolute;left:clamp(24px,7vw,110px);top:50%;width:min(30rem,calc(100% - 48px));z-index:3;padding:clamp(22px,2.6vw,34px);border-radius:20px;background:rgba(14,11,9,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 0 0 1px var(--line),0 40px 80px -30px rgba(0,0,0,.8);opacity:0;visibility:hidden;translate:0 calc(-50% + 24px);transition:opacity 500ms cubic-bezier(.23,1,.32,1),translate 600ms cubic-bezier(.23,1,.32,1),visibility 500ms}
+.chap.on{opacity:1;visibility:visible;translate:0 -50%}
+.chap h3{font-size:clamp(1.7rem,2.6vw,2.3rem);margin:.8rem 0 .9rem;line-height:1.12}
+.chap h3 em{font-style:italic;color:var(--gold-2)}
+.chap p{color:var(--cream-2);font-size:1rem}
+.chap .step{display:block;margin-top:1.1rem;font-size:.68rem;letter-spacing:.26em;color:var(--muted)}
+.saga-end{position:absolute;inset:0;z-index:3;display:grid;place-content:center;justify-items:center;text-align:center;gap:2rem;padding:24px;opacity:0;visibility:hidden;transition:opacity 600ms ease,visibility 600ms;background:radial-gradient(60% 50% at 50% 50%,rgba(7,6,5,.75),rgba(7,6,5,.35))}
+.saga-end.on{opacity:1;visibility:visible}
+.saga-end .q{font-family:var(--serif);font-size:clamp(2.2rem,5vw,4.2rem);line-height:1.1}
+.saga-end .q em{color:var(--gold-2)}
+.saga-end .ctas{display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center}
+.saga-bar{position:absolute;left:0;right:0;bottom:0;height:2px;background:rgba(201,164,106,.15);z-index:4}
+.saga-bar i{display:block;height:100%;width:100%;transform-origin:0 0;transform:scaleX(0);background:var(--gold)}
+@media (max-width:860px){.saga-shade{background:linear-gradient(transparent 35%,rgba(7,6,5,.85))}.chap{top:auto;bottom:5vh;translate:0 24px}.chap.on{translate:0 0}.saga-intro{bottom:10vh}.compass{top:9vh}}
+@media (prefers-reduced-motion:reduce){.chap{transition:opacity 300ms ease}}
+/* mobile: own bottle per world */
+.world .wb{display:none}
+@media (max-width:860px){
+ .world{display:flex;flex-direction:column;justify-content:center;padding-top:14vh;padding-bottom:10vh}
+ .world .wb{display:block;position:relative;z-index:2;height:42svh;margin:0 auto 2.2rem;opacity:0;transform:translateY(36px) scale(.94);transition:opacity 700ms cubic-bezier(.23,1,.32,1),transform 900ms cubic-bezier(.23,1,.32,1)}
+ .world .wb.in{opacity:1;transform:none}
+ .world .wb img{height:100%;width:auto;display:block;filter:drop-shadow(0 30px 40px rgba(0,0,0,.55))}
+}
+@media (max-width:860px) and (prefers-reduced-motion:reduce){.world .wb{opacity:1;transform:none;transition:none}}
+/* first-visit intro */
+#intro{position:fixed;inset:0;z-index:500;display:grid;place-items:center;pointer-events:auto;cursor:pointer}
+#intro .half{position:absolute;left:0;right:0;height:50.5%;background:#070605;transition:transform 900ms cubic-bezier(.77,0,.175,1)}
+#intro .top{top:0}#intro .bot{bottom:0}
+#intro .mark{position:relative;z-index:2;display:grid;justify-items:center;gap:22px;transition:opacity 400ms ease,transform 900ms cubic-bezier(.77,0,.175,1)}
+#intro .mark img{width:min(46vw,230px);opacity:0;filter:blur(10px);transform:scale(.96);animation:inLogo 1100ms cubic-bezier(.23,1,.32,1) 150ms forwards}
+#intro .mark i{display:block;width:min(52vw,260px);height:1px;background:linear-gradient(90deg,transparent,#e2c58f,transparent);transform:scaleX(0);animation:inLine 900ms cubic-bezier(.23,1,.32,1) 500ms forwards}
+#intro .mark span{font-family:var(--sans);font-size:.68rem;letter-spacing:.42em;text-transform:uppercase;color:#c9a46a;opacity:0;animation:inFade 700ms ease 900ms forwards}
+@keyframes inLogo{to{opacity:1;filter:blur(0);transform:none}}
+@keyframes inLine{to{transform:scaleX(1)}}
+@keyframes lineOut{from{transform:scaleX(1);opacity:1}to{transform:scaleX(1.4);opacity:0}}
+@keyframes inFade{to{opacity:1}}
+#intro[hidden]{display:none}
+#intro.open{pointer-events:none}
+#intro.open .top{transform:translateY(-100%)}#intro.open .bot{transform:translateY(100%)}
+#intro.open .mark{opacity:0;transform:scale(1.04)}
+body.intro-wait .hero-inner>*,body.intro-wait #bwrap{opacity:0}
+body.intro-go .hero-inner>*{animation:heroIn 900ms cubic-bezier(.23,1,.32,1) both}
+body.intro-go .hero-inner>*:nth-child(2){animation-delay:80ms}body.intro-go .hero-inner>*:nth-child(3){animation-delay:160ms}
+body.intro-go .hero-inner>*:nth-child(4){animation-delay:240ms}body.intro-go .hero-inner>*:nth-child(5){animation-delay:320ms}
+body.intro-go #bwrap>*{animation:bottleIn 1300ms cubic-bezier(.23,1,.32,1) both}
+@keyframes heroIn{from{opacity:0;transform:translateY(22px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+@keyframes bottleIn{from{opacity:0;transform:translateY(60px) scale(.9);filter:brightness(.2)}to{opacity:1;transform:none;filter:none}}
+@media (prefers-reduced-motion:reduce){#intro{display:none}body.intro-wait .hero-inner>*,body.intro-wait #bwrap{opacity:1}}
+/* first-visit intro (mobile) — film opening */
+#mi{position:fixed;inset:0;z-index:9999;background:#060504;display:none;overflow:hidden;touch-action:none;-webkit-tap-highlight-color:transparent}
+#mi.on{display:block}
+#mi video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;transition:opacity 420ms ease}
+#mi .vig{position:absolute;inset:0;z-index:2;background:radial-gradient(120% 80% at 50% 45%,transparent 45%,rgba(6,5,4,.75)),linear-gradient(transparent 60%,rgba(6,5,4,.7));pointer-events:none}
+#mi .word{position:absolute;left:0;right:0;bottom:calc(12% + env(safe-area-inset-bottom));z-index:3;text-align:center;font-family:var(--serif);font-style:italic;font-size:2.1rem;color:#f6efe3;text-shadow:0 2px 24px rgba(0,0,0,.5);opacity:0;transform:translateY(8px);filter:blur(6px);transition:opacity 160ms ease-out,transform 260ms cubic-bezier(.23,1,.32,1),filter 220ms ease-out}
+#mi .word.in{opacity:1;transform:none;filter:none}
+#mi .bar{position:absolute;left:0;top:0;height:2px;width:100%;z-index:6;background:linear-gradient(90deg,#8a6a3c,#e2c58f);transform-origin:0 50%;transform:scaleX(0)}
+#mi.run .bar{animation:miBar 3.3s linear forwards}
+#mi .glow{position:absolute;left:50%;top:48%;width:140vw;height:140vw;margin:-70vw 0 0 -70vw;border-radius:50%;z-index:2;background:radial-gradient(circle,rgba(227,154,98,.38),rgba(201,164,106,.1) 42%,transparent 68%);opacity:0;transform:scale(.8);transition:opacity 900ms ease,transform 1400ms cubic-bezier(.23,1,.32,1)}
+#mi .bt{position:absolute;left:50%;top:50%;height:44svh;aspect-ratio:524/1400;z-index:4;transform:translate(-50%,-46%) scale(.94);opacity:0;filter:blur(10px) brightness(.4);transition:opacity 700ms cubic-bezier(.23,1,.32,1),transform 1100ms cubic-bezier(.23,1,.32,1),filter 900ms cubic-bezier(.23,1,.32,1);transform-origin:50% 50%}
+#mi .bt img{width:100%;height:100%;display:block;object-fit:contain}
+#mi .bt i{position:absolute;inset:0;-webkit-mask:url(img/hero/dubai.webp) center/contain no-repeat;mask:url(img/hero/dubai.webp) center/contain no-repeat;background:linear-gradient(105deg,transparent 35%,rgba(255,240,210,.85) 50%,transparent 65%) no-repeat;background-size:300% 100%;background-position:120% 0;mix-blend-mode:screen;opacity:0}
+#mi.p2 .glow{opacity:1;transform:none}
+#mi.p2 .bt{opacity:1;transform:translate(-50%,-50%);filter:none}
+#mi.p2 .bt i{opacity:1;animation:miSweep 1100ms cubic-bezier(.77,0,.175,1) 250ms forwards}
+#mi.p2 video,#mi.p2 .word{opacity:0}
+#mi .wm{position:absolute;left:0;right:0;top:calc(13% + env(safe-area-inset-top));z-index:5;text-align:center;font-family:var(--sans);font-size:.74rem;letter-spacing:.62em;text-indent:.62em;text-transform:uppercase;color:#e2c58f}
+#mi .wm span{display:inline-block;opacity:0;filter:blur(8px);transform:translateY(6px);transition:opacity 500ms ease-out,filter 600ms ease-out,transform 600ms cubic-bezier(.23,1,.32,1)}
+#mi.p2 .wm span{opacity:1;filter:none;transform:none}
+#mi .dt{position:absolute;left:0;right:0;bottom:calc(13% + env(safe-area-inset-bottom));z-index:5;text-align:center;font-family:var(--serif);font-size:1.05rem;letter-spacing:.32em;text-indent:.32em;color:rgba(246,239,227,.82);opacity:0;transform:translateY(8px);transition:opacity 600ms ease-out 700ms,transform 700ms cubic-bezier(.23,1,.32,1) 700ms}
+#mi .dt small{display:block;margin-top:.7rem;font-family:var(--sans);font-size:.58rem;letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;color:#c9a46a}
+#mi.p2 .dt{opacity:1;transform:none}
+#mi .skip{position:absolute;right:12px;top:calc(12px + env(safe-area-inset-top));z-index:7;font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(246,239,227,.5);background:none;border:0;padding:12px}
+#mi.land{background:transparent;transition:background-color 500ms ease}
+#mi.land .glow,#mi.land .wm,#mi.land .dt,#mi.land .bar,#mi.land .skip,#mi.land video,#mi.land .vig{opacity:0!important;transition:opacity 380ms ease-out!important}
+#mi.land .bt{transition:transform 820ms cubic-bezier(.77,0,.175,1),opacity 200ms ease;filter:none}
+#mi.land .bt i{opacity:0;transition:opacity 200ms}
+#mi .shade{position:absolute;inset:0;background:#060504;z-index:0;transition:opacity 600ms ease}
+#mi.land .shade{opacity:0}
+body.mi-wait .hero-inner>*,body.mi-wait #bwrap,body.mi-wait .nav{opacity:0}
+body.mi-go .hero-inner>*,body.mi-go .nav{animation:heroIn 900ms cubic-bezier(.23,1,.32,1) both}
+body.mi-go .hero-inner>*:nth-child(2){animation-delay:70ms}body.mi-go .hero-inner>*:nth-child(3){animation-delay:140ms}
+body.mi-go .hero-inner>*:nth-child(4){animation-delay:210ms}body.mi-go .hero-inner>*:nth-child(5){animation-delay:280ms}
+@keyframes miBar{to{transform:scaleX(1)}}
+@keyframes miSweep{to{background-position:-20% 0}}
+@media (prefers-reduced-motion:reduce){#mi{display:none!important}}
+/* map */
+.mapcard{background:#0a0d0f}
+.mapstage{position:relative;aspect-ratio:2000/1250;transform-origin:0 0;will-change:transform}
+.mapstage img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.route{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.route .ghost{fill:none;stroke:rgba(255,226,170,.22);stroke-width:2.4;stroke-dasharray:3 12;stroke-linecap:round}
+.route .trail{fill:none;stroke:#f3c77a;stroke-width:10;stroke-linecap:round;opacity:.45;filter:url(#glw)}
+.route .path{fill:none;stroke:#ffe2ab;stroke-width:3.6;stroke-linecap:round}
+.route .city .dot{fill:#120e0a;stroke:#e9c98f;stroke-width:3;transition:fill 400ms ease}
+.route .city .halo{fill:url(#hl);opacity:0;transition:opacity 600ms cubic-bezier(.23,1,.32,1)}
+.route .city.lit .dot{fill:#ffe2ab}.route .city.lit .halo{opacity:1}
+.route .city.home .dot{stroke-width:4}
+.route text{font-family:var(--serif);font-size:44px;fill:#f6efe3;letter-spacing:.03em;paint-order:stroke;stroke:rgba(8,6,4,.75);stroke-width:8px;stroke-linejoin:round}
+.route .sub{font-family:var(--sans);font-size:21px;letter-spacing:.3em;fill:var(--gold-2);text-transform:uppercase;stroke-width:6px}
+.route .sea{font-family:var(--serif2);font-style:italic;font-size:34px;fill:rgba(170,200,205,.55);letter-spacing:.12em;stroke:none}
+.route .region{font-family:var(--sans);font-size:24px;letter-spacing:.6em;fill:rgba(246,239,227,.38);text-transform:uppercase;stroke:none}
+.route .caravan{fill:#fff1cf}
+.mapcap{display:flex;justify-content:space-between;align-items:center;padding:.85rem 1.2rem;background:var(--ink-2);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);position:relative;z-index:2}
+.mapcap b{font-weight:400;color:var(--gold)}
+@media (max-width:860px){.mapcap{font-size:.66rem;letter-spacing:.1em}.route text{font-size:56px}.route .sub{font-size:26px}.route .sea{font-size:40px}.route .region{display:none}}
+/* why */
+.why{background:var(--ink-2);padding:14vh var(--pad);position:relative;z-index:2}
+.why-head{max-width:1280px;margin:0 auto 3.5rem;display:flex;justify-content:space-between;align-items:end;gap:2rem;flex-wrap:wrap}
+.why h2{max-width:13ch}
+.cards{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{padding:2rem 1.8rem 2.2rem;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,rgba(201,164,106,.06),transparent);min-height:260px;display:flex;flex-direction:column}
+.card .k{font-family:var(--serif2);font-style:italic;color:var(--gold);font-size:1.1rem}
+.card h3{font-size:1.7rem;margin:1.6rem 0 .8rem}
+.card p{color:var(--cream-2);font-size:.98rem}
+.stats{max-width:1280px;margin:3.5rem auto 0;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.stat{padding:2rem 1rem 0;text-align:left}
+.stat b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,5vw,4.4rem);line-height:1;color:var(--gold-2)}
+.stat span{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:860px){.cards{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr);row-gap:1.5rem}}
+
+/* scenes */
+.story{background:linear-gradient(90deg,rgba(14,11,9,.96) 0%,rgba(14,11,9,.86) 45%,rgba(14,11,9,.55) 100%),url(img/scene/sarajevo-night.webp) center/cover no-repeat}
+section.trust{background:radial-gradient(70% 70% at 50% 45%,rgba(14,11,9,.82),rgba(14,11,9,.5)),url(img/scene/sarajevo-coffee.webp) center/cover no-repeat}
+.campaign{position:relative;z-index:2;min-height:78vh;display:flex;align-items:flex-end;padding:0 var(--pad) 10vh;
+  background:linear-gradient(90deg,rgba(14,11,9,.85) 0%,rgba(14,11,9,.35) 45%,rgba(14,11,9,0) 70%),url(img/scene/dubai-box.webp) 70% 28%/cover no-repeat}
+.campaign .in-txt{max-width:30rem}
+.campaign h2{margin:1rem 0 1.4rem}
+.gift-photo{border-radius:32px;overflow:hidden;aspect-ratio:1/1;box-shadow:0 40px 70px -35px rgba(60,40,20,.45)}
+.gift-photo img{width:100%;height:100%;object-fit:cover;object-position:46% 50%}
+@media (max-width:860px){.story{background:linear-gradient(180deg,rgba(14,11,9,.9),rgba(14,11,9,.82)),url(img/scene/sarajevo-night.webp) center/cover no-repeat}
+ .campaign{min-height:auto;padding-top:calc(100vw + 40px);padding-bottom:9vh;background:linear-gradient(180deg,rgba(14,11,9,0) 30%,var(--ink) 58%),url(img/scene/dubai-box-m.webp) center 56px/100% auto no-repeat,var(--ink)}}
+/* anatomy */
+.anatomy{background:var(--ink);padding:14vh var(--pad);position:relative;z-index:2;overflow:hidden}
+.anat-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,6vw,90px);align-items:center}
+.anat-visual{position:relative;aspect-ratio:1;max-width:460px;width:100%;margin:0 auto}
+.anat-visual .halo{position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle,rgba(227,154,98,.35),transparent 65%)}
+.anat-visual img{position:relative;height:86%;width:auto;margin:5% auto 0;filter:drop-shadow(0 40px 50px rgba(0,0,0,.6))}
+.layers{display:grid;gap:12px;margin-top:2rem}
+.layer{display:grid;grid-template-columns:110px 1fr;gap:1.2rem;padding:1.3rem 1.4rem;border-radius:18px;border:1px solid var(--line);align-items:baseline}
+.layer .lbl{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.layer .lbl small{display:block;color:var(--muted);letter-spacing:.1em;text-transform:none;font-size:.78rem;margin-top:.25rem}
+.layer .notes{font-family:var(--serif2);font-size:1.45rem;line-height:1.25}
+.layer:nth-child(1){margin-left:14%}.layer:nth-child(2){margin-left:7%}
+@media (max-width:860px){.anat-grid{grid-template-columns:1fr}.layer{grid-template-columns:1fr;gap:.4rem}.layer:nth-child(n){margin-left:0}}
+
+/* collection (light) */
+.collection{background:var(--paper);color:var(--ink);padding:14vh var(--pad);position:relative;z-index:2}
+.collection .eyebrow{color:#9a7440}
+.collection h2 em{color:#9a7440}
+.col-head{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:end;gap:2rem;flex-wrap:wrap}
+.col-head p{color:#5a4d40;max-width:28rem}
+.filters{max-width:1280px;margin:2.4rem auto 2rem;display:flex;gap:.5rem;flex-wrap:wrap}
+.filters button{padding:.55rem 1.05rem;border-radius:999px;border:1px solid rgba(14,11,9,.16);font-size:.8rem;letter-spacing:.06em;transition:background-color 200ms ease,color 200ms ease,border-color 200ms ease,transform 160ms var(--ease-out)}
+.filters button:active{transform:scale(.97)}
+.filters button[aria-pressed=true]{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.p{position:relative;border-radius:22px;padding:1.1rem 1.1rem 1.3rem;background:color-mix(in srgb,var(--c) 22%,#fbf6ee);display:flex;flex-direction:column;transition:transform 300ms var(--ease-out),opacity 250ms ease,box-shadow 300ms var(--ease-out)}
+.p.hide{display:none}
+.p .img{height:280px;display:flex;justify-content:center;align-items:center;padding:14px 0 6px}
+.p .img img{height:100%;width:auto;max-width:none;object-fit:contain;filter:drop-shadow(0 18px 18px rgba(60,40,20,.22));transition:transform 400ms var(--ease-out)}
+.p .tag{position:absolute;top:14px;left:14px;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;padding:.3rem .6rem;border-radius:999px;background:rgba(255,255,255,.6)}
+.p h3{font-size:1.6rem;margin-top:.4rem}
+.p .n{font-size:.86rem;color:#5a4d40;margin:.35rem 0 1rem;line-height:1.45;flex:1}
+.p .row{display:flex;justify-content:space-between;align-items:center}
+.p .price{font-family:var(--serif);font-size:1.4rem}
+.p .price small{font-family:var(--sans);font-size:.72rem;color:#7a6b5c;margin-left:.3rem}
+.p .btn{padding:.65rem 1rem;font-size:.7rem}
+@media (hover:hover) and (pointer:fine){.p:hover{transform:translateY(-4px);box-shadow:0 24px 40px -24px rgba(60,40,20,.35)}.p:hover .img img{transform:scale(1.04) rotate(-2deg)}}
+@media (max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:760px){.p .img{height:200px}.grid{grid-template-columns:repeat(2,1fr);gap:10px}.p h3{font-size:1.45rem}.p .n{font-size:.78rem}.p .row{flex-direction:column;align-items:stretch;gap:.6rem}.p .btn{justify-content:center}}
+
+/* quiz */
+.quiz{background:var(--ink);padding:14vh var(--pad);position:relative;z-index:2;overflow:hidden}
+.quiz-box{max-width:900px;margin:0 auto;text-align:center}
+.quiz h2{margin:1rem auto 1rem;max-width:16ch}
+.q-step{margin-top:3rem}
+.q-progress{display:flex;justify-content:center;gap:8px;margin-bottom:1.6rem}
+.q-progress i{width:28px;height:2px;background:rgba(201,164,106,.25);transition:background-color 300ms ease}
+.q-progress i.on{background:var(--gold)}
+.q-title{font-family:var(--serif2);font-size:clamp(1.6rem,3vw,2.3rem);margin-bottom:1.6rem}
+.q-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:640px;margin:0 auto}
+.q-opts button{padding:1.2rem 1.2rem;border-radius:16px;border:1px solid var(--line);text-align:left;font-size:1rem;transition:border-color 200ms ease,background-color 200ms ease,transform 160ms var(--ease-out)}
+.q-opts button small{display:block;color:var(--muted);font-size:.8rem;margin-top:.2rem}
+.q-opts button:active{transform:scale(.98)}
+@media (hover:hover) and (pointer:fine){.q-opts button:hover{border-color:var(--gold);background:rgba(201,164,106,.06)}}
+.q-anim{animation:qin 380ms var(--ease-out)}
+@keyframes qin{from{opacity:0;transform:translateY(10px);filter:blur(2px)}to{opacity:1;transform:none;filter:none}}
+.result{display:grid;grid-template-columns:240px 1fr;gap:2rem;align-items:center;text-align:left;max-width:760px;margin:0 auto;padding:2rem;border:1px solid var(--line);border-radius:26px;background:radial-gradient(circle at 20% 30%,color-mix(in srgb,var(--c) 30%,transparent),transparent 70%)}
+.result img{height:300px;width:auto;margin:0 auto;filter:drop-shadow(0 30px 30px rgba(0,0,0,.5))}
+.result h3{font-size:2.6rem;margin:.3rem 0 .6rem}
+.result p{color:var(--cream-2)}
+.result .alts{margin-top:1rem;font-size:.86rem;color:var(--muted)}
+.result .alts b{color:var(--cream-2);font-weight:400}
+.result .ctas{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.4rem}
+@media (max-width:700px){.q-opts{grid-template-columns:1fr}.result{grid-template-columns:1fr;text-align:center}.result img{height:220px}.result .ctas{justify-content:center}}
+
+/* reviews */
+.reviews{background:linear-gradient(180deg,rgba(23,18,14,.9),rgba(23,18,14,.82)),url(img/scene/sarajevo-couple.webp) center 35%/cover no-repeat;padding:14vh 0;position:relative;z-index:2;overflow:hidden}
+.reviews .head{padding:0 var(--pad);max-width:1280px;margin:0 auto 3rem}
+.marquee{display:flex;gap:16px;width:max-content;animation:mq 60s linear infinite}
+.marquee:hover{animation-play-state:paused}
+@keyframes mq{to{transform:translateX(-50%)}}
+.rv{width:min(420px,82vw);padding:2rem;border:1px solid var(--line);border-radius:22px;background:rgba(201,164,106,.03)}
+.rv .stars{color:var(--gold);letter-spacing:.2em;font-size:.9rem}
+.rv q{display:block;font-family:var(--serif2);font-size:1.45rem;line-height:1.3;margin:1rem 0 1.2rem;quotes:"„" "“"}
+.rv small{color:var(--muted);font-size:.76rem;letter-spacing:.12em;text-transform:uppercase}
+.reviews .note{padding:2rem var(--pad) 0;max-width:1280px;margin:0 auto;font-size:.78rem;color:var(--muted)}
+
+/* gift */
+.gift{background:var(--paper);color:var(--ink);padding:14vh var(--pad);position:relative;z-index:2;overflow:hidden}
+.gift-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,90px);align-items:center}
+.gift .eyebrow{color:#9a7440}.gift h2 em{color:#9a7440}
+.gift p{color:#5a4d40;margin:1.4rem 0;max-width:30rem;font-size:1.05rem}
+.gift-visual{position:relative;display:grid;place-items:center;aspect-ratio:1;border-radius:32px;background:radial-gradient(circle at 50% 60%,#fff,#eadcc6)}
+.gift-visual .box{height:58%;width:auto;position:relative;left:-8%;filter:drop-shadow(0 30px 30px rgba(60,40,20,.25))}
+.gift-visual .bot{position:absolute;height:44%;width:auto;right:18%;bottom:19%;filter:drop-shadow(0 26px 24px rgba(60,40,20,.25))}
+.soon{display:grid;gap:10px;margin-top:1.6rem}
+.soon div{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.2rem;border-radius:16px;background:#fbf6ee;border:1px solid rgba(14,11,9,.08)}
+.soon span{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;padding:.3rem .6rem;border-radius:999px;background:var(--ink);color:var(--cream)}
+@media (max-width:860px){.gift-grid{grid-template-columns:1fr}}
+
+/* trust + footer */
+.trust{background:var(--ink);padding:12vh var(--pad);position:relative;z-index:2;text-align:center}
+.trust-logo{width:min(300px,64vw);height:auto;margin:0 auto 3rem;display:block}
+.trust h2{max-width:18ch;margin:1rem auto 2rem}
+.pills{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:2.6rem}
+.pills span{padding:.7rem 1.1rem;border-radius:999px;border:1px solid var(--line);font-size:.86rem;color:var(--cream-2)}
+footer{background:var(--ink);border-top:1px solid var(--line);padding:2.4rem var(--pad);position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.4rem;font-size:.8rem;color:var(--muted)}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(8,6,4,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:60;opacity:0;pointer-events:none;transition:opacity 260ms ease}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(480px,100%);background:var(--ink-2);border-left:1px solid var(--line);z-index:61;transform:translateX(100%);transition:transform 420ms var(--ease-drawer);display:flex;flex-direction:column;overflow-y:auto}
+.open .scrim{opacity:1;pointer-events:auto}
+.open .drawer{transform:none}
+.drawer header{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 1.6rem;border-bottom:1px solid var(--line)}
+.drawer header h3{font-size:1.8rem}
+.drawer .x{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:1.2rem;transition:transform 160ms var(--ease-out)}
+.drawer .x:active{transform:scale(.94)}
+.d-prod{display:flex;gap:1rem;align-items:center;padding:1.2rem 1.6rem;background:rgba(201,164,106,.05)}
+.d-prod img{height:86px;width:auto}
+.d-prod b{font-family:var(--serif);font-weight:500;font-size:1.5rem;display:block}
+form.order{padding:1.4rem 1.6rem 2rem;display:grid;gap:.95rem}
+form.order label{display:grid;gap:.35rem;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+form.order input,form.order select,form.order textarea{font:inherit;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--cream);background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:.85rem .95rem;transition:border-color 200ms ease}
+form.order input:focus,form.order select:focus,form.order textarea:focus{outline:none;border-color:var(--gold)}
+form.order .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.8rem}
+form.order label{min-width:0}
+form.order input,form.order select,form.order textarea{width:100%;min-width:0}
+form.order .hp{position:absolute;left:-9999px}
+form.order .btn{justify-content:center;margin-top:.4rem}
+form.order .fine{font-size:.78rem;color:var(--muted);text-align:center}
+.done{padding:3rem 1.6rem;text-align:center;display:none}
+.done h3{font-size:2.4rem;margin-bottom:1rem}
+.done p{color:var(--cream-2)}
+.sent .done{display:block}.sent form.order{display:none}
+
+/* reveal */
+.rv-in{opacity:0;transform:translateY(24px)}
+.in .rv-in,.rv-in.in{opacity:1;transform:none;transition:opacity 900ms var(--ease-out),transform 900ms var(--ease-out)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;scroll-behavior:auto!important}
+  .rv-in{transform:none}
+  .drawer{transition:none}
+}
+</style>
+</head>
+<body>
+<div id="mi" aria-hidden="true"><div class="shade"></div>
+<video muted playsinline preload="auto" poster="film/intro/poster.jpg"><source src="film/intro/intro.mp4" type="video/mp4"><source src="film/intro/intro.webm" type="video/webm"></video>
+<div class="vig"></div><div class="word"></div><div class="glow"></div>
+<div class="bt"><img src="img/hero/dubai.webp" alt=""><i></i></div>
+<div class="wm"></div><div class="dt">01 · 01 · 2027<small>Sarajevo</small></div>
+<div class="bar"></div><button class="skip" type="button">Preskoči</button></div>
+<script>
+(()=>{const el=document.getElementById('mi');let seen=false;try{seen=localStorage.getItem('introSeen')==='1'}catch(e){}
+const force=/[?&]intro=1/.test(location.search);
+if(!force&&(seen||innerWidth>=860||matchMedia('(prefers-reduced-motion: reduce)').matches)){el.remove();return;}
+try{localStorage.setItem('introSeen','1')}catch(e){}
+let en=false;try{en=localStorage.getItem('lang')==='en'}catch(e){}
+const words=en?['Spice','Sweetness','Amber','Smoke']:['Začin','Slast','Ambra','Dim'];
+if(en)el.querySelector('.skip').textContent='Skip';
+const wm=el.querySelector('.wm');[...'Collection Premium'].forEach((c,i)=>{const s=document.createElement('span');s.textContent=c===' '?' ':c;s.style.transitionDelay=(120+i*38)+'ms';wm.appendChild(s);});
+const v=el.querySelector('video'),w=el.querySelector('.word'),bt=el.querySelector('.bt');
+document.body.classList.add('mi-wait');document.documentElement.style.overflow='hidden';el.classList.add('on');
+const T=[];const at=(ms,f)=>T.push(setTimeout(f,ms));let stage=0;
+function say(i){w.classList.remove('in');setTimeout(()=>{w.textContent=words[i];void w.offsetWidth;w.classList.add('in');},40);}
+function p2(){if(stage>=2)return;stage=2;T.forEach(clearTimeout);T.length=0;el.classList.add('p2','run');try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}at(1500,land);}
+function p1(){if(stage)return;stage=1;el.classList.add('run');[0,460,920,1380].forEach((t,i)=>at(t,()=>say(i)));at(1720,p2);}
+function land(){if(stage>=3)return;stage=3;T.forEach(clearTimeout);
+ if(!el.classList.contains('p2')){el.classList.add('p2');}
+ const tg=document.querySelector('#btilt img.b.on');const r0=bt.getBoundingClientRect();
+ el.classList.add('land');document.body.classList.remove('mi-wait');document.body.classList.add('mi-go');
+ const wrap=document.getElementById('bwrap');if(wrap)wrap.style.opacity='0';
+ requestAnimationFrame(()=>{const r1=tg?tg.getBoundingClientRect():null;
+  if(r1&&r1.height>20&&r1.bottom>0){const sc=r1.height/r0.height,dx=(r1.left+r1.width/2)-(r0.left+r0.width/2),dy=(r1.top+r1.height/2)-(r0.top+r0.height/2);
+   bt.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(${sc})`;}
+  else bt.style.opacity='0';
+  setTimeout(()=>{if(wrap)wrap.style.opacity='';bt.style.opacity='0';},840);
+  setTimeout(()=>{el.remove();document.documentElement.style.overflow='';document.body.classList.remove('mi-go');},1150);});}
+v.addEventListener('playing',p1,{once:true});
+const pr=v.play();if(pr&&pr.catch)pr.catch(()=>p2());
+at(900,()=>{if(!stage)p2();});
+at(5200,land);
+el.addEventListener('click',()=>{stage<2?p2():land();});
+el.querySelector('.skip').addEventListener('click',e=>{e.stopPropagation();land();});})();
+</script>
+<div id="intro" aria-hidden="true" hidden><div class="half top"></div><div class="half bot"></div><div class="mark"><img src="img/brand/logo-full.webp" alt=""><i></i><span>Sarajevo · 1. januar</span></div></div>
+<script>(()=>{let seen=false;try{seen=!!localStorage.getItem('introSeen')}catch(e){}
+if(seen||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+const el=document.getElementById('intro');el.hidden=false;document.body.classList.add('intro-wait');document.documentElement.style.overflow='hidden';
+let done=false;const open=()=>{if(done)return;done=true;try{localStorage.setItem('introSeen','1')}catch(e){}
+ el.classList.add('open');document.body.classList.remove('intro-wait');document.body.classList.add('intro-go');document.documentElement.style.overflow='';
+ setTimeout(()=>{el.remove();document.body.classList.remove('intro-go');},1500);};
+el.addEventListener('click',open);setTimeout(open,2100);})();</script>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-cinnamon" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="1.3"><rect x="14" y="40" width="74" height="12" rx="6" transform="rotate(-24 50 46)"/><rect x="18" y="54" width="70" height="11" rx="5.5" transform="rotate(-14 50 60)"/><path d="M22 58c3-4 8-3 8 1s-5 4-6 1" transform="rotate(-24 50 46)"/></g></symbol>
+    <symbol id="i-star" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="1.3"><g id="pt"><ellipse cx="50" cy="27" rx="7" ry="19"/><circle cx="50" cy="24" r="2.4"/></g><use href="#pt" transform="rotate(45 50 50)"/><use href="#pt" transform="rotate(90 50 50)"/><use href="#pt" transform="rotate(135 50 50)"/><use href="#pt" transform="rotate(180 50 50)"/><use href="#pt" transform="rotate(225 50 50)"/><use href="#pt" transform="rotate(270 50 50)"/><use href="#pt" transform="rotate(315 50 50)"/><circle cx="50" cy="50" r="5"/></g></symbol>
+    <symbol id="i-wood" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M14 44 54 22 70 34 34 62Z"/><path d="M24 46l34-18M30 52l32-17"/><path d="M42 74 78 52 88 62 56 84Z"/><path d="M50 76l30-19"/></g></symbol>
+    <symbol id="i-smoke" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M46 96C26 80 66 70 46 54S66 30 46 12"/><path d="M58 92C44 80 72 72 58 58S76 38 62 22"/></g></symbol>
+    <symbol id="i-orchid" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="1.3"><g id="pe"><path d="M50 50C40 38 42 16 50 10 58 16 60 38 50 50Z"/></g><use href="#pe" transform="rotate(72 50 50)"/><use href="#pe" transform="rotate(144 50 50)"/><use href="#pe" transform="rotate(216 50 50)"/><use href="#pe" transform="rotate(288 50 50)"/><circle cx="50" cy="50" r="6"/></g></symbol>
+    <symbol id="i-pod" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M12 88C38 64 60 40 88 10"/><path d="M18 90C44 66 64 44 90 16"/><path d="M12 88c2 2 4 3 6 2M88 10c2 2 2 4 2 6"/></g></symbol>
+    <symbol id="i-citrus" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="34"/><g id="sg"><path d="M50 50 50 17"/></g><use href="#sg" transform="rotate(36 50 50)"/><use href="#sg" transform="rotate(72 50 50)"/><use href="#sg" transform="rotate(108 50 50)"/><use href="#sg" transform="rotate(144 50 50)"/><use href="#sg" transform="rotate(180 50 50)"/><use href="#sg" transform="rotate(216 50 50)"/><use href="#sg" transform="rotate(252 50 50)"/><use href="#sg" transform="rotate(288 50 50)"/><use href="#sg" transform="rotate(324 50 50)"/><circle cx="50" cy="50" r="3"/></g></symbol>
+    <symbol id="i-leaf" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M50 92C20 70 18 30 50 8 82 30 80 70 50 92Z"/><path d="M50 96V16M50 40l-14-10M50 40l14-10M50 58l-18-12M50 58l18-12M50 74l-14-9M50 74l14-9"/></g></symbol>
+    <symbol id="i-rose" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M50 46a4 4 0 1 1 6 3a9 9 0 1 1-14-6a14 14 0 1 1 22 13a19 19 0 1 1-30-14"/><path d="M28 64c-6 10-4 20 4 24 8 4 18 2 18-6M72 64c6 10 4 20-4 24-8 4-18 2-18-6"/></g></symbol>
+    <symbol id="i-drop" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="1.3"><path d="M50 10S22 46 22 62a28 28 0 0 0 56 0C78 46 50 10 50 10Z"/><path d="M36 64a14 14 0 0 0 10 14" stroke-linecap="round"/></g></symbol>
+  </defs>
+</svg>
+
+<div id="stage" aria-hidden="true">
+  <div class="glow" id="glow"></div>
+  <canvas id="dust"></canvas>
+  <div class="b-wrap" id="bwrap">
+    <div class="b-tilt" id="btilt">
+      <img class="b on" src="img/hero/dubai.webp" alt="">
+      <img class="b" src="img/hero/oud-secret.webp" alt="">
+      <img class="b" src="img/hero/vanille.webp" alt="">
+      <img class="b" src="img/hero/safyr.webp" alt="">
+      <span class="sheen" id="sheen"></span>
+    </div>
+    <div class="b-shadow"></div>
+  </div>
+</div>
+
+<nav class="nav" id="nav">
+  <a href="#top" class="logo" aria-label="Collection Premium Paris by MESO, Sarajevo"><img class="lg-full" src="img/brand/logo-full.webp" alt="Collection Premium Paris · Extrait de parfum · by MESO" width="900" height="677"><img class="lg-nav" src="img/brand/logo-nav.webp" alt="" width="600" height="185"></a>
+  <div class="nav-links">
+    <a href="#svjetovi" data-en="Worlds">Svjetovi</a>
+    <a href="#prica" data-en="Story">Priča</a>
+    <a href="#film" data-en="Film">Film</a>
+    <a href="#kolekcija" data-en="Collection">Kolekcija</a>
+    <a href="#kviz" data-en="Quiz">Kviz</a>
+    <a href="#poklon" data-en="Gifts">Pokloni</a>
+  </div>
+  <div style="display:flex;gap:.5rem;align-items:center"><button class="lang" id="lang" aria-label="Promijeni jezik / Change language"><span data-l="bs">BS</span> / <span data-l="en">EN</span></button><button class="btn btn-gold" data-order="dubai" data-en="Reserve">Rezerviši</button></div>
+</nav>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero" id="hero">
+    <div class="hero-inner over">
+    <span class="badge"><i></i><span data-en="Official partner for Sarajevo">Službeni partner za Sarajevo</span></span>
+    <h1 data-en="Invisible to the eye.<br><em>Unforgettable to the soul.</em>">Nevidljiv oku.<br><em>Nezaboravan duši.</em></h1>
+    <p class="lead" data-en="Extrait de parfum from Paris, with up to 30% perfume oils. A scent that stays in the room long after you leave. Now officially in Sarajevo.">Extrait de parfum iz Pariza, sa do 30% mirisnih ulja. Miris koji ostaje u prostoriji i dugo nakon što odeš. Sada i službeno u Sarajevu.</p>
+    <div class="ctas">
+      <a href="#kviz" class="btn btn-gold" data-en="Find your scent">Pronađi svoj miris</a>
+      <a href="#kolekcija" class="btn btn-ghost" data-en="View the collection">Pogledaj kolekciju</a>
+    </div>
+    <div class="launch" aria-live="off"><span class="lbl" data-en="Opening 1 January">Otvaramo 1. januara</span><span class="cd" id="cd"><b data-u="d">00</b><i data-en="d">d</i><b data-u="h">00</b><i data-en="h">h</i><b data-u="m">00</b><i data-en="m">m</i><b data-u="s">00</b><i data-en="s">s</i></span></div>
+  </div>
+  <div class="scroll-cue over" data-en="Scroll">Skrolaj</div>
+</section>
+
+<!-- WORLDS -->
+<section class="worlds" id="svjetovi">
+  <div class="w-intro">
+    <span class="eyebrow" data-en="One bottle">Jedna bočica</span>
+    <h2 data-en="Four worlds. <em>One signature.</em>">Četiri svijeta. <em>Jedan potpis.</em></h2>
+  </div>
+
+  <article class="world" data-scent="0" style="background:radial-gradient(55% 60% at 25% 50%,rgba(227,154,98,.28),transparent 70%)">
+    <div class="bg">
+      <span class="ing" style="left:6%;top:16%;--s:96px;--d:8s"><svg><use href="#i-cinnamon"/></svg></span>
+      <span class="ing lo" style="left:36%;top:70%;--s:74px;--d:10s;--r0:10deg;--r1:-12deg"><svg><use href="#i-star"/></svg></span>
+      <span class="ing" style="left:40%;top:14%;--s:60px;--d:7s"><svg><use href="#i-drop"/></svg></span>
+    </div>
+    <div class="wb" aria-hidden="true"><img src="img/hero/dubai.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="txt rv-in">
+      <span class="num" data-en="01 — ORIENTAL">01 — ORIJENTALNO</span>
+      <h3>Dubai</h3>
+      <div class="fam" data-en="Warmth everyone notices.">Toplina koju svi primijete.</div>
+      <p data-en="It opens with cinnamon, nutmeg and bergamot. Dates and praline sit at the heart, while vanilla, tonka and myrrh stay on the skin for hours.">Otvara se cimetom, muškatnim oraščićem i bergamotom. U srcu su datulje i praline, a vanilija, tonka i mira ostaju na koži satima.</p>
+      <div class="chips"><span class="chip" data-en="Cinnamon">Cimet</span><span class="chip" data-en="Dates">Datulje</span><span class="chip">Praline</span><span class="chip" data-en="Vanilla">Vanilija</span><span class="chip" data-en="Myrrh">Mira</span></div>
+    </div>
+  </article>
+
+  <article class="world" data-scent="1" style="background:radial-gradient(55% 60% at 25% 50%,rgba(150,160,80,.22),transparent 70%)">
+    <div class="bg">
+      <span class="ing" style="left:8%;top:18%;--s:100px;--d:9s"><svg><use href="#i-wood"/></svg></span>
+      <span class="ing" style="left:38%;top:12%;--s:84px;--d:11s;--r0:0deg;--r1:4deg"><svg><use href="#i-smoke"/></svg></span>
+      <span class="ing lo" style="left:34%;top:72%;--s:70px;--d:8s"><svg><use href="#i-rose"/></svg></span>
+    </div>
+    <div class="wb" aria-hidden="true"><img src="img/hero/oud-secret.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="txt rv-in">
+      <span class="num">02 — OUD</span>
+      <h3>Oud Secret</h3>
+      <div class="fam" data-en="Wood, smoke and mystery.">Drvo, dim i tajna.</div>
+      <p data-en="Passion fruit and saffron, then deep oud and patchouli, finishing with leather and vanilla. For evenings you will remember.">Marakuja i šafran, zatim duboki oud i pačuli, a na kraju koža i vanilija. Za večeri koje se pamte.</p>
+      <div class="chips"><span class="chip">Oud</span><span class="chip" data-en="Saffron">Šafran</span><span class="chip" data-en="Turkish rose">Turska ruža</span><span class="chip" data-en="Leather">Koža</span></div>
+    </div>
+  </article>
+
+  <article class="world" data-scent="2" style="background:radial-gradient(55% 60% at 25% 50%,rgba(242,198,107,.22),transparent 70%)">
+    <div class="bg">
+      <span class="ing" style="left:7%;top:20%;--s:92px;--d:9s"><svg><use href="#i-orchid"/></svg></span>
+      <span class="ing lo" style="left:36%;top:66%;--s:96px;--d:10s;--r0:-2deg;--r1:6deg"><svg><use href="#i-pod"/></svg></span>
+      <span class="ing" style="left:40%;top:14%;--s:62px;--d:7s"><svg><use href="#i-rose"/></svg></span>
+    </div>
+    <div class="wb" aria-hidden="true"><img src="img/hero/vanille.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="txt rv-in">
+      <span class="num" data-en="03 — VANILLA">03 — VANILIJA</span>
+      <h3>Vanille</h3>
+      <div class="fam" data-en="Soft as a breath.">Mekano kao dah.</div>
+      <p data-en="Sea salt and fresh air at first, Turkish rose and praline at the heart, then warm vanilla with amber. Salty-sweet, soft and irresistible.">Na početku morska so i svjež zrak, u srcu turska ruža i praline, a na kraju topla vanilija s ambrom. Slano-slatko, nježno i neodoljivo.</p>
+      <div class="chips"><span class="chip" data-en="Vanilla">Vanilija</span><span class="chip">Praline</span><span class="chip" data-en="Turkish rose">Turska ruža</span><span class="chip" data-en="Sea salt">Morska so</span></div>
+    </div>
+  </article>
+
+  <article class="world" data-scent="3" style="background:radial-gradient(55% 60% at 25% 50%,rgba(127,216,180,.18),transparent 70%)">
+    <div class="bg">
+      <span class="ing" style="left:6%;top:16%;--s:98px;--d:10s"><svg><use href="#i-citrus"/></svg></span>
+      <span class="ing lo" style="left:38%;top:70%;--s:80px;--d:8s;--r0:12deg;--r1:-6deg"><svg><use href="#i-leaf"/></svg></span>
+      <span class="ing" style="left:40%;top:16%;--s:56px;--d:7s"><svg><use href="#i-drop"/></svg></span>
+    </div>
+    <div class="wb" aria-hidden="true"><img src="img/hero/safyr.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="txt rv-in">
+      <span class="num" data-en="04 — FRESH">04 — SVJEŽE</span>
+      <h3>Safyr</h3>
+      <div class="fam" data-en="Like a morning by the sea.">Kao jutro na moru.</div>
+      <p data-en="Calabrian bergamot, Sicilian citrus and mandarin. A fruity heart and clean white musk with Madagascar vanilla.">Kalabrijski bergamot, sicilijanski citrusi i mandarina. Voćno srce, čisti bijeli mošus i vanilija s Madagaskara.</p>
+      <div class="chips"><span class="chip">Bergamot</span><span class="chip" data-en="Mandarin">Mandarina</span><span class="chip" data-en="White musk">Bijeli mošus</span></div>
+    </div>
+  </article>
+</section>
+
+<!-- STORY -->
+<section class="saga" id="prica" aria-label="Priča · Karavan">
+  <div class="saga-pin">
+    <video class="saga-vid" id="sagaVid" muted loop playsinline preload="none" poster="film/bg/caravan.jpg"><source src="film/bg/caravan.mp4" type="video/mp4"></video>
+    <div class="saga-map" id="sagaMap"><div class="mapstage" id="mapstage">
+      <picture><source media="(max-width:860px)" srcset="img/scene/map-sm.webp"><img src="img/scene/map.webp" alt="" width="2000" height="1250" loading="lazy" decoding="async"></picture>
+      <svg class="route" viewBox="0 0 2000 1250" role="img" aria-label="Put karavana od Mezopotamije do Sarajeva">
+  <defs><filter id="glw" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+  <radialGradient id="hl"><stop offset="0" stop-color="#ffd99a" stop-opacity=".55"/><stop offset="1" stop-color="#ffd99a" stop-opacity="0"/></radialGradient></defs>
+  <text class="sea" x="342" y="484" text-anchor="middle"><tspan data-en="Adriatic Sea">Jadransko more</tspan></text>
+  <text class="sea" x="1266" y="418" text-anchor="middle"><tspan data-en="Black Sea">Crno more</tspan></text>
+  <text class="sea" x="686" y="959" text-anchor="middle"><tspan data-en="Mediterranean Sea">Sredozemno more</tspan></text>
+  <text class="region" x="712" y="298" text-anchor="middle"><tspan data-en="Balkans">Balkan</tspan></text>
+  <text class="region" x="1193" y="724" text-anchor="middle"><tspan data-en="Anatolia">Anadolija</tspan></text>
+  <path class="ghost" d="M1744.7 1078.6 C1713.9 1062.2 1618.4 1015.7 1560.0 980.0 C1501.6 944.3 1445.8 901.1 1394.1 864.4 C1342.4 827.8 1297.3 795.7 1250.0 760.0 C1202.7 724.3 1151.8 682.2 1110.0 650.0 C1068.2 617.8 1047.4 592.0 999.0 567.0 C950.7 542.0 879.8 522.8 820.0 500.0 C760.2 477.2 695.2 449.9 640.0 430.0 C584.8 410.1 513.8 388.7 488.6 380.4"/>
+  <path class="trail" id="routeGlow" d="M1744.7 1078.6 C1713.9 1062.2 1618.4 1015.7 1560.0 980.0 C1501.6 944.3 1445.8 901.1 1394.1 864.4 C1342.4 827.8 1297.3 795.7 1250.0 760.0 C1202.7 724.3 1151.8 682.2 1110.0 650.0 C1068.2 617.8 1047.4 592.0 999.0 567.0 C950.7 542.0 879.8 522.8 820.0 500.0 C760.2 477.2 695.2 449.9 640.0 430.0 C584.8 410.1 513.8 388.7 488.6 380.4"/>
+  <path class="path" id="routePath" d="M1744.7 1078.6 C1713.9 1062.2 1618.4 1015.7 1560.0 980.0 C1501.6 944.3 1445.8 901.1 1394.1 864.4 C1342.4 827.8 1297.3 795.7 1250.0 760.0 C1202.7 724.3 1151.8 682.2 1110.0 650.0 C1068.2 617.8 1047.4 592.0 999.0 567.0 C950.7 542.0 879.8 522.8 820.0 500.0 C760.2 477.2 695.2 449.9 640.0 430.0 C584.8 410.1 513.8 388.7 488.6 380.4"/>
+  <g class="city origin" data-at="meso"><circle class="halo" cx="1745" cy="1079" r="34"/><circle class="dot" cx="1745" cy="1079" r="9"/>
+    <text x="1735" y="1019" text-anchor="middle"><tspan data-en="Mesopotamia">Mezopotamija</tspan></text><text class="sub" x="1735" y="1053" text-anchor="middle"><tspan data-en="origin">izvor</tspan></text></g>
+  <g class="city " data-at="aleppo"><circle class="halo" cx="1394" cy="864" r="34"/><circle class="dot" cx="1394" cy="864" r="9"/>
+    <text x="1364" y="824" text-anchor="end"><tspan data-en="Aleppo">Alep</tspan></text><text class="sub" x="1364" y="858" text-anchor="end"><tspan data-en=""></tspan></text></g>
+  <g class="city " data-at="istanbul"><circle class="halo" cx="999" cy="567" r="34"/><circle class="dot" cx="999" cy="567" r="9"/>
+    <text x="1019" y="631" text-anchor="start"><tspan data-en="Istanbul">Istanbul</tspan></text><text class="sub" x="1019" y="665" text-anchor="start"><tspan data-en=""></tspan></text></g>
+  <g class="city home" data-at="sarajevo"><circle class="halo" cx="489" cy="380" r="34"/><circle class="dot" cx="489" cy="380" r="9"/>
+    <text x="489" y="318" text-anchor="middle"><tspan data-en="Sarajevo">Sarajevo</tspan></text><text class="sub" x="489" y="352" text-anchor="middle"><tspan data-en="home">dom</tspan></text></g>
+  <circle class="caravan-halo" id="caravanHalo" r="40" fill="url(#hl)"/>
+  <circle class="caravan" id="caravan" r="9"/>
+  </svg>
+    </div>
+      <svg class="compass" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="38"/><path d="M50 4 56 50 50 96 44 50z"/><path d="M4 50 50 44 96 50 50 56z" opacity=".55"/><text x="50" y="16" text-anchor="middle">N</text></svg>
+    </div>
+    <div class="saga-shade"></div>
+    <div class="saga-intro" id="sagaIntro">
+      <div class="cune" aria-hidden="true">𒀭 𒆠 𒂗 𒈠 𒁹 𒊩 𒌋 𒀸</div>
+      <span class="eyebrow" data-en="Story · Karavan">Priča · Karavan</span>
+      <h2 data-en="Travellers once carried scent <em>so they would never forget home.</em>">Nekada su putnici nosili miris <em>da ne zaborave dom.</em></h2>
+      <span class="cue" data-en="Scroll through the story">Skrolaj kroz priču</span>
+    </div>
+    <article class="chap" data-c="0"><span class="eyebrow" data-en="Mesopotamia · c. 1200 BC">Mezopotamija · oko 1200. p. n. e.</span><h3 data-en="Where rivers <em>meet the earth</em>">Gdje se rijeke susreću <em>sa zemljom</em></h3><p data-en="In the land between the Tigris and the Euphrates came the first cities, the first writing and the first perfumes. A clay tablet more than 3,000 years old records the name of a woman who made scents: Tapputi, the first perfumer whose name we know.">U zemlji između Tigrisa i Eufrata nastali su prvi gradovi, prvo pismo i prvi parfemi. Na glinenoj pločici starijoj od 3.000 godina zapisano je ime žene koja je pravila mirise: Tapputi. Prva parfumerka čije ime znamo.</p><span class="step">01 / 04</span></article>
+    <article class="chap" data-c="1"><span class="eyebrow" data-en="Aleppo · The caravan road">Alep · Put karavana</span><h3 data-en="Small vials, <em>long roads</em>">Mali flakoni, <em>dugi putevi</em></h3><p data-en="Caravans carried spices, rare flowers and resins, and travellers carried small vials of precious oils. They weren’t luxuries but reminders of home and of the people left behind. One breath took them back.">Karavani su nosili začine, rijetko cvijeće i smole, a putnici male bočice dragocjenih ulja. To nisu bili luksuzi, nego podsjetnici na dom i na ljude koje su ostavili. Jedan udah ih je vraćao kući.</p><span class="step">02 / 04</span></article>
+    <article class="chap" data-c="2"><span class="eyebrow" data-en="Istanbul · The crossroads">Istanbul · Raskršće</span><h3 data-en="Where East <em>meets West</em>">Gdje se Istok <em>sreće sa Zapadom</em></h3><p data-en="At the crossroads of two worlds, scents changed hands, languages and names. From here the roads led on, across the Balkans and into Europe.">Na raskršću dva svijeta mirisi su mijenjali ruke, jezike i imena. Odavde su putevi vodili dalje, preko Balkana, prema Evropi.</p><span class="step">03 / 04</span></article>
+    <article class="chap" data-c="3"><span class="eyebrow" data-en="Sarajevo · Home">Sarajevo · Dom</span><h3 data-en="The story <em>comes home</em>">Priča <em>stiže kući</em></h3><p data-en="Those roads reached Sarajevo too, ending at the old inns of Baščaršija where traders rested with their goods. MESO takes its name from Mesopotamia, and we are bringing that story back where it belongs: home.">Putevi su vodili i do Sarajeva, do hanova na Baščaršiji gdje su trgovci odmarali sa svojom robom. MESO je ime dobio po Mezopotamiji, a mi tu priču vraćamo tamo gdje joj je mjesto: kući.</p><span class="step">04 / 04</span></article>
+    <div class="saga-end" id="sagaEnd">
+      <p class="q" data-en="Invisible to the eye.<br><em>Unforgettable to the soul.</em>">Nevidljiv oku.<br><em>Nezaboravan duši.</em></p>
+      <div class="ctas"><a class='btn btn-gold' data-en='Read the full story' href='/prica'>Pročitaj cijelu priču</a><a class="btn btn-ghost" href="#film" data-en="Watch the film">Pogledaj film</a></div>
+    </div>
+    <div class="saga-bar"><i id="sagaBar"></i></div>
+  </div>
+</section>
+
+<!-- FILM -->
+<section class="cinema" id="film">
+  <div class="cinema-head rv-in">
+    <span class="eyebrow" data-en="Short film">Kratki film</span>
+    <h2>KARAVAN</h2>
+    <div class="tag" data-en="Invisible to the eye. <em>Unforgettable to the soul.</em>">Nevidljiv oku. <em>Nezaboravan duši.</em></div>
+    <p data-en="A scent that travelled from the caravans of Mesopotamia to Sarajevo today. Fifty-one seconds, best with sound on.">Miris koji je putovao od karavana Mezopotamije do današnjeg Sarajeva. Pedeset i jedna sekunda, najbolje uz zvuk.</p>
+  </div>
+  <div class="screen rv-in" id="screen">
+    <video id="filmVideo" playsinline preload="none" poster="film/poster.webp"></video>
+    <button class="cover" type="button" id="filmPlay" aria-label="Pokreni film Karavan">
+      <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span>
+      <span class="cover-label" data-en="Watch the film">Pogledaj film</span>
+    </button>
+  </div>
+  <div class="credits">
+    <span><b data-en="Runtime">Trajanje</b>0:51</span>
+    <span><b data-en="Language">Jezik</b><span data-en="English, subtitled">bosanski, titlovano</span></span>
+    <span><b data-en="Sound">Zvuk</b><span data-en="On">Uključen</span></span>
+  </div>
+</section>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shName">
+  <div class="panel" id="shPanel">
+    <button class="x" type="button" id="shClose" aria-label="Zatvori">×</button>
+    <div class="media" id="shMedia"><video id="shVideo" playsinline preload="none"></video>
+      <button class="go" type="button" id="shPlay"><span class="ring"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span id="shFilm"></span></button></div>
+    <div class="body">
+      <div class="meta"><span id="shTag"></span><span id="shNum"></span></div>
+      <h3 id="shName"></h3>
+      <p class="hook" id="shHook"></p>
+      <p class="desc" id="shDesc"></p>
+      <dl class="pyr" id="shPyr"></dl>
+      <div class="wear" id="shWear"></div>
+      <div class="buy"><span class="price" id="shPrice"></span><button class="btn btn-gold" type="button" id="shOrder"></button><button class="next" type="button" id="shNext"></button></div>
+      <div class="prog"><div class="dots" id="shDots"></div><span id="shProg"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY -->
+<section class="why" id="zasto">
+  <div class="why-head">
+    <div>
+      <span class="eyebrow" data-en="Why MESO">Zašto MESO</span>
+      <h2 style="margin-top:1rem" data-en="Luxury, <em>at a fair price.</em>">Luksuz, <em>po poštenoj cijeni.</em></h2>
+    </div>
+    <p class="lead" data-en="Perfume is the one thing you wear all day that nobody can see, yet everyone notices.">Parfem nosiš cijeli dan. Niko ga ne vidi, a svi ga primijete.</p>
+  </div>
+  <div class="cards">
+    <div class="card rv-in"><span class="k">01</span><h3 data-en="Real concentration">Prava koncentracija</h3><p data-en="Extrait de parfum is the most concentrated form of perfume, with up to 30% high-quality perfume oils. One spray is enough.">Extrait de parfum je najkoncentrisaniji oblik parfema, sa do 30% visokokvalitetnih mirisnih ulja. Dovoljno je jedno prskanje.</p></div>
+    <div class="card rv-in"><span class="k">02</span><h3 data-en="Straight from Paris">Direktno iz Pariza</h3><p data-en="Collection Premium Paris is a Paris perfume house founded in 2016. We are its official partner for Sarajevo, and every bottle comes straight from the house.">Collection Premium Paris je parfemska kuća iz Pariza, osnovana 2016. godine. Mi smo njen službeni partner za Sarajevo, a svaka bočica dolazi direktno od kuće.</p></div>
+    <div class="card rv-in"><span class="k">03</span><h3 data-en="Not sure which one?">Ne znaš koji odabrati?</h3><p data-en="Answer three questions and the quiz will suggest a scent. Still not sure? Ask us. We reply personally.">Odgovori na tri pitanja i kviz će ti preporučiti miris. Ako i dalje nisi siguran, pitaj nas. Odgovaramo lično.</p></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><b data-count="30" data-pre="do" data-pre-en="up to" data-suf="%"><small>do</small>30%</b><span data-en="perfume oils">mirisnih ulja</span></div>
+    <div class="stat"><b data-count="12" data-suf="+ h">12+ h</b><span data-en="on the skin">na koži</span></div>
+    <div class="stat"><b data-count="50" data-suf=" ml">50 ml</b><span data-en="in every bottle">u svakoj bočici</span></div>
+    <div class="stat"><b data-count="2016">2016</b><span data-en="founded in Paris">osnovano u Parizu</span></div>
+  </div>
+</section>
+
+
+
+<!-- ANATOMY -->
+<section class="anatomy" id="anatomija">
+  <div class="anat-grid">
+    <div class="anat-visual rv-in"><div class="halo"></div><img src="img/dubai.webp" alt="DUBAI extrait de parfum" loading="lazy"></div>
+    <div>
+      <span class="eyebrow" data-en="Anatomy of a scent · Dubai">Anatomija mirisa · Dubai</span>
+      <h2 style="margin-top:1rem" data-en="One scent, <em>three chapters.</em>">Jedan miris, <em>tri poglavlja.</em></h2>
+      <div class="layers">
+        <div class="layer rv-in"><span class="lbl" data-en="Top notes<small>the first few minutes</small>">Gornje note<small>prvih nekoliko minuta</small></span><span class="notes" data-en="Cinnamon, nutmeg, bergamot">Cimet, muškatni oraščić, bergamot</span></div>
+        <div class="layer rv-in"><span class="lbl" data-en="Heart<small>several hours</small>">Srce<small>nekoliko sati</small></span><span class="notes" data-en="Dates, praline, tuberose, mahogany">Datulje, praline, tuberoza, mahagonij</span></div>
+        <div class="layer rv-in"><span class="lbl" data-en="Base<small>all day long</small>">Baza<small>cijeli dan</small></span><span class="notes" data-en="Vanilla, tonka, amber, myrrh, benzoin">Vanilija, tonka, ambra, mira, benzoin</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAMPAIGN -->
+<section class="campaign" aria-label="Dubai">
+  <div class="in-txt rv-in">
+    <span class="eyebrow" data-en="Gift-ready">Spremno za poklon</span>
+    <h2 data-en="Dubai. <em>Warm and unforgettable.</em>">Dubai. <em>Toplo i nezaboravno.</em></h2>
+    <a href="#kolekcija" class="btn btn-gold" data-en="Discover the collection">Otkrij kolekciju</a>
+  </div>
+</section>
+
+<!-- COLLECTION -->
+<section class="collection" id="kolekcija">
+  <div class="col-head">
+    <div>
+      <span class="eyebrow" data-en="Collection">Kolekcija</span>
+      <h2 style="margin-top:1rem" data-en="Our most <em>loved scents.</em>">Najtraženiji <em>mirisi.</em></h2>
+    </div>
+    <p data-en="Twelve scents our customers choose again and again. All 50 ml, all extrait de parfum.">Dvanaest mirisa koje kupci uvijek iznova biraju. Svi u bočici od 50 ml, svi extrait de parfum.</p>
+  </div>
+  <div class="filters" role="group" aria-label="Filtriraj mirise">
+    <button aria-pressed="true" data-f="all" data-en="All">Svi</button>
+    <button aria-pressed="false" data-f="z" data-en="Women">Ženski</button>
+    <button aria-pressed="false" data-f="m" data-en="Men">Muški</button>
+    <button aria-pressed="false" data-f="u">Unisex</button>
+    <button aria-pressed="false" data-f="oud">Oud</button>
+    <button aria-pressed="false" data-f="slatko" data-en="Sweet &amp; vanilla">Slatko i vanilija</button>
+    <button aria-pressed="false" data-f="svjeze" data-en="Fresh">Svježe</button>
+    <button aria-pressed="false" data-f="cvjetno" data-en="Floral">Cvjetno</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<!-- QUIZ -->
+<section class="quiz" id="kviz">
+  <div class="quiz-box">
+    <span class="eyebrow" data-en="Quiz · 30 seconds">Kviz · 30 sekundi</span>
+    <h2 data-en="Which scent <em>is yours?</em>">Koji je miris <em>tvoj?</em></h2>
+    <p class="lead" style="margin:0 auto" data-en="Three questions. One recommendation. No guesswork.">Tri pitanja. Jedna preporuka. Bez nagađanja.</p>
+    <div id="quizMount"></div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews" id="recenzije">
+  <div class="head">
+    <span class="eyebrow" data-en="Reviews">Recenzije</span>
+    <h2 style="margin-top:1rem" data-en="What people who wear it <em>are saying.</em>">Šta kažu oni <em>koji ga već nose.</em></h2>
+  </div>
+  <div class="marquee" id="marquee"></div>
+  <p class="note" data-en="Reviews from Collection Premium Paris customers in the Netherlands. Reviews from our Sarajevo customers are coming soon.">Recenzije kupaca Collection Premium Paris iz Holandije, prevedene na bosanski. Uskoro i recenzije naših kupaca iz Sarajeva.</p>
+</section>
+
+<!-- GIFT -->
+<section class="gift" id="poklon">
+  <div class="gift-grid">
+    <figure class="gift-photo rv-in"><img src="img/scene/dubai-gift.webp" srcset="img/scene/dubai-gift-sm.webp 1280w, img/scene/dubai-gift.webp 2560w" sizes="(max-width:860px) 92vw, 46vw" alt="Ruke drže bijelu poklon kutiju DUBAI pored bočice, bosanske kahve i rahat lokuma" loading="lazy" width="1672" height="941"></figure>
+    <div>
+      <span class="eyebrow" data-en="Gifts">Pokloni</span>
+      <h2 style="margin-top:1rem" data-en="A gift they’ll <em>remember.</em>">Poklon koji se <em>pamti.</em></h2>
+      <p data-en="A white box, a magnetic cap and a bottle that feels solid in the hand. For Bajram, a wedding or a birthday, or whenever words aren’t enough.">Bijela kutija, magnetni čep i bočica koja lijepo leži u ruci. Za Bajram, svadbu ili rođendan, ili kad riječi nisu dovoljne.</p>
+      <button class="btn btn-dark" data-order="dubai" data-en="Reserve as a gift">Rezerviši kao poklon</button>
+      <div class="soon">
+        <div><b style="font-weight:300" data-en="Gift sets for Bajram and weddings">Poklon setovi za Bajram i svadbe</b> <span data-en="Soon">Uskoro</span></div>
+        <div><b style="font-weight:300" data-en="Travel spray: your scent in your pocket">Travel spray: miris u džepu</b> <span data-en="Soon">Uskoro</span></div>
+        <div><b style="font-weight:300" data-en="Home and car fragrances">Mirisi za dom i auto</b> <span data-en="Soon">Uskoro</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust">
+  <img class="trust-logo" src="img/brand/logo-full.webp" alt="Collection Premium Paris · Extrait de parfum · by MESO" width="900" height="677" loading="lazy">
+  <div class="cune" aria-hidden="true" style="font-size:1.05rem;margin-bottom:2rem">𒀭 𒆠 𒂗 𒈠 𒁹 𒊩 𒌋 𒀸 𒂊 𒄿</div>
+  <span class="eyebrow">Sarajevo</span>
+  <h2 data-en="Paris in a bottle. <em>Sarajevo at heart.</em>">Pariz u bočici. <em>Sarajevo u srcu.</em></h2>
+  <div class="pills">
+    <span data-en="Official Collection Premium Paris partner">Službeni partner Collection Premium Paris</span>
+    <span>Extrait de parfum · 50 ml</span>
+    <span data-en="Delivery across Bosnia and Herzegovina">Dostava širom BiH</span>
+    <span data-en="Personal support">Lična podrška</span>
+  </div>
+  <button class="btn btn-gold" data-order="dubai" data-en="Reserve your scent">Rezerviši svoj miris</button>
+</section>
+</main>
+
+<footer>
+  <img src="img/brand/logo-full.webp" alt="" width="900" height="677" loading="lazy" style="width:110px;height:auto;opacity:.85">
+  <span data-en="© 2026 Collection Premium Sarajevo · Official partner of Collection Premium Paris by MESO®">© 2026 Collection Premium Sarajevo · Službeni partner Collection Premium Paris by MESO®</span>
+  <span class="cune" aria-hidden="true">𒀭 𒆠 𒂗</span>
+  <span data-en="Invisible to the eye. Unforgettable to the soul.">Nevidljiv oku. Nezaboravan duši.</span>
+</footer>
+
+<!-- ORDER DRAWER -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle" aria-hidden="true">
+  <header><h3 id="dTitle" data-en="Reservation">Rezervacija</h3><button class="x" id="dClose" aria-label="Zatvori">×</button></header>
+  <div class="d-prod"><img id="dImg" src="img/dubai.webp" alt=""><div><b id="dName">Dubai</b><span id="dPrice" style="color:var(--muted)"></span></div></div>
+  <form class='order' method='POST' name='narudzba'>
+    <input type="hidden" name="form-name" value="narudzba">
+    <input type="hidden" name="jezik" value="bs">
+    <input type="hidden" name="subject" value="Nova rezervacija · Collection Premium Sarajevo">
+    <p class="hp"><label>Ne popunjavati <input name="bot-field"></label></p>
+    <label><span data-en="Full name">Ime i prezime</span><input name="ime" required autocomplete="name"></label>
+    <div class="two">
+      <label><span data-en="Phone">Telefon</span><input name="telefon" type="tel" required autocomplete="tel" placeholder="+387 …"></label>
+      <label>Email<input name="email" type="email" autocomplete="email" placeholder="opcionalno" data-ph-en="optional"></label>
+    </div>
+    <div class="two">
+      <label><span data-en="Scent">Miris</span><select name="miris" id="dSelect"></select></label>
+      <label><span data-en="Quantity">Količina</span><input name="kolicina" type="number" min="1" max="20" value="1"></label>
+    </div>
+    <div class="two">
+      <label><span data-en="City">Grad</span><input name="grad" required autocomplete="address-level2" value="Sarajevo"></label>
+      <label><span data-en="Address (optional)">Adresa (opcionalno)</span><input name="adresa" autocomplete="street-address"></label>
+    </div>
+    <label><span data-en="Referral code (optional)">Kod preporuke (opcionalno)</span><input name="kod" id="dCode" autocomplete="off" autocapitalize="characters" placeholder="npr. AMINA" data-ph-en="e.g. AMINA"></label>
+    <label><span data-en="Note">Napomena</span><textarea name="napomena" rows="3" placeholder="Npr. poklon pakovanje ili poruka na čestitki" data-ph-en="E.g. gift wrapping or a message on the card"></textarea></label>
+    <button class="btn btn-gold" type="submit" data-en="Reserve now">Rezerviši</button>
+    <p class="fine" data-en="No payment now. We open on 1 January and you’ll hear from us first, before anyone else.">Bez plaćanja sada. Otvaramo 1. januara, a tebi ćemo se javiti prvom, prije svih.</p>
+  </form>
+  <div class="done"><h3 data-en="Thank you!">Hvala!</h3><p data-en="Your scent is reserved. You’ll be among the first to hear from us before 1 January.">Tvoj miris je rezervisan. Među prvima ćeš čuti od nas prije 1. januara.</p></div>
+</aside>
+
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script>
+/* ---------- LANGUAGE ---------- */
+let LANG='bs';
+try{ const saved=localStorage.getItem('lang'); if(saved==='en'||saved==='bs') LANG=saved; }catch(e){}
+const L=(bs,en)=>LANG==='en'?en:bs;
+
+/* ---------- DATA ---------- */
+const PRICE = null; // cijena se objavljuje 1. januara
+const LAUNCH = new Date('2027-01-01T00:00:00+01:00');
+const SEAL = '<svg class="wax" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2c3 0 4 3 7 4s6-1 8 2-1 5 0 8 4 4 3 7-4 3-5 6 0 6-3 8-5-1-8 0-4 4-7 3-3-4-6-5-6 1-8-2 1-5 0-8-4-4-3-7 4-3 5-6 0-6 3-8 5 1 8 0 4-4 7-3z"/><text x="20" y="24.5" text-anchor="middle">M</text></svg>';
+const P = [
+ {id:'dubai',name:'Dubai',g:'u',c:'#e39a62',t:['slatko','oud'],bs:['Cimet, muškatni oraščić, bergamot','Datulje, praline, tuberoza','Vanilija, tonka, ambra, mira'],en:['Cinnamon, nutmeg, bergamot','Dates, praline, tuberose','Vanilla, tonka, amber, myrrh']},
+ {id:'vanille',name:'Vanille',g:'u',c:'#f2c66b',t:['slatko'],bs:['Morska so, ozonske note','Turska ruža, praline','Vanilija, pačuli, ambra'],en:['Sea salt, ozonic notes','Turkish rose, praline','Vanilla, patchouli, amber']},
+ {id:'oud-secret',name:'Oud Secret',g:'u',c:'#bfc27a',t:['oud'],bs:['Marakuja, šafran, turska ruža','Oud, pačuli, benzoin','Koža, vanilija, cistus'],en:['Passion fruit, saffron, Turkish rose','Oud, patchouli, benzoin','Leather, vanilla, cistus']},
+ {id:'safyr',name:'Safyr',g:'u',c:'#7fd8b4',t:['svjeze'],bs:['Bergamot, sicilijanski citrusi','Voćne note','Bijeli mošus, vanilija'],en:['Bergamot, Sicilian citrus','Fruity notes','White musk, vanilla']},
+ {id:'arabian-nights',name:'Arabian Nights',g:'u',c:'#f29a78',t:['oud','slatko'],bs:['Šafran, bergamot','Oud, bugarska ruža','Tonka, šećerna trska, ambra'],en:['Saffron, bergamot','Oud, Bulgarian rose','Tonka, sugar cane, amber']},
+ {id:'gourmand',name:'Gourmand',g:'u',c:'#cfe3ee',t:['cvjetno','slatko'],bs:['Bergamot, mandarina','Ruža, jasmin','Vanilija, ambra, šafran, sandalovina'],en:['Bergamot, mandarin','Rose, jasmine','Vanilla, amber, saffron, sandalwood']},
+ {id:'love',name:'Love',g:'u',c:'#f07a6a',t:['slatko','cvjetno'],bs:['Neroli, ružičasti biber, bergamot','Narandžin cvijet, jasmin, iris','Vanilija, karamel, mošus'],en:['Neroli, pink pepper, bergamot','Orange blossom, jasmine, iris','Vanilla, caramel, musk']},
+ {id:'x',name:'X',g:'u',c:'#c8d96a',t:['svjeze','drvo'],bs:['Bergamot, limun, lavanda','Jasmin, cimet, med','Duhanski list, tonka, vanilija'],en:['Bergamot, lemon, lavender','Jasmine, cinnamon, honey','Tobacco leaf, tonka, vanilla']},
+ {id:'belle-parisienne',name:'Belle Parisienne',g:'z',c:'#e7b6b4',t:['cvjetno','svjeze'],bs:['Bergamot, narandža, grejpfrut','Ruža, liči, jasmin','Pačuli, vanilija, mošus'],en:['Bergamot, orange, grapefruit','Rose, lychee, jasmine','Patchouli, vanilla, musk']},
+ {id:'bellissima',name:'Bellissima',g:'z',c:'#d9705e',t:['cvjetno'],bs:['Kruška, bergamot','Cvjetne note, koža','Vanilija, vetiver, ambra'],en:['Pear, bergamot','Floral notes, leather','Vanilla, vetiver, amber']},
+ {id:'alya',name:'Alya',g:'z',c:'#c9c77d',t:['oud','slatko'],bs:['Karamel, ribizla, breskva, šafran','Ružičasti biber, labdanum, đumbir','Oud, vanilija, benzoin'],en:['Caramel, redcurrant, peach, saffron','Pink pepper, labdanum, ginger','Oud, vanilla, benzoin']},
+ {id:'keos',name:'Keos',g:'m',c:'#e8be8c',t:['drvo','svjeze'],bs:['Kruška, bergamot','Cedar, lotos, jasmin','Vanilija, sandalovina, ambra'],en:['Pear, bergamot','Cedar, lotus, jasmine','Vanilla, sandalwood, amber']}
+];
+const GL = {z:['Ženski','Women'],m:['Muški','Men'],u:['Unisex','Unisex']};
+const byId = id => P.find(p=>p.id===id);
+const notes = p => p[LANG];
+
+/* ---------- COLLECTION ---------- */
+const FILMS = {
+ 'dubai':['Povratak','The Return'],'vanille':['Ljeto','The Summer'],'oud-secret':['Pismo','The Letter'],'safyr':['Prvo jutro','The First Morning'],
+ 'arabian-nights':['Noć fenjera','The Lantern Night'],'gourmand':['Nanina nedjelja',"Nana's Sunday"],'love':['Prvi sastanak','The First Date'],
+ 'x':['Prisustvo','Presence'],'belle-parisienne':['Jedan kofer','One Suitcase'],'bellissima':['Mamina haljina',"Mother's Dress"],
+ 'alya':['Zlatni sat','Golden Hour'],'keos':['Prije nego što se svijet probudi','Before the World Wakes']
+};
+const grid = document.getElementById('grid');
+function renderGrid(){
+  const f=(document.querySelector('.filters [aria-pressed=true]')||{}).dataset?.f||'all';
+  grid.innerHTML = P.map(p=>{const n=notes(p);return `
+  <article class="p" style="--c:${p.c}" data-g="${p.g}" data-t="${p.t.join(' ')}" data-sheet="${p.id}" tabindex="0" role="button" aria-label="${p.name}: ${L('otvori priču','open the story')}">
+   <span class="seen">${L('Otkriveno','Discovered')} ✓</span>
+   <span class="tag">${L(...GL[p.g])}</span>
+   <div class="img"><img src="img/${p.id}.webp" alt="${p.name} extrait de parfum 50 ml" loading="lazy"></div>
+   <h3>${p.name}</h3>
+   <p class="n">${n[0]} · ${n[1]} · ${n[2]}</p>
+   <div class="row"><span class="price seal">${SEAL}<small>${L('Cijena 1. januara','Price on 1 January')}</small></span><button class="btn btn-dark" data-order="${p.id}">${L('Rezerviši','Reserve')}</button></div>
+  </article>`}).join('');
+  applyFilter(f,false);
+}
+function applyFilter(f,anim){
+  grid.querySelectorAll('.p').forEach((el,i)=>{
+    const show = f==='all' || el.dataset.g===f || (!['z','m','u'].includes(f) && el.dataset.t.split(' ').includes(f));
+    el.classList.toggle('hide',!show);
+    if(anim && show && !matchMedia('(prefers-reduced-motion: reduce)').matches)
+      el.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'none'}],{duration:320,delay:i*30,easing:'cubic-bezier(.23,1,.32,1)',fill:'backwards'});
+  });
+}
+document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b)); applyFilter(b.dataset.f,true);
+}));
+
+/* ---------- REVIEWS ---------- */
+const R = [
+ ['Apsolutna sam fanica ovih mirisa. Divno mirišu i dugo traju. Odnos cijene i kvalitete je odličan i ovi mirisi neće vas razočarati.','I’m an absolute fan of these scents. They smell wonderful and last a long time. The value for money is excellent, and they won’t disappoint.'],
+ ['Dobio sam toliko komplimenata. Miris dugo traje, ekskluzivan je, a nije skup. Mogu reći samo najbolje.','I’ve had so many compliments. The scent lasts a long time, feels exclusive and isn’t expensive. I can only say good things.'],
+ ['Rijetko pišem recenzije, ali ovu nisam mogao preskočiti. Imao sam mnogo parfema koji su lijepo mirisali, ali nisu trajali. Ovaj traje izuzetno dugo.','I almost never write reviews, but I had to for this one. I’ve owned plenty of perfumes that smelled nice but didn’t last. This one lasts an incredibly long time.'],
+ ['Ugodno sam iznenađen kvalitetom. Gdje god odem, ljudi primijete kako mirišem.','I was pleasantly surprised by the quality. Wherever I go, people notice how I smell.'],
+ ['Divni mirisi koji traju. Dubai mi je favorit i sigurno nije posljednja kupovina.','Lovely fragrances that last. Dubai is my favourite, and it definitely won’t be my last purchase.'],
+ ['Miris je trajao jako dugo nakon prskanja. Preporučujem 100%.','It lasted so long after spraying. I recommend it 100%.']
+];
+const mq=document.getElementById('marquee');
+function renderReviews(){
+  const who=L('Kupac · Holandija','Customer · Netherlands');
+  const h=R.map(r=>`<div class="rv"><div class="stars" aria-label="5/5">★★★★★</div><q>${L(r[0],r[1])}</q><small>${who}</small></div>`).join('');
+  mq.innerHTML=h+h.replaceAll('class="rv"','class="rv" aria-hidden="true"');
+}
+
+/* ---------- QUIZ ---------- */
+const Q=[
+ {t:['Za koga biraš?','Who is it for?'],o:[[['Za sebe','Me'],['ženski miris','a women’s scent'],'z'],[['Za sebe','Me'],['muški miris','a men’s scent'],'m'],[['Poklon','A gift'],['za nekog posebnog','for someone special'],'gift'],[['Svejedno','Either'],['iznenadi me','surprise me'],'any']]},
+ {t:['Kada ćeš ga najčešće nositi?','When will you wear it most?'],o:[[['Svaki dan','Every day'],['posao, grad, kafa','work, the city, coffee'],'day'],[['Navečer','Evenings'],['izlasci i večere','nights out and dinners'],'night'],[['Za posebne prilike','Special occasions'],['svadbe, Bajram, slavlja','weddings, Bajram, celebrations'],'event'],[['Ljeti','Summer'],['more, sunce, putovanja','the sea, sun and travel'],'summer']]},
+ {t:['Kakav osjećaj tražiš?','What feeling are you after?'],o:[[['Toplo i slatko','Warm and sweet'],['vanilija, karamel, praline','vanilla, caramel, praline'],'slatko'],[['Tajanstveno','Mysterious'],['oud, dim, drvo','oud, smoke, wood'],'oud'],[['Svježe i čisto','Fresh and clean'],['citrusi, mošus','citrus, musk'],'svjeze'],[['Nježno i cvjetno','Soft and floral'],['ruža, jasmin','rose, jasmine'],'cvjetno']]}
+];
+let qi=0, qa=[];
+const mount=document.getElementById('quizMount');
+function renderQ(){
+  if(qi>=Q.length) return renderResult();
+  const q=Q[qi];
+  mount.innerHTML=`<div class="q-step q-anim"><div class="q-progress">${Q.map((_,i)=>`<i class="${i<=qi?'on':''}"></i>`).join('')}</div>
+   <div class="q-title">${L(...q.t)}</div><div class="q-opts">${q.o.map((o,i)=>`<button data-i="${i}">${L(...o[0])}<small>${L(...o[1])}</small></button>`).join('')}</div></div>`;
+  mount.querySelectorAll('.q-opts button').forEach(b=>b.onclick=()=>{qa[qi]=q.o[b.dataset.i][2];qi++;renderQ();});
+}
+function score(p){
+  let s=0; const [who,when,feel]=qa;
+  if(p.t.includes(feel)) s+=5;
+  if(who==='z'&&p.g==='m') s-=9; if(who==='m'&&p.g==='z') s-=9;
+  if(who==='z'&&p.g==='z') s+=1.5; if(who==='m'&&p.g==='m') s+=2;
+  if(who==='gift'&&['dubai','love','vanille','belle-parisienne'].includes(p.id)) s+=1.2;
+  if(when==='night'&&(p.t.includes('oud')||p.t.includes('slatko'))) s+=2;
+  if(when==='day'&&(p.t.includes('svjeze')||p.t.includes('drvo'))) s+=2;
+  if(when==='summer'&&p.t.includes('svjeze')) s+=2.5;
+  if(when==='event'&&(p.t.includes('cvjetno')||['dubai','oud-secret'].includes(p.id))) s+=2;
+  return s + (P.length-P.indexOf(p))*0.01;
+}
+function renderResult(){
+  const r=[...P].sort((a,b)=>score(b)-score(a)); const p=r[0], n=notes(p);
+  mount.innerHTML=`<div class="q-step q-anim"><div class="result" style="--c:${p.c}">
+   <img src="img/${p.id}.webp" alt="${p.name}">
+   <div><span class="eyebrow">${L('Tvoj miris','Your scent')}</span><h3>${p.name}</h3>
+   <p>${L('Gornje note','Top notes')}: ${n[0].toLowerCase()}.<br>${L('Srce','Heart')}: ${n[1].toLowerCase()}.<br>${L('Baza','Base')}: ${n[2].toLowerCase()}.</p>
+   <p class="alts">${L('Probaj i','You might also like')}: <b>${r[1].name}</b>, <b>${r[2].name}</b></p>
+   <div class="ctas"><button class="btn btn-gold" data-order="${p.id}">${L('Rezerviši','Reserve')} ${p.name}</button><button class="btn btn-ghost" id="qAgain">${L('Ponovi kviz','Start again')}</button></div></div></div></div>`;
+  document.getElementById('qAgain').onclick=()=>{qi=0;qa=[];renderQ();};
+}
+
+/* ---------- APPLY LANGUAGE ---------- */
+function applyLang(){
+  (window.langHooks||[]).forEach(f=>f());
+  document.documentElement.lang=LANG==='en'?'en':'bs';
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    if(el.dataset.bs===undefined) el.dataset.bs=el.innerHTML;
+    el.innerHTML=LANG==='en'?el.dataset.en:el.dataset.bs;
+  });
+  document.querySelectorAll('[data-ph-en]').forEach(el=>{
+    if(el.dataset.phBs===undefined) el.dataset.phBs=el.placeholder;
+    el.placeholder=LANG==='en'?el.dataset.phEn:el.dataset.phBs;
+  });
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    if(el.dataset.preEn!==undefined){ if(el.dataset.preBs===undefined) el.dataset.preBs=el.dataset.pre||''; el.dataset.pre=LANG==='en'?el.dataset.preEn:el.dataset.preBs; }
+    el.innerHTML=(el.dataset.pre?`<small>${el.dataset.pre}</small>`:'')+el.dataset.count+(el.dataset.suf||'');
+  });
+  document.querySelectorAll('#lang [data-l]').forEach(s=>s.classList.toggle('on',s.dataset.l===LANG));
+  renderGrid(); renderReviews(); renderQ(); if(window.__setProd&&window.__curProd) window.__setProd(window.__curProd);
+}
+document.getElementById('lang').addEventListener('click',()=>{
+  LANG=LANG==='bs'?'en':'bs'; try{localStorage.setItem('lang',LANG);}catch(e){} qi=Math.min(qi,Q.length); applyLang();
+});
+applyLang();
+
+/* ---------- ORDER DRAWER ---------- */
+const root=document.documentElement, drawer=document.getElementById('drawer'), sel=document.getElementById('dSelect');
+sel.innerHTML=P.map(p=>`<option value="${p.name}">${p.name}</option>`).join('');
+let lastFocus=null;
+function setProd(p){window.__curProd=p;document.getElementById('dImg').src=`img/${p.id}.webp`;document.getElementById('dName').textContent=p.name;document.getElementById('dPrice').textContent=L('50 ml · cijena se otkriva 1. januara','50 ml · price revealed on 1 January');sel.value=p.name;}
+window.__setProd=setProd;
+function openOrder(id){
+  setProd(byId(id)||P[0]); drawer.classList.remove('sent'); lastFocus=document.activeElement;
+  root.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+  setTimeout(()=>drawer.querySelector('input[name=ime]').focus({preventScroll:true}),350);
+}
+function closeOrder(){root.classList.remove('open');drawer.setAttribute('aria-hidden','true');document.body.style.overflow='';lastFocus&&lastFocus.focus({preventScroll:true});}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-order]'); if(b){e.preventDefault();openOrder(b.dataset.order);}});
+sel.addEventListener('change',()=>{const p=P.find(x=>x.name===sel.value); if(p){window.__curProd=p;document.getElementById('dImg').src=`img/${p.id}.webp`;document.getElementById('dName').textContent=p.name;}});
+document.getElementById('dClose').onclick=closeOrder; document.getElementById('scrim').onclick=closeOrder;
+addEventListener('keydown',e=>{if(e.key==='Escape'&&root.classList.contains('open'))closeOrder();});
+drawer.querySelector('form').addEventListener('submit',async e=>{
+  e.preventDefault(); const f=e.target, btn=f.querySelector('button[type=submit]'); btn.disabled=true; btn.textContent=L('Šaljem…','Sending…');
+  const fd=new FormData(f); fd.set('jezik',LANG);
+  try{
+    const res=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(fd).toString()});
+    if(!res.ok) throw new Error(res.status);
+    drawer.classList.add('sent'); f.reset();
+  }catch(err){ btn.textContent=L('Greška, pokušaj ponovo','Something went wrong, please try again'); }
+  finally{ btn.disabled=false; setTimeout(()=>btn.textContent=L('Rezerviši','Reserve now'),2500); }
+});
+
+/* ---------- NAV + REVEAL + COUNTERS ---------- */
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40),{passive:true});
+const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){
+  const els=en.target.classList.contains('rv-in')?[en.target]:[]; els.forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*60)); io.unobserve(en.target);}}),{rootMargin:'0px 0px -12% 0px'});
+document.querySelectorAll('.rv-in').forEach((el,i)=>{el.style.transitionDelay=((i%3)*70)+'ms';io.observe(el);});
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const cio=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;cio.unobserve(en.target);
+  const el=en.target,to=+el.dataset.count,suf=el.dataset.suf||''; if(reduce)return;
+  const from=to>1000?to-40:0,t0=performance.now(),dur=1400;
+  (function tick(t){const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,4);el.innerHTML=(el.dataset.pre?`<small>${el.dataset.pre}</small>`:'')+Math.round(from+(to-from)*e)+suf;if(k<1)requestAnimationFrame(tick);})(t0);
+}),{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
+
+/* saga: pinned story — video → antique map → route chapters → end */
+if(window.gsap){ gsap.registerPlugin(ScrollTrigger);
+  const rp=document.getElementById('routePath'), rg=document.getElementById('routeGlow'), L=rp.getTotalLength();
+  const cv=document.getElementById('caravan'), ch=document.getElementById('caravanHalo'), stage=document.getElementById('mapstage');
+  const vid=document.getElementById('sagaVid'), mapEl=document.getElementById('sagaMap'), intro=document.getElementById('sagaIntro'), end=document.getElementById('sagaEnd'), bar=document.getElementById('sagaBar');
+  const chaps=[...document.querySelectorAll('.chap')];
+  const cities=[...document.querySelectorAll('.route .city')].map(el=>{const c=el.querySelector('.dot');return {el,x:+c.getAttribute('cx'),y:+c.getAttribute('cy')};});
+  const atLen=cities.map(c=>{let best=0,bd=1e9;for(let l=0;l<=L;l+=L/400){const p=rp.getPointAtLength(l),d=(p.x-c.x)**2+(p.y-c.y)**2;if(d<bd){bd=d;best=l;}}return best;});
+  [rp,rg].forEach(e=>e.style.strokeDasharray=L);
+  const cl=(v,a,b)=>Math.max(a,Math.min(b,v)), seg=(p,a,b)=>cl((p-a)/(b-a),0,1);
+  function route(k){const off=L*(1-k);rp.style.strokeDashoffset=off;rg.style.strokeDashoffset=off;const pt=rp.getPointAtLength(L*k);
+    cv.setAttribute('cx',pt.x);cv.setAttribute('cy',pt.y);ch.setAttribute('cx',pt.x);ch.setAttribute('cy',pt.y);
+    cities.forEach((c,i)=>c.el.classList.toggle('lit',L*k>=atLen[i]-2));
+    const s=reduce?1:1.6-0.6*k, W=stage.offsetWidth, H=stage.offsetHeight, vw=mapEl.clientWidth, vh=mapEl.clientHeight, mob=vw<860;
+    const px=(pt.x/2000-.5)*W*s, py=(pt.y/1250-.5)*H*s;
+    const want=[(mob?.5:.62)*vw-vw/2,(mob?.36:.46)*vh-vh/2];
+    const mx=Math.max(0,(W*s-vw)/2)+vw*.18, my=Math.max(0,(H*s-vh)/2)+vh*.14;
+    const tx=cl(want[0]-px,-mx,mx), ty=cl(want[1]-py,-my,my);
+    stage.style.transform=`translate(${tx}px,${ty}px) scale(${s})`; }
+  function render(p){
+    bar.style.transform=`scaleX(${p})`;
+    const m=seg(p,.1,.2); mapEl.style.opacity=m; vid.style.opacity=1-m; intro.style.opacity=1-seg(p,.06,.14);
+    intro.style.visibility=p>.15?'hidden':'visible';
+    const k=seg(p,.18,.8); route(k);
+    let lit=0; atLen.forEach(l=>{if(L*k>=l-2)lit++;});
+    const idx=p<.17||p>.9?-1:Math.max(0,lit-1);
+    chaps.forEach((c,i)=>c.classList.toggle('on',i===idx));
+    end.classList.toggle('on',p>.91);
+    if(m<1&&vid.paused&&p<.25) vid.play().catch(()=>{}); if(m>=1&&!vid.paused) vid.pause();
+  }
+  render(0);
+  ScrollTrigger.create({trigger:'.saga',start:'top top',end:'bottom bottom',onUpdate:self=>render(self.progress),
+    onEnter:()=>vid.play().catch(()=>{}),onLeave:()=>vid.pause(),onLeaveBack:()=>vid.pause()});
+}
+window.__P=P; window.__reduce=reduce;
+</script>
+
+<script>
+(()=>{
+const reduce=window.__reduce, stage=document.getElementById('stage'), wrap=document.getElementById('bwrap'), tilt=document.getElementById('btilt'),
+      sheen=document.getElementById('sheen'), glow=document.getElementById('glow'), imgs=[...tilt.querySelectorAll('.b')];
+const SC=[{src:'img/hero/dubai.webp',glow:'rgba(227,154,98,.34)'},{src:'img/hero/oud-secret.webp',glow:'rgba(160,170,80,.26)'},{src:'img/hero/vanille.webp',glow:'rgba(242,198,107,.3)'},{src:'img/hero/safyr.webp',glow:'rgba(127,216,180,.24)'}];
+let cur=0;
+function mask(i){const u=`url(${SC[i].src})`;sheen.style.webkitMaskImage=u;sheen.style.maskImage=u;}
+mask(0);
+function setScent(i){ if(i===cur) return; cur=i; imgs.forEach((im,k)=>im.classList.toggle('on',k===i)); mask(i); glow.style.setProperty('--gc',SC[i].glow);
+  if(!reduce) gsap.fromTo(st,{sh:-20},{sh:130,duration:1.4,ease:'power2.inOut'}); }
+const mobile=()=>innerWidth<860;
+const heroPose=()=>mobile()?{x:0,y:-innerHeight*.2,s:1}:{x:innerWidth*.2,y:innerHeight*.01,s:1};
+const worldPose=()=>mobile()?{x:0,y:-innerHeight*.22,s:.92}:{x:-innerWidth*.22,y:innerHeight*.01,s:.96};
+const st={...heroPose(),sh:-20};
+gsap.registerPlugin(ScrollTrigger);
+const moveTl=gsap.timeline({scrollTrigger:{trigger:'#svjetovi',start:()=>mobile()?'top 5%':'top bottom',end:()=>mobile()?'top -40%':'top+='+(innerHeight*.9)+' top',scrub:.8,invalidateOnRefresh:true}})
+  .fromTo(st,{x:()=>heroPose().x,y:()=>heroPose().y,s:()=>heroPose().s},{x:()=>worldPose().x,y:()=>worldPose().y,s:()=>worldPose().s,ease:'none'});
+gsap.to(stage,{opacity:0,ease:'none',scrollTrigger:{trigger:'.saga',start:'top 85%',end:'top 35%',scrub:true,
+  onLeave:()=>stage.style.visibility='hidden',onEnterBack:()=>stage.style.visibility='visible'}});
+document.querySelectorAll('.world').forEach(el=>ScrollTrigger.create({trigger:el,start:'top 55%',end:'bottom 55%',onToggle:self=>self.isActive&&setScent(+el.dataset.scent)}));
+ScrollTrigger.create({trigger:'#hero',start:'top top',end:'bottom 55%',onEnterBack:()=>setScent(0)});
+ScrollTrigger.config({ignoreMobileResize:true});
+let lastW=innerWidth;addEventListener('resize',()=>{if(innerWidth!==lastW){lastW=innerWidth;ScrollTrigger.refresh();}});
+/* first light sweep */
+if(!reduce) gsap.fromTo(st,{sh:-20},{sh:130,duration:2,delay:.6,ease:'power2.inOut'});
+
+/* pointer tilt */
+const ptr={x:0,y:0},sm={x:0,y:0};
+addEventListener('pointermove',e=>{ptr.x=e.clientX/innerWidth*2-1;ptr.y=e.clientY/innerHeight*2-1;},{passive:true});
+
+/* gold dust */
+const cv=document.getElementById('dust'),cx=cv.getContext('2d'); let W,H,D=Math.min(devicePixelRatio,2);
+const N=innerWidth<760?60:140, pts=[];
+function size(){W=cv.width=innerWidth*D;H=cv.height=innerHeight*D;}
+size(); let dW=innerWidth; addEventListener('resize',()=>{if(innerWidth!==dW){dW=innerWidth;size();}});
+for(let i=0;i<N;i++) pts.push({x:Math.random(),y:Math.random(),r:(Math.random()*1.4+.4),v:Math.random()*.00035+.0001,a:Math.random()*.6+.2,p:Math.random()*6});
+
+function frame(t){
+  requestAnimationFrame(frame);
+  if(stage.style.visibility==='hidden') return;
+  if(mobile()){ if(scrollY>innerHeight*1.1) return;
+    if(!frame.m){frame.m=1; wrap.style.transform=`translate(-50%, calc(-50% + ${st.y}px)) scale(${st.s})`; tilt.style.transform='none';}
+    cx.clearRect(0,0,W,H);
+    if(!reduce) for(const p of pts){p.y-=p.v; if(p.y<-.02)p.y=1.02; cx.fillStyle=`rgba(232,196,138,${p.a*.7})`; cx.fillRect(p.x*W,p.y*H,p.r*D*1.6,p.r*D*1.6);}
+    return; }
+  frame.m=0;
+  sm.x+=(ptr.x-sm.x)*.06; sm.y+=(ptr.y-sm.y)*.06;
+  const fl=reduce?0:Math.sin(t/1000*.9)*8;
+  const pr=moveTl.scrollTrigger?moveTl.scrollTrigger.progress:0;
+  const lift=0;
+  wrap.style.transform=`translate(calc(-50% + ${st.x}px), calc(-50% + ${st.y+fl+lift}px)) scale(${st.s})`;
+  glow.style.setProperty('--gx',st.x+'px');
+  if(!reduce) tilt.style.transform=`perspective(1100px) rotateY(${sm.x*7}deg) rotateX(${-sm.y*4}deg)`;
+  sheen.style.setProperty('--sh',(st.sh + (reduce?0:sm.x*8))+'%');
+  cx.clearRect(0,0,W,H);
+  if(!reduce) for(const p of pts){p.y-=p.v; if(p.y<-.02)p.y=1.02;
+    const tw=.5+.5*Math.sin(t/900+p.p); cx.fillStyle=`rgba(232,196,138,${p.a*tw})`; cx.beginPath(); cx.arc(p.x*W,p.y*H,p.r*D,0,6.283); cx.fill();}
+}
+requestAnimationFrame(frame);
+})();
+</script>
+<script>
+(()=>{const sc=document.getElementById('screen'),v=document.getElementById("filmVideo"),b=document.getElementById('filmPlay');if(!sc)return;
+const pick=()=>'film/karavan'+(LANG==='en'?'':'-bs')+(matchMedia('(max-width:860px)').matches?'-720':'-web')+'.mp4';
+b.addEventListener('click',()=>{const want=pick();if(!v.src.endsWith(want))v.src=want;
+v.controls=true;sc.classList.add('playing');v.play().catch(()=>{});});
+(window.langHooks=window.langHooks||[]).push(()=>{if(v.src&&!v.src.endsWith(pick())){v.pause();v.removeAttribute('src');v.load();v.controls=false;sc.classList.remove('playing');}});
+v.addEventListener('ended',()=>{sc.classList.remove('playing');v.controls=false;v.currentTime=0;});
+new IntersectionObserver(e=>{e.forEach(x=>{if(!x.isIntersecting&&!v.paused)v.pause();});},{threshold:.25}).observe(sc);})();
+</script>
+<script>
+(()=>{
+const D={
+'dubai':{h:['Miris koji te dočeka na vratima.','The scent that meets you at the door.'],
+ d:['Topli cimet i muškatni oraščić otvaraju se kao kuhinja u kojoj se nešto peče. U srcu su datulje, praline i tuberoza, a na koži ostaju vanilija, ambra i mira. Dubai je miris povratka: mekan, sladak i dubok, za večeri kad želiš da te neko zagrli.','Warm cinnamon and nutmeg open like a kitchen where something is baking. At the heart are dates, praline and tuberose, and vanilla, amber and myrrh stay on the skin. Dubai is the scent of coming home: soft, sweet and deep, for evenings when you want to be held.'],
+ w:[['Večeri','Jesen i zima','Posebni trenuci'],['Evenings','Autumn & winter','Special moments']]},
+'vanille':{h:['Ljeto koje možeš ponijeti u decembar.','A summer you can carry into December.'],
+ d:['Morska so i svježe ozonske note, kao vjetar s Jadrana. Turska ruža i praline daju mu toplinu kože nakon sunca, a vanilija, pačuli i ambra ostaju dugo poslije zalaska. Vanille nije običan slatki miris: u sebi ima more.','Sea salt and airy ozonic notes, like a breeze off the Adriatic. Turkish rose and praline bring the warmth of sun-kissed skin, while vanilla, patchouli and amber stay long after sunset. Vanille is not just another sweet scent: it has the sea in it.'],
+ w:[['Svaki dan','Proljeće i ljeto','Izlasci'],['Every day','Spring & summer','Nights out']]},
+'oud-secret':{h:['Neke stvari se ne govore. Nose se.','Some things aren’t spoken. They’re worn.'],
+ d:['Marakuja i šafran otvaraju vrata, a turska ruža vodi dalje. U srcu je oud, tamno i plemenito drvo, uz pačuli i benzoin. Na kraju ostaju koža, vanilija i cistus: miris starih kutija i čuvanih pisama.','Passion fruit and saffron open the door, and Turkish rose leads the way in. At its heart is oud, a dark and noble wood, with patchouli and benzoin. What remains is leather, vanilla and cistus: the scent of old boxes and treasured letters.'],
+ w:[['Večeri','Hladniji dani','Kad želiš ostaviti trag'],['Evenings','Cooler days','When you want to be remembered']]},
+'safyr':{h:['Za jutra kad počinješ ispočetka.','For mornings when you start again.'],
+ d:['Bergamot i sicilijanski citrusi bude te kao otvoren prozor. Voćne note daju mu lakoću, a bijeli mošus i vanilija ga čine mekanim na koži. Safyr je čist, svijetao i lagan: miris koji ne traži pažnju, ali je dobije.','Bergamot and Sicilian citrus wake you up like an open window. Fruity notes give it lightness, and white musk with vanilla keeps it soft on the skin. Safyr is clean, bright and easy: a scent that doesn’t ask for attention, but gets it.'],
+ w:[['Posao','Svaki dan','Toplo vrijeme'],['Work','Every day','Warm weather']]},
+'arabian-nights':{h:['Kad stara čaršija ne spava.','When the old town stays awake.'],
+ d:['Šafran i bergamot pale se kao fenjeri u sumrak. Oud i bugarska ruža pričaju priču staru stotinama godina, a tonka, šećerna trska i ambra je završavaju slatko. Bogat, topao i pomalo tajanstven.','Saffron and bergamot light up like lanterns at dusk. Oud and Bulgarian rose tell a story hundreds of years old, and tonka, sugar cane and amber end it sweetly. Rich, warm and a little mysterious.'],
+ w:[['Noć','Svečanosti','Zima'],['Night','Celebrations','Winter']]},
+'gourmand':{h:['Ljubav koju gotovo možeš okusiti.','Love you can almost taste.'],
+ d:['Bergamot i mandarina, kao kora voća na kuhinjskom stolu. Ruža i jasmin iz bašte, a ispod svega vanilija, ambra, šafran i sandalovina. Gourmand miriše na nedjelju kod nane: toplo, slatko i sigurno.','Bergamot and mandarin, like citrus peel on the kitchen table. Rose and jasmine from the garden, and beneath it all vanilla, amber, saffron and sandalwood. Gourmand smells like Sunday at Nana’s: warm, sweet and safe.'],
+ w:[['Svaki dan','Hladniji dani','Porodična okupljanja'],['Every day','Cooler days','Family gatherings']]},
+'love':{h:['Sve počne jednim trenutkom.','It all starts with one moment.'],
+ d:['Neroli, ružičasti biber i bergamot, nervozno i uzbudljivo kao prvi sastanak. U srcu su narandžin cvijet, jasmin i iris, a vanilija, karamel i mošus ostaju kao sjećanje na veče koje je prebrzo prošlo.','Neroli, pink pepper and bergamot: nervous and exciting, like a first date. Orange blossom, jasmine and iris sit at the heart, while vanilla, caramel and musk linger like the memory of an evening that ended too soon.'],
+ w:[['Sastanci','Večeri','Proljeće'],['Dates','Evenings','Spring']]},
+'x':{h:['Ne moraš reći ni riječ.','You don’t need to say a word.'],
+ d:['Bergamot, limun i lavanda: svježe i odlučno. U srcu su jasmin, cimet i med, a duhanski list, tonka i vanilija mu daju dubinu. X je miris za ljude koji uđu u prostoriju i promijene atmosferu.','Bergamot, lemon and lavender: fresh and decisive. Jasmine, cinnamon and honey sit at the heart, and tobacco leaf, tonka and vanilla give it depth. X is for people who walk into a room and change the mood.'],
+ w:[['Posao','Večeri','Cijela godina'],['Work','Evenings','All year']]},
+'belle-parisienne':{h:['Jedan kofer. Cijeli novi svijet.','One suitcase. A whole new world.'],
+ d:['Bergamot, narandža i grejpfrut, kao jutro u novom gradu. Ruža, liči i jasmin su elegantni i razigrani, a pačuli, vanilija i mošus mu daju pariški šarm koji traje cijeli dan.','Bergamot, orange and grapefruit, like a morning in a new city. Rose, lychee and jasmine are elegant and playful, while patchouli, vanilla and musk add a Parisian charm that lasts all day.'],
+ w:[['Svaki dan','Proljeće','Putovanja'],['Every day','Spring','Travel']]},
+'bellissima':{h:['Bila je to mamina haljina.','It was my mother’s dress.'],
+ d:['Sočna kruška i bergamot otvaraju ga nježno. U srcu su cvjetne note i dašak kože, a vanilija, vetiver i ambra ga zaokružuju. Bellissima je ženstvena i samouvjerena: miris koji se prenosi s generacije na generaciju.','Juicy pear and bergamot open it gently. Floral notes and a touch of leather sit at the heart, rounded off by vanilla, vetiver and amber. Bellissima is feminine and confident: a scent passed down from one generation to the next.'],
+ w:[['Posebne prilike','Večeri','Jesen'],['Special occasions','Evenings','Autumn']]},
+'alya':{h:['Svako veče grad postane zlatan.','Every evening, the city turns to gold.'],
+ d:['Karamel, ribizla, breskva i šafran sijaju kao zalazak sunca nad krovovima. Ružičasti biber, labdanum i đumbir mu daju toplinu, a oud, vanilija i benzoin ostaju na koži do kasno u noć.','Caramel, redcurrant, peach and saffron glow like a sunset over the rooftops. Pink pepper, labdanum and ginger add warmth, and oud, vanilla and benzoin stay on the skin late into the night.'],
+ w:[['Zalazak sunca','Večeri','Jesen i zima'],['Sunset','Evenings','Autumn & winter']]},
+'keos':{h:['Prije nego što se svijet probudi.','Before the world wakes up.'],
+ d:['Kruška i bergamot, svježi kao planinski zrak u zoru. Cedar, lotos i jasmin donose mir šume, a vanilija, sandalovina i ambra toplinu prve kafe. Keos je miran, čist i tiho siguran u sebe.','Pear and bergamot, fresh as mountain air at dawn. Cedar, lotus and jasmine bring the calm of the forest, while vanilla, sandalwood and amber add the warmth of the first coffee. Keos is calm, clean and quietly confident.'],
+ w:[['Svaki dan','Posao','Cijela godina'],['Every day','Work','All year']]}
+};
+const $=id=>document.getElementById(id), sh=$('sheet'), v=$('shVideo'), media=$('shMedia');
+let cur=null,last=null,seen=[];
+try{seen=JSON.parse(localStorage.getItem('seen')||'[]')}catch(e){}
+const mark=()=>{document.querySelectorAll('.p[data-sheet]').forEach(el=>el.classList.toggle('was',seen.includes(el.dataset.sheet)));};
+const src=id=>'film/bottles/'+id+'-'+(LANG==='en'?'en':'bs')+'.mp4';
+function fill(id){
+  const p=P.find(x=>x.id===id), d=D[id], i=P.indexOf(p), n=p[LANG], f=FILMS[id];
+  if(!seen.includes(id)){seen.push(id);try{localStorage.setItem('seen',JSON.stringify(seen))}catch(e){}}
+  cur=id; $('shPanel').style.setProperty('--c',p.c);
+  $('shTag').textContent=L(...GL[p.g])+' · Extrait de parfum'; $('shNum').textContent=String(i+1).padStart(2,'0')+' / 12';
+  $('shName').textContent=p.name; $('shHook').textContent=L(...d.h); $('shDesc').textContent=L(...d.d);
+  $('shPyr').innerHTML=[[L('Početak','Top'),n[0]],[L('Srce','Heart'),n[1]],[L('Baza','Base'),n[2]]].map(r=>`<div><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join('');
+  $('shWear').innerHTML=d.w[LANG==='en'?1:0].map(x=>`<span>${x}</span>`).join('');
+  $('shPrice').innerHTML=SEAL+`<small>${L('Cijena se otkriva 1. januara','Price revealed on 1 January')}</small>`; $('shOrder').textContent=L('Rezerviši '+p.name,'Reserve '+p.name);
+  const nx=P[(i+1)%P.length]; $('shNext').textContent=L('Sljedeći: ','Next: ')+nx.name+' →';
+  $('shFilm').textContent=L('Film · ','Film · ')+L(f[0],f[1]);
+  $('shDots').innerHTML=P.map(q=>`<i class="${seen.includes(q.id)?'on':''}"></i>`).join('');
+  $('shProg').textContent=seen.length>=12?L('Otkrili ste svih 12 mirisa. Koji je vaš?','You’ve discovered all 12. Which one is yours?'):L(`Otkrili ste ${seen.length} od 12 mirisa`,`You’ve discovered ${seen.length} of 12 scents`);
+  v.pause(); v.removeAttribute('src'); v.load(); v.controls=false; media.classList.remove('playing');
+  media.style.backgroundImage='url(film/bottles/'+id+'.webp)'; mark();
+}
+function open(id,from){
+  last=from||document.activeElement; fill(id);
+  sh.classList.add('open'); document.body.style.overflow='hidden'; setTimeout(()=>$('shClose').focus({preventScroll:true}),60);
+}
+function close(){ sh.classList.remove('open'); document.body.style.overflow=''; v.pause();
+  document.querySelectorAll('.p.lift').forEach(x=>x.classList.remove('lift')); if(last)last.focus({preventScroll:true}); }
+$('shPlay').addEventListener('click',()=>{v.src=src(cur);v.controls=true;media.classList.add('playing');v.play().catch(()=>{});});
+v.addEventListener('ended',()=>{media.classList.remove('playing');v.controls=false;});
+$('shClose').addEventListener('click',close);
+sh.addEventListener('click',e=>{if(e.target===sh)close();});
+document.addEventListener('keydown',e=>{if(!sh.classList.contains('open'))return; if(e.key==='Escape')close();});
+$('shNext').addEventListener('click',()=>{const i=P.findIndex(x=>x.id===cur);fill(P[(i+1)%P.length].id);sh.querySelector('.body').scrollTop=0;$('shPanel').scrollTop=0;});
+$('shOrder').addEventListener('click',()=>{const id=cur;close();openOrder(id);});
+const trigger=card=>{ if(matchMedia('(prefers-reduced-motion: reduce)').matches){open(card.dataset.sheet,card);return;}
+  card.classList.add('lift'); setTimeout(()=>open(card.dataset.sheet,card),200); };
+document.addEventListener('click',e=>{ if(e.target.closest('[data-order]'))return; const c=e.target.closest('.p[data-sheet]'); if(c)trigger(c); });
+document.addEventListener('keydown',e=>{ const c=e.target.closest&&e.target.closest('.p[data-sheet]'); if(c&&(e.key==='Enter'||e.key===' ')&&e.target===c){e.preventDefault();trigger(c);} });
+(window.langHooks=window.langHooks||[]).push(()=>{ if(sh.classList.contains('open')&&cur) fill(cur); mark(); });
+mark(); new MutationObserver(mark).observe(document.getElementById('grid'),{childList:true});
+})();
+</script>
+<script>
+(()=>{const el=document.getElementById('cd');if(!el)return;const u=k=>el.querySelector('[data-u='+k+']');
+const t=()=>{let ms=Math.max(0,LAUNCH-new Date());const d=Math.floor(ms/864e5);ms-=d*864e5;const h=Math.floor(ms/36e5);ms-=h*36e5;const m=Math.floor(ms/6e4);const sec=Math.floor((ms-m*6e4)/1e3);
+u('d').textContent=d;u('h').textContent=String(h).padStart(2,'0');u('m').textContent=String(m).padStart(2,'0');u('s').textContent=String(sec).padStart(2,'0');};t();setInterval(t,1000);})();
+</script>
+<script>
+(()=>{try{const q=new URLSearchParams(location.search);const c=(q.get('kod')||q.get('ref')||'').trim().toUpperCase().slice(0,24);
+if(c){try{localStorage.setItem('kod',c)}catch(e){}}const v=c||(()=>{try{return localStorage.getItem('kod')||''}catch(e){return''}})();
+const el=document.getElementById('dCode');if(el&&v)el.value=v;}catch(e){}})();
+</script>
+<script>
+(()=>{const wbs=document.querySelectorAll('.world .wb');const io=new IntersectionObserver(e=>e.forEach(x=>{x.target.classList.toggle('in',x.isIntersecting);}),{rootMargin:'0px 0px -12% 0px',threshold:.2});wbs.forEach(w=>io.observe(w));
+if(window.gsap&&window.ScrollTrigger){const st=document.getElementById('stage');gsap.matchMedia().add('(max-width: 860px)',()=>{const t=gsap.to(st,{opacity:0,ease:'none',scrollTrigger:{trigger:'#svjetovi',start:'top 85%',end:'top 35%',scrub:true,onLeave:()=>st.style.visibility='hidden',onEnterBack:()=>st.style.visibility='visible'}});return()=>{t.scrollTrigger&&t.scrollTrigger.kill();t.kill();st.style.opacity='';st.style.visibility='';};});}})();
+</script>
+</body>
+</html>
