@@ -479,6 +479,7 @@ section.trust{background:radial-gradient(70% 70% at 50% 45%,rgba(14,11,9,.82),rg
 .qz-o img.bt{position:absolute;right:8%;top:10%;height:62%;width:auto;z-index:-1;filter:drop-shadow(0 14px 14px rgba(0,0,0,.45));transition:transform 500ms var(--ease-out)}
 .qz-o::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 30%,rgba(14,11,9,.82))}
 .qz-o b{font-family:var(--serif);font-weight:500;font-size:clamp(1.25rem,4.2vw,1.6rem);line-height:1.1}
+.qz-o b:last-child{font-size:clamp(1.5rem,5vw,1.9rem)}
 .qz-o small{display:block;color:var(--cream-2);opacity:.85;font-size:.82rem;margin-top:.25rem}
 .qz-o .word{font-family:var(--serif);font-style:italic;font-size:clamp(1.9rem,6vw,2.6rem);line-height:1}
 .qz-o .ring{position:absolute;top:36%;left:50%;width:calc(var(--n) * 34px + 26px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);z-index:-1;background:radial-gradient(circle,var(--gold-2) 0 7px,rgba(226,197,143,.32) 8px 34%,rgba(226,197,143,.14) 35% 60%,rgba(226,197,143,.05) 61% 70%,transparent 71%)}
@@ -596,7 +597,7 @@ form.order .fine{font-size:.78rem;color:var(--muted);text-align:center}
 <script>
 (()=>{const el=document.getElementById('mi');let seen=false;try{seen=localStorage.getItem('introSeen')==='1'}catch(e){}
 const force=/[?&]intro=1/.test(location.search);
-if(!force&&(seen||innerWidth>=860||matchMedia('(prefers-reduced-motion: reduce)').matches)){el.remove();return;}
+if(!force&&(seen||location.hash==='#kviz'||/[?&]kviz/.test(location.search)||innerWidth>=860||matchMedia('(prefers-reduced-motion: reduce)').matches)){el.remove();return;}
 try{localStorage.setItem('introSeen','1')}catch(e){}
 let en=false;try{en=localStorage.getItem('lang')==='en'}catch(e){}
 const words=en?['Spice','Sweetness','Amber','Smoke']:['Začin','Slast','Ambra','Dim'];
@@ -1120,30 +1121,30 @@ const sw=(a,b)=>`linear-gradient(150deg,${a},${b})`;
 // option: [labelBs,labelEn, subBs,subEn, visual, effect]
 const Q=[
  {t:['Za koga <em>biraš?</em>','Who is it <em>for?</em>'],o:[
-  ['Za sebe','For me','ženski miris','a women’s scent',{bt:'belle-parisienne',sw:sw('#5a3a38','#1d1512')},{who:'z'}],
-  ['Za sebe','For me','muški miris','a men’s scent',{bt:'keos',sw:sw('#4a3a26','#17120e')},{who:'m'}],
+  ['Za sebe','For me','ženski miris','a women’s scent',{ph:'img/quiz/za-sebe-ona.webp'},{who:'z'}],
+  ['Za sebe','For me','muški miris','a men’s scent',{ph:'img/quiz/za-sebe-on.webp'},{who:'m'}],
   ['Poklon','A gift','za nekog posebnog','for someone special',{ph:'img/scene/dubai-gift-sm.webp'},{who:'gift'}],
   ['Iznenadi me','Surprise me','bilo koji miris','any scent',{ph:'img/story/vial.webp'},{who:'any'}]]},
  {t:['Gdje ćeš ga <em>najviše nositi?</em>','Where will you <em>wear it most?</em>'],o:[
   ['Posao i grad','Work and the city','kafa, sastanci, šetnja','coffee, meetings, walks',{ph:'img/scene/sarajevo-coffee-sm.webp'},{svjeze:2,drvo:2}],
   ['Večer i izlasci','Evenings out','večere, muzika, noć','dinners, music, nights',{ph:'img/scene/sarajevo-night-sm.webp'},{oud:2,slatko:1.5,boost:{'arabian-nights':1.4}}],
   ['Svadbe i Bajram','Weddings and Bajram','velike prilike','big occasions',{ph:'img/scene/dubai-box-m.webp'},{cvjetno:1.5,event:1}],
-  ['Ljeto i putovanja','Summer and travel','more, sunce, aerodrom','sea, sun, airports',{bt:'safyr',sw:sw('#2f5a4f','#121a17')},{svjeze:2.5}]]},
+  ['Ljeto i putovanja','Summer and travel','more, sunce, aerodrom','sea, sun, airports',{ph:'img/quiz/ljeto.webp'},{svjeze:2.5}]]},
  {t:['Izaberi <em>desert.</em>','Pick a <em>dessert.</em>'],o:[
-  ['Baklava i kahva','Baklava and coffee','toplo i slatko','warm and sweet',{sw:sw('#a8692f','#3a2414'),word:'Med'},{slatko:3,boost:{'dubai':0.3,'love':0.5}}],
-  ['Limunada s mentom','Mint lemonade','svježe i lagano','fresh and light',{sw:sw('#5f9c78','#1c3328'),word:'Led'},{svjeze:3}],
-  ['Tamna čokolada','Dark chocolate','gorko i duboko','bitter and deep',{sw:sw('#4a2a22','#140c0a'),word:'Noć'},{oud:3,boost:{'arabian-nights':0.8,'oud-secret':0.4}}],
-  ['Ružin lokum','Rose lokum','nježno i cvjetno','soft and floral',{sw:sw('#b85d6e','#3a1820'),word:'Ruža'},{cvjetno:3}]]},
+  ['Baklava i kahva','Baklava and coffee','toplo i slatko','warm and sweet',{ph:'img/quiz/baklava.webp'},{slatko:3,boost:{'dubai':0.3,'love':0.5}}],
+  ['Limunada s mentom','Mint lemonade','svježe i lagano','fresh and light',{ph:'img/quiz/limunada.webp'},{svjeze:3}],
+  ['Tamna čokolada','Dark chocolate','gorko i duboko','bitter and deep',{ph:'img/quiz/cokolada.webp'},{oud:3,boost:{'arabian-nights':0.8,'oud-secret':0.4}}],
+  ['Ružin lokum','Rose lokum','nježno i cvjetno','soft and floral',{ph:'img/quiz/lokum.webp'},{cvjetno:3}]]},
  {t:['Kakav trag <em>želiš ostaviti?</em>','What trail do you <em>want to leave?</em>'],o:[
-  ['Šapat','A whisper','osjeti se samo izbliza','close to the skin',{sw:sw('#3b3530','#17120e'),ring:1},{svjeze:1.5,cvjetno:1}],
-  ['Kompliment','A compliment','da me primijete','so people notice',{sw:sw('#6b5532','#1f170e'),ring:2},{slatko:1,cvjetno:1,drvo:1}],
-  ['Legenda','A legend','da me pamte satima','remembered for hours',{sw:sw('#8a6a2f','#241a0c'),ring:3},{oud:2,slatko:1}],
-  ['Iznenađenje','A surprise','nešto drugačije','something different',{sw:sw('#3c4a5a','#11161c'),word:'?'},{drvo:1.5,oud:1}]]},
+  ['Šapat','A whisper','osjeti se samo izbliza','close to the skin',{ph:'img/quiz/sapat.webp'},{svjeze:1.5,cvjetno:1}],
+  ['Kompliment','A compliment','da me primijete','so people notice',{ph:'img/quiz/kompliment.webp'},{slatko:1,cvjetno:1,drvo:1}],
+  ['Legenda','A legend','da me pamte satima','remembered for hours',{ph:'img/quiz/legenda.webp'},{oud:2,slatko:1}],
+  ['Iznenađenje','A surprise','nešto drugačije','something different',{ph:'img/quiz/iznenadjenje.webp'},{drvo:1.5,oud:1}]]},
  {t:['Jedna riječ <em>za tebe.</em>','One word <em>for you.</em>'],o:[
-  ['Toplina','Warmth','','',{sw:sw('#c07a3e','#3a2210')},{slatko:2}],
-  ['Misterija','Mystery','','',{sw:sw('#3d2c3f','#120c14')},{oud:2}],
-  ['Sloboda','Freedom','','',{sw:sw('#3f7f8c','#0f2226')},{svjeze:2}],
-  ['Nježnost','Tenderness','','',{sw:sw('#c98a9a','#3a1d26')},{cvjetno:2}]]}
+  ['Toplina','Warmth','','',{ph:'img/quiz/toplina.webp'},{slatko:2}],
+  ['Misterija','Mystery','','',{ph:'img/quiz/misterija.webp'},{oud:2}],
+  ['Sloboda','Freedom','','',{ph:'img/quiz/sloboda.webp'},{svjeze:2}],
+  ['Nježnost','Tenderness','','',{ph:'img/quiz/njeznost.webp'},{cvjetno:2}]]}
 ];
 let qi=0, qa=[], qzOpen=false;
 const mount=document.getElementById('quizMount');
@@ -1194,6 +1195,7 @@ function drawQ(){
     setTimeout(()=>{qi++;drawQ();},340);
   });
   const first=body.querySelector('.qz-o'); first&&first.focus({preventScroll:true});
+  const nx=Q[qi+1]; if(nx) nx.o.forEach(o=>{ if(o[4].ph){ const im=new Image(); im.src=o[4].ph; } });
 }
 function scoreAll(){
   const w={slatko:0,oud:0,svjeze:0,cvjetno:0,drvo:0}; let who='any', event=false;
@@ -1267,7 +1269,7 @@ async function shareCard(p,T){
   if(navigator.canShare&&navigator.canShare({files:[file]})){ try{await navigator.share({files:[file],text:L('Moj miris je ','My scent is ')+p.name+'. '+L('Koji si ti?','Which one are you?')+' '+location.origin+'/#kviz'});return;}catch(e){ if(e&&e.name==='AbortError') return; } }
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=file.name; document.body.appendChild(a); a.click(); a.remove();
 }
-if(location.hash==='#kviz') setTimeout(()=>{ const go=document.getElementById('qzGo'); if(go) openQuiz(); },900);
+if(location.hash==='#kviz'||/[?&]kviz/.test(location.search)) setTimeout(()=>{ const go=document.getElementById('qzGo'); if(go) openQuiz(); },900);
 
 /* ---------- APPLY LANGUAGE ---------- */
 function applyLang(){

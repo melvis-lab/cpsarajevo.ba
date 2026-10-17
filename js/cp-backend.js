@@ -64,7 +64,7 @@
     const b = document.createElement('div');
     b.setAttribute('role', 'dialog');
     b.setAttribute('aria-label', 'Kolačići');
-    b.style.cssText = 'position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-width:560px;margin:0 auto;' +
+    b.style.cssText = 'position:fixed;left:16px;right:16px;bottom:16px;z-index:110;max-width:560px;margin:0 auto;' +
       'background:#17120e;color:#f6efe3;border:1px solid #c9a46a55;border-radius:14px;padding:16px 18px;' +
       'font:14px/1.5 Jost,system-ui,sans-serif;box-shadow:0 10px 40px #0008';
     b.innerHTML =
