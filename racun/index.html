@@ -31,6 +31,19 @@
   .pill { font-size:12px; letter-spacing:.06em; border:1px solid var(--line); color:var(--gold2); border-radius:999px; padding:3px 10px; white-space:nowrap; align-self:center; }
   .muted { color:var(--muted); font-size:14px; }
   [hidden] { display:none !important; }
+  .tabs { display:flex; gap:6px; background:var(--ink2); border:1px solid var(--line); border-radius:999px; padding:4px; margin:0 0 18px; }
+  .tabs button { flex:1; margin:0; background:none; color:var(--muted); padding:10px 12px; font-weight:500; }
+  .tabs button[aria-selected=true] { background:var(--gold); color:var(--ink); }
+  .types { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:6px; }
+  .types label { margin:0; display:flex; gap:10px; align-items:center; border:1px solid #ffffff1a; border-radius:12px; padding:12px; cursor:pointer; color:var(--cream); font-size:15px; }
+  .types input { width:auto; accent-color:var(--gold); }
+  .types label:has(input:checked) { border-color:var(--gold); background:#c9a46a14; }
+  .check { display:flex; gap:10px; align-items:flex-start; margin-top:14px; font-size:14px; color:var(--cream); }
+  .check input { width:auto; margin-top:3px; accent-color:var(--gold); }
+  .banner { border-radius:14px; padding:14px 16px; margin:0 0 22px; font-size:15px; }
+  .banner.wait { background:#c9a46a1a; border:1px solid var(--line); color:var(--gold2); }
+  .banner.ok { background:#5fae7a1a; border:1px solid #5fae7a55; color:#bfe6c9; }
+  .banner.no { background:#e8a08a14; border:1px solid #e8a08a44; color:#f0c3b6; }
 </style>
 </head>
 <body>
@@ -39,18 +52,44 @@
 
   <section id="login">
     <h1>Moj <em>račun</em></h1>
-    <p class="lead">Upiši email i poslat ćemo ti link za prijavu. Bez lozinke.</p>
+    <p class="lead">Za kupce, firme i preprodavače. Bez lozinke: link za prijavu stiže na tvoj email.</p>
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" id="tabLogin" aria-selected="true">Prijava</button>
+      <button type="button" role="tab" id="tabReg" aria-selected="false">Registracija</button>
+    </div>
     <form class="card" id="loginForm">
       <label for="email">Email</label>
       <input id="email" type="email" autocomplete="email" required placeholder="ime@primjer.ba">
-      <button type="submit" data-track="login-send-link">Pošalji link</button>
+      <button type="submit" data-track="login-send-link">Pošalji link za prijavu</button>
       <div class="msg" id="loginMsg" role="status"></div>
+    </form>
+    <form class="card" id="regForm" hidden>
+      <label>Registrujem se kao</label>
+      <div class="types">
+        <label><input type="radio" name="tip" value="kupac" checked> Kupac</label>
+        <label><input type="radio" name="tip" value="firma"> Firma (pokloni)</label>
+        <label><input type="radio" name="tip" value="preprodavac"> Preprodavač</label>
+        <label><input type="radio" name="tip" value="salon"> Salon / butik</label>
+      </div>
+      <div id="b2bFields" hidden>
+        <label for="r_company">Naziv firme</label><input id="r_company" autocomplete="organization">
+      </div>
+      <label for="r_name">Ime i prezime</label><input id="r_name" required autocomplete="name">
+      <label for="r_email">Email</label><input id="r_email" type="email" required autocomplete="email" placeholder="ime@primjer.ba">
+      <label for="r_phone">Telefon</label><input id="r_phone" type="tel" autocomplete="tel" placeholder="+387 …">
+      <label for="r_city">Grad</label><input id="r_city" autocomplete="address-level2" value="Sarajevo">
+      <label class="check"><input type="checkbox" id="r_news" checked> <span>Svako jutro mi pošaljite odbrojavanje do 1. januara i miris dana.</span></label>
+      <label class="check"><input type="checkbox" id="r_consent" required> <span>Slažem se da Collection Premium Sarajevo čuva moje podatke za račun i kontakt.</span></label>
+      <p class="muted" id="b2bNote" hidden style="margin:14px 0 0">Firme i preprodavači dobijaju pristup nakon odobrenja. Javljamo se u roku od 2 radna dana.</p>
+      <button type="submit" data-track="register-submit">Registruj se</button>
+      <div class="msg" id="regMsg" role="status"></div>
     </form>
   </section>
 
   <section id="account" hidden>
     <h1>Zdravo, <em id="hello">dobro došao/la</em></h1>
     <p class="lead" id="who"></p>
+    <div class="banner" id="statusBanner" hidden></div>
 
     <h2>Moje rezervacije</h2>
     <div class="card" id="resList"><span class="muted">Učitavam…</span></div>
@@ -61,6 +100,7 @@
       <label for="phone">Telefon</label><input id="phone" autocomplete="tel">
       <label for="city">Grad</label><input id="city" autocomplete="address-level2">
       <label for="address">Adresa za dostavu</label><input id="address" autocomplete="street-address">
+      <label class="check"><input type="checkbox" id="newsletter"> <span>Dnevno odbrojavanje do 1. januara na email</span></label>
       <button type="submit" data-track="profile-save">Sačuvaj</button>
       <div class="msg" id="profileMsg" role="status"></div>
     </form>
@@ -76,6 +116,33 @@
   const $ = (id) => document.getElementById(id);
   const STATUS = { nova: 'Primljena', kontaktirana: 'Kontaktirali smo te', potvrdjena: 'Potvrđena', isporucena: 'Isporučena', otkazana: 'Otkazana' };
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  const TYPE = { kupac: 'Kupac', firma: 'Firma', preprodavac: 'Preprodavač', salon: 'Salon / butik' };
+  function tab(reg) {
+    $('tabLogin').setAttribute('aria-selected', String(!reg)); $('tabReg').setAttribute('aria-selected', String(reg));
+    $('loginForm').hidden = reg; $('regForm').hidden = !reg;
+  }
+  $('tabLogin').onclick = () => tab(false); $('tabReg').onclick = () => tab(true);
+  const syncType = () => { const t = document.querySelector('input[name=tip]:checked').value; const b2b = t !== 'kupac'; $('b2bFields').hidden = !b2b; $('b2bNote').hidden = !b2b; $('r_company').required = b2b; };
+  document.querySelectorAll('input[name=tip]').forEach((r) => r.addEventListener('change', syncType));
+  const qs = new URLSearchParams(location.search);
+  if (qs.get('registracija')) {
+    tab(true);
+    const t = qs.get('tip'); const el = t && document.querySelector('input[name=tip][value="' + t.replace(/[^a-z]/g, '') + '"]'); if (el) el.checked = true;
+    if (qs.get('email')) $('r_email').value = qs.get('email');
+  }
+  syncType();
+  $('regForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!$('regForm').reportValidity()) return;
+    const t = document.querySelector('input[name=tip]:checked').value;
+    $('regMsg').textContent = 'Šaljem…';
+    const r = await CP.auth.register($('r_email').value, {
+      account_type: t, full_name: $('r_name').value.trim(), phone: $('r_phone').value.trim(), city: $('r_city').value.trim(),
+      company: t === 'kupac' ? null : $('r_company').value.trim(), newsletter: $('r_news').checked,
+    });
+    $('regMsg').textContent = r.ok ? 'Skoro gotovo: provjeri email i klikni na link da potvrdiš registraciju.' : 'Nije uspjelo: ' + r.error;
+  });
 
   $('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -95,7 +162,17 @@
     const { data: p } = await CP.sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
     if (p) {
       ['full_name', 'phone', 'city', 'address'].forEach((k) => { $(k).value = p[k] || ''; });
+      $('newsletter').checked = !!p.newsletter;
       if (p.full_name) $('hello').textContent = p.full_name.split(' ')[0];
+      const b = $('statusBanner');
+      if (p.account_type && p.account_type !== 'kupac') {
+        b.hidden = false;
+        b.className = 'banner ' + (p.approval_status === 'odobren' ? 'ok' : p.approval_status === 'odbijen' ? 'no' : 'wait');
+        b.textContent = (TYPE[p.account_type] || 'Partner') + (p.company ? ' · ' + p.company : '') + ': ' +
+          (p.approval_status === 'odobren' ? 'račun je odobren. Javljamo se s ponudom i uslovima prije 1. januara.' :
+           p.approval_status === 'odbijen' ? 'partnerski račun trenutno nije odobren. I dalje možeš rezervisati kao kupac.' :
+           'čeka odobrenje. Javljamo se u roku od 2 radna dana.');
+      } else b.hidden = true;
     }
 
     const { data: rs, error } = await CP.sb.from('reservations')
@@ -113,7 +190,8 @@
     const user = await CP.auth.user();
     const row = { id: user.id };
     ['full_name', 'phone', 'city', 'address'].forEach((k) => { row[k] = $(k).value.trim() || null; });
-    const { error } = await CP.sb.from('profiles').upsert(row);
+    row.newsletter = $('newsletter').checked; row.marketing_consent = row.newsletter;
+    const { error } = await CP.sb.from('profiles').update(row).eq('id', user.id);
     $('profileMsg').textContent = error ? 'Nije sačuvano, pokušaj ponovo.' : 'Sačuvano.';
   });
 

@@ -176,6 +176,14 @@
       });
       return error ? { error: error.message } : { ok: true };
     },
+    async register(email, data) {
+      const { error } = await sb.auth.signInWithOtp({
+        email: email.trim(),
+        options: { emailRedirectTo: location.origin + '/racun/', shouldCreateUser: true, data },
+      });
+      if (!error) track('register', { element: 'racun', label: data && data.account_type });
+      return error ? { error: error.message } : { ok: true };
+    },
     async user() { const { data } = await sb.auth.getUser(); return data.user || null; },
     async signOut() { await sb.auth.signOut(); },
   };

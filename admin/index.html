@@ -102,6 +102,7 @@
   <nav><div class="wrap" role="tablist">
     <button role="tab" type="button" data-tab="danas" aria-selected="true">Pregled</button>
     <button role="tab" type="button" data-tab="rezervacije">Rezervacije<span class="count" id="newCount" hidden></span></button>
+    <button role="tab" type="button" data-tab="korisnici">Korisnici<span class="count" id="accCount" hidden></span></button>
     <button role="tab" type="button" data-tab="firme">Firme<span class="count" id="b2bCount" hidden></span></button>
     <button role="tab" type="button" data-tab="stranica">Šta ljudi klikaju</button>
     <button role="tab" type="button" data-tab="izvori">Odakle dolaze</button>
@@ -159,6 +160,16 @@
       </div>
       <div class="row"><input type="search" id="search" placeholder="Traži po imenu, telefonu, emailu ili gradu"></div>
       <div class="panel scroll"><table id="resTable"></table></div>
+    </section>
+
+    <!-- KORISNICI -->
+    <section data-panel="korisnici" hidden>
+      <div class="row"><div><h2>Korisnici</h2><p class="sub" style="margin:0">Svi registrovani računi. Firme, preprodavači i saloni čekaju tvoje odobrenje; kupci su odobreni odmah. Kad odobriš ili odbiješ, email odlazi automatski.</p></div>
+        <div class="actions"><select id="accFilter" aria-label="Filtriraj"><option value="">Svi</option><option value="na_cekanju">Čekaju odobrenje</option><option value="b2b">Samo firme i preprodavači</option><option value="kupac">Samo kupci</option></select></div></div>
+      <div class="panel scroll"><table id="accTable"></table></div>
+      <h2 style="margin-top:2.4rem">Poslani emailovi</h2>
+      <p class="sub">Dobrodošlica, potvrde, odobrenja, obavijesti tebi i dnevno odbrojavanje. Zadnjih 200.</p>
+      <div class="panel scroll"><table id="mailTable"></table></div>
     </section>
 
     <!-- FIRME -->
@@ -368,8 +379,54 @@
   }
   $('refreshLive').addEventListener('click', loadLive);
 
+  // ---- accounts & approvals ----
+  const ACC_TYPE = { kupac: 'Kupac', firma: 'Firma', preprodavac: 'Preprodavač', salon: 'Salon / butik' };
+  const ACC_ST = { na_cekanju: 'Čeka odobrenje', odobren: 'Odobren', odbijen: 'Odbijen' };
+  const MAIL = { welcome: 'Dobrodošlica', welcome_b2b: 'Dobrodošlica (firma)', approved: 'Odobrenje', partner_approved: 'Odobrenje partnera', rejected: 'Odbijanje', partner_received: 'Potvrda zahtjeva', reservation_confirm: 'Potvrda rezervacije', countdown: 'Odbrojavanje', admin_new_account: 'Tebi: novi račun', admin_new_reservation: 'Tebi: nova rezervacija', admin_new_partner: 'Tebi: nova firma' };
+  const MAIL_ST = { pending: 'Čeka slanje', sending: 'Šalje se', sent: 'Poslan', error: 'Greška', skipped: 'Preskočen' };
+  let accounts = [];
+  async function loadAccounts() {
+    const { data } = await sb.from('profiles').select('*').order('created_at', { ascending: false }).limit(2000);
+    accounts = data || []; renderAccounts();
+    const n = accounts.filter((a) => a.approval_status === 'na_cekanju').length;
+    $('accCount').hidden = !n; $('accCount').textContent = n;
+  }
+  function renderAccounts() {
+    const f = $('accFilter').value;
+    const rows = accounts.filter((a) => !f || (f === 'b2b' ? a.account_type !== 'kupac' : f === 'kupac' ? a.account_type === 'kupac' : a.approval_status === f));
+    table($('accTable'), [
+      { h: 'Kada', html: (r) => when(r.created_at) },
+      { h: 'Ko', html: (r) => '<b>' + esc(r.full_name || r.email) + '</b><div class="muted">' + esc(r.email) + (r.phone ? '<br>' + esc(r.phone) : '') + '</div>' },
+      { h: 'Tip', html: (r) => esc(ACC_TYPE[r.account_type] || r.account_type) + (r.company ? '<div class="muted">' + esc(r.company) + '</div>' : '') + (r.city ? '<div class="muted">' + esc(r.city) + '</div>' : '') },
+      { h: 'Odbrojavanje', html: (r) => r.newsletter ? 'Da' : '<span class="muted">Ne</span>' },
+      { h: 'Status', html: (r) => '<span class="pill p-' + (r.approval_status === 'odobren' ? 'potvrdjena' : r.approval_status === 'odbijen' ? 'otkazana' : 'nova') + '">' + ACC_ST[r.approval_status] + '</span>' },
+      { h: '', html: (r) => r.account_type === 'kupac' ? '' : '<div class="actions">' +
+          (r.approval_status !== 'odobren' ? '<button class="btn dark" type="button" data-acc="odobren" data-id="' + r.id + '">Odobri</button>' : '') +
+          (r.approval_status !== 'odbijen' ? '<button class="btn" type="button" data-acc="odbijen" data-id="' + r.id + '">Odbij</button>' : '') + '</div>' },
+    ], rows, 'Još nema registrovanih računa.');
+  }
+  $('accFilter').addEventListener('change', renderAccounts);
+  $('accTable').addEventListener('click', async (e) => {
+    const b = e.target.closest('[data-acc]'); if (!b) return;
+    if (b.dataset.acc === 'odbijen' && !confirmBox(b, 'Sigurno odbiti? Korisnik dobija email.')) return;
+    b.disabled = true;
+    const { error } = await sb.from('profiles').update({ approval_status: b.dataset.acc }).eq('id', b.dataset.id);
+    toast(error ? 'Nije sačuvano.' : (b.dataset.acc === 'odobren' ? 'Odobreno. Email o odobrenju je na putu.' : 'Odbijeno. Email je na putu.'));
+    loadAccounts(); setTimeout(loadMails, 1500);
+  });
+  function confirmBox(btn, msg) { if (btn.dataset.sure) return true; btn.dataset.sure = '1'; btn.textContent = 'Klikni opet za potvrdu'; toast(msg); setTimeout(() => { delete btn.dataset.sure; btn.textContent = 'Odbij'; }, 4000); return false; }
+  async function loadMails() {
+    const { data } = await sb.from('email_outbox').select('created_at,to_email,template,status,sent_at,error').order('created_at', { ascending: false }).limit(200);
+    table($('mailTable'), [
+      { h: 'Kada', html: (r) => when(r.sent_at || r.created_at) },
+      { h: 'Kome', k: 'to_email' },
+      { h: 'Email', html: (r) => esc(MAIL[r.template] || r.template) },
+      { h: 'Status', html: (r) => '<span class="pill p-' + (r.status === 'sent' ? 'potvrdjena' : r.status === 'error' ? 'otkazana' : 'nova') + '">' + (MAIL_ST[r.status] || r.status) + '</span>' + (r.error ? '<div class="muted">' + esc(r.error) + '</div>' : '') },
+    ], data || [], 'Još nema emailova.');
+  }
+
   // ---- business registrations ----
-  const B2B_STATUS = { nova: 'Nova', kontaktirana: 'Kontaktirana', dogovoreno: 'Dogovoreno', odbijeno: 'Odbijeno' };
+  const B2B_STATUS = { nova: 'Nova', kontaktirana: 'Kontaktirana', dogovoreno: 'Odobreno', odbijeno: 'Odbijeno' };
   const B2B_KIND = { firma: 'Firma (pokloni)', preprodavac: 'Preprodavač', salon: 'Salon / butik', drugo: 'Drugo' };
   let b2b = [];
   async function loadB2b() {
@@ -384,16 +441,26 @@
       { h: 'Količina', k: 'volume' },
       { h: 'Poruka', html: (r) => esc(r.note) },
       { h: 'Status', html: (r) => '<select data-b2b="' + r.id + '" aria-label="Status">' + Object.keys(B2B_STATUS).map((v) => '<option value="' + v + '"' + (v === r.status ? ' selected' : '') + '>' + B2B_STATUS[v] + '</option>').join('') + '</select>' },
+      { h: 'Odluka', html: (r) => (r.status === 'dogovoreno' || r.status === 'odbijeno') ? '<span class="muted">' + B2B_STATUS[r.status] + '</span>' :
+          '<div class="actions"><button class="btn dark" type="button" data-pr="dogovoreno" data-id="' + r.id + '">Odobri</button><button class="btn" type="button" data-pr="odbijeno" data-id="' + r.id + '">Odbij</button></div>' },
       { h: '', html: (r) => { const d = phoneDigits(r.phone); const msg = encodeURIComponent('Poštovani/a ' + (r.contact_name || '') + ', hvala na registraciji ' + (r.company || '') + ' kod Collection Premium Sarajevo. Kada vam odgovara kratki razgovor o ponudi?'); return '<div class="actions"><a class="btn wa" href="https://wa.me/' + d + '?text=' + msg + '" target="_blank" rel="noopener">WhatsApp</a><a class="btn" href="tel:+' + d + '">Pozovi</a></div>'; } },
     ], b2b, 'Još nema registracija firmi. Pojave se ovdje čim neko pošalje formu "Za firme" na stranici.');
   }
+  $('b2bTable').addEventListener('click', async (e) => {
+    const b = e.target.closest('[data-pr]'); if (!b) return;
+    if (b.dataset.pr === 'odbijeno' && !confirmBox(b, 'Sigurno odbiti? Firma dobija email.')) return;
+    b.disabled = true;
+    const { error } = await sb.from('partner_requests').update({ status: b.dataset.pr }).eq('id', b.dataset.id);
+    toast(error ? 'Nije sačuvano.' : (b.dataset.pr === 'dogovoreno' ? 'Odobreno. Firma dobija email s linkom za partnerski račun.' : 'Odbijeno. Email je na putu.'));
+    loadB2b(); loadAccounts();
+  });
   $('b2bTable').addEventListener('change', async (e) => {
     const sel = e.target.closest('select[data-b2b]'); if (!sel) return;
     const { error } = await sb.from('partner_requests').update({ status: sel.value }).eq('id', sel.dataset.b2b);
     toast(error ? 'Status nije sačuvan.' : 'Sačuvano: ' + B2B_STATUS[sel.value]); if (!error) loadB2b();
   });
 
-  function loadAll() { loadOverview(); loadScents(); loadB2b(); loadReservations(); loadClicks(); loadSources(); }
+  function loadAll() { loadOverview(); loadScents(); loadB2b(); loadAccounts(); loadMails(); loadReservations(); loadClicks(); loadSources(); }
 
   async function start() {
     const user = await CP.auth.user();
@@ -402,6 +469,7 @@
     if (!isAdmin) { await CP.auth.signOut(); $('gateMsg').textContent = user.email + ' nema pristup. Prijavi se s melvis@hadzic.com.'; return; }
     $('gate').hidden = true; $('app').hidden = false; $('me').textContent = user.email;
     loadAll();
+    const h = location.hash.slice(1); if (h && document.querySelector('[data-panel="' + h + '"]')) openTab(h);
   }
   sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_IN') start(); });
   start();
