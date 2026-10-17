@@ -27,10 +27,11 @@ function rows(pairs: [string, unknown][]) {
 function layout(o: { pre: string; eyebrow: string; title: string; body: string; footer?: string; hero?: string }) {
   return `<!doctype html><html lang="bs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light">
 <title>${esc(o.title.replace(/<[^>]+>/g, ""))}</title>
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;1,400&display=swap" rel="stylesheet"></head>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
+<style>@media only screen and (max-width:620px){.pad{padding:30px 22px 26px!important}.h1{font-size:27px!important;line-height:1.22!important}.big{font-size:66px!important}.outer{padding:14px 8px!important}}</style></head>
 <body style="margin:0;padding:0;background:${C.paper}">
 <div style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(o.pre)}&#8199;&#65279;&#847;&#8199;&#65279;&#847;</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.paper}"><tr><td align="center" style="padding:28px 12px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.paper}"><tr><td align="center" class="outer" style="padding:28px 12px">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;border-radius:22px;overflow:hidden;background:${C.card};box-shadow:0 20px 50px -30px rgba(40,25,10,.45)">
 <tr><td align="center" style="background:${C.ink};padding:30px 24px 26px">
   <a href="${SITE}"><img src="${SITE}/img/email/logo.png" width="150" alt="Collection Premium Sarajevo" style="display:block;border:0;width:150px;height:auto"></a>
@@ -38,7 +39,7 @@ function layout(o: { pre: string; eyebrow: string; title: string; body: string; 
 ${o.hero ?? ""}
 <tr><td style="padding:40px 44px 34px" class="pad">
   <p style="margin:0 0 12px;font-family:${sans};font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:${C.gold}">${esc(o.eyebrow)}</p>
-  <h1 style="margin:0 0 18px;font-family:${serif};font-weight:500;font-size:32px;line-height:1.18;color:${C.text}">${o.title}</h1>
+  <h1 class="h1" style="margin:0 0 18px;font-family:${serif};font-weight:500;font-size:32px;line-height:1.18;color:${C.text}">${o.title}</h1>
   <div style="font-family:${sans};font-size:16px;line-height:1.65;color:${C.text}">${o.body}</div>
 </td></tr>
 <tr><td align="center" style="background:${C.ink};padding:26px 30px;font-family:${sans};font-size:12px;line-height:1.7;color:#bcae99">
@@ -82,7 +83,7 @@ async function render(t: string, d: Record<string, any>, to: string): Promise<{ 
   switch (t) {
     case "welcome": return {
       subject: "Dobro došli u Collection Premium Sarajevo",
-      html: layout({ pre: "Tvoje mjesto prije svih je osigurano. Evo šta slijedi do 1. januara.", eyebrow: "Dobrodošlica", title: `${hi(d.name)}drago nam je<br><em style="color:${C.gold}">što si tu.</em>`,
+      html: layout({ pre: "Tvoje mjesto prije svih je osigurano. Evo šta slijedi do 1. januara.", eyebrow: "Dobrodošlica", title: `${hi(d.name)}drago nam&nbsp;je<br><em style="color:${C.gold}">što si tu.</em>`,
         body: p("Tvoj račun je otvoren. Od sada si među prvima koji saznaju sve o otvaranju Collection Premium Sarajevo, 1. januara 2027.") +
           p("<b>Šta slijedi:</b> svako jutro ti šaljemo kratko pismo s odbrojavanjem do otvaranja i jednim mirisom dana: priča, note i kako ga nositi.") +
           p("Već sada možeš rezervisati svoj miris, bez plaćanja. Ako još ne znaš koji je tvoj, kviz ti ga pronađe za minutu.") +
@@ -139,7 +140,7 @@ async function render(t: string, d: Record<string, any>, to: string): Promise<{ 
         pre: pr ? `Miris dana: ${pr.name}. ${pr.notes_top ?? ""}` : "Odbrojavanje do otvaranja.",
         eyebrow: "Odbrojavanje · 1. januar 2027.",
         hero: `<tr><td align="center" style="background:${C.ink2};padding:34px 20px 30px;border-top:1px solid #2a2017">
-          <div style="font-family:${serif};font-size:84px;line-height:1;color:${C.gold2}">${big}</div>
+          <div class="big" style="font-family:${serif};font-size:84px;line-height:1;color:${C.gold2}">${big}</div>
           <div style="margin-top:8px;font-family:${sans};font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:#bcae99">${small}</div></td></tr>`,
         title: pr ? `Miris dana: <em style="color:${C.gold}">${esc(pr.name)}</em>` : "Odbrojavanje",
         body: (pr ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 10px"><tr>
