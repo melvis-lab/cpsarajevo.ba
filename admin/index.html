@@ -2,85 +2,176 @@
 <html lang="bs">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Admin · Collection Premium Sarajevo</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
-  /* Admin: light, neutral, system font */
-  :root { --bg:#ffffff; --panel:#ffffff; --soft:#f6f7f9; --ink:#1f2328; --muted:#6b7280; --line:#e5e7eb; --accent:#9a7432; --accent-soft:#f6efe2; --ok:#1a7f37; --warn:#b26a00; --bad:#c62828; color-scheme:light; }
+  /* Light admin, system font. Summary first, then detail. */
+  :root { --bg:#fff; --soft:#f5f6f8; --ink:#1f2328; --muted:#667085; --line:#e4e7ec; --accent:#8a6a2f; --accent-soft:#f7f0e3;
+          --ok:#127a3c; --ok-soft:#e8f5ec; --warn:#a15c00; --warn-soft:#fff4e0; --bad:#b42318; --bad-soft:#fdecea; --info:#2557a7; --info-soft:#eaf1fb; color-scheme:light; }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--soft); color:var(--ink); font:14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-  header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding-block:14px; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--bg); z-index:5; }
-  header h1 { font-size:17px; font-weight:600; margin:0; }
-  header small { color:var(--muted); }
-  nav { display:flex; gap:4px; overflow-x:auto; padding-block:10px; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); border-bottom:1px solid var(--line); background:var(--bg); }
-  nav button { background:none; border:1px solid transparent; color:var(--muted); border-radius:8px; padding:7px 12px; cursor:pointer; white-space:nowrap; font:inherit; font-weight:500; }
+  .wrap { max-width:1180px; margin:0 auto; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); }
+  header { background:var(--bg); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
+  header .wrap { display:flex; align-items:center; justify-content:space-between; gap:12px; padding-block:12px; }
+  header h1 { font-size:16px; font-weight:600; margin:0; }
+  header small { color:var(--muted); display:block; font-size:12px; }
+  nav { background:var(--bg); border-bottom:1px solid var(--line); }
+  nav .wrap { display:flex; gap:4px; overflow-x:auto; padding-block:8px; }
+  nav button { background:none; border:0; color:var(--muted); border-radius:8px; padding:8px 12px; cursor:pointer; white-space:nowrap; font:inherit; font-weight:500; }
   nav button:hover { background:var(--soft); color:var(--ink); }
-  nav button[aria-selected="true"] { background:var(--accent-soft); color:var(--accent); border-color:#ead9b8; }
-  main { padding-block:20px; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); max-width:1232px; margin:0 auto; }
-  .tiles { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:20px; }
-  .tile { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
-  .tile .n { font-size:26px; font-weight:600; font-variant-numeric:tabular-nums; }
-  .tile .l { color:var(--muted); font-size:12px; }
-  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow-x:auto; margin-bottom:20px; }
-  .card h2 { font-size:13px; font-weight:600; color:var(--ink); margin:14px 16px 10px; }
-  table { width:100%; border-collapse:collapse; min-width:560px; }
-  th, td { text-align:left; padding:9px 16px; border-top:1px solid var(--line); vertical-align:top; }
-  th { color:var(--muted); font-weight:500; font-size:12px; background:#fafbfc; }
+  nav button[aria-selected="true"] { background:var(--accent-soft); color:var(--accent); }
+  nav .count { background:var(--warn); color:#fff; border-radius:999px; font-size:11px; padding:1px 7px; margin-left:6px; }
+  main { padding-block:20px 60px; }
+  h2 { font-size:15px; font-weight:600; margin:0 0 4px; }
+  .sub { color:var(--muted); margin:0 0 12px; font-size:13px; }
+  section > .block { margin-bottom:24px; }
+  .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .seg { display:inline-flex; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:2px; }
+  .seg button { border:0; background:none; padding:6px 12px; border-radius:6px; cursor:pointer; font:inherit; color:var(--muted); }
+  .seg button[aria-pressed="true"] { background:var(--ink); color:#fff; }
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:12px; }
+  .tile { background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; min-width:0; }
+  .tile .n { font-size:26px; font-weight:600; font-variant-numeric:tabular-nums; line-height:1.2; }
+  .tile .l { font-weight:500; }
+  .tile .h { color:var(--muted); font-size:12px; }
+  .panel { background:var(--bg); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .funnel { display:grid; gap:10px; padding:16px; }
+  .step { display:grid; grid-template-columns:minmax(120px, 190px) 1fr auto; gap:12px; align-items:center; }
+  .step .track { background:var(--soft); border-radius:6px; height:26px; overflow:hidden; }
+  .step .fill { background:var(--accent); height:100%; border-radius:6px; min-width:2px; }
+  .step .v { font-variant-numeric:tabular-nums; text-align:right; min-width:110px; }
+  .step .v small { color:var(--muted); }
+  .todo { display:grid; }
+  .todo .item { display:flex; gap:12px; align-items:center; justify-content:space-between; padding:12px 16px; border-top:1px solid var(--line); flex-wrap:wrap; }
+  .todo .item:first-child { border-top:0; }
+  .who b { font-weight:600; }
+  .who .meta { color:var(--muted); font-size:13px; }
+  .actions { display:flex; gap:6px; flex-wrap:wrap; }
+  a.btn, button.btn { display:inline-flex; align-items:center; gap:6px; text-decoration:none; border:1px solid var(--line); background:var(--bg); color:var(--ink); border-radius:8px; padding:7px 11px; font:inherit; font-size:13px; cursor:pointer; }
+  a.btn:hover, button.btn:hover { background:var(--soft); }
+  .btn.wa { border-color:#bfe3c9; color:var(--ok); }
+  .btn.dark { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .empty { padding:22px 16px; color:var(--muted); }
+  .scroll { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; min-width:620px; }
+  th, td { text-align:left; padding:10px 16px; border-top:1px solid var(--line); vertical-align:top; }
+  th { color:var(--muted); font-weight:500; font-size:12px; background:#fafbfc; border-top:0; }
   td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
-  .bar { height:6px; background:var(--accent); border-radius:3px; opacity:.7; }
-  select, input, button.act { background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:7px 10px; font:inherit; }
-  button.act { cursor:pointer; } button.act:hover { background:var(--soft); }
-  button.primary { background:var(--ink); color:#fff; border:0; border-radius:8px; padding:10px 16px; font:inherit; font-weight:600; cursor:pointer; }
-  button:focus-visible, select:focus-visible, input:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  .bar { height:6px; background:var(--accent); border-radius:3px; opacity:.75; }
+  .pill { display:inline-block; border-radius:999px; padding:2px 9px; font-size:12px; font-weight:500; white-space:nowrap; }
+  .p-nova { background:var(--warn-soft); color:var(--warn); }
+  .p-kontaktirana { background:var(--info-soft); color:var(--info); }
+  .p-potvrdjena, .p-isporucena { background:var(--ok-soft); color:var(--ok); }
+  .p-otkazana { background:var(--bad-soft); color:var(--bad); }
+  select, input { background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:8px 10px; font:inherit; }
+  input[type=search] { min-width:0; flex:1 1 220px; }
+  .feed .ev { display:flex; gap:12px; padding:10px 16px; border-top:1px solid var(--line); }
+  .feed .ev:first-child { border-top:0; }
+  .feed time { color:var(--muted); font-variant-numeric:tabular-nums; min-width:92px; font-size:13px; }
+  .feed .dot { width:8px; height:8px; border-radius:50%; margin-top:7px; flex:none; background:var(--line); }
+  .dot.reserve_submit { background:var(--ok); } .dot.reserve_open, .dot.quiz_result { background:var(--accent); } .dot.click { background:var(--info); }
   .muted { color:var(--muted); }
   .center { max-width:400px; margin:12vh auto; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); }
-  .center h1 { font-size:22px; font-weight:600; margin:0 0 6px; }
-  .center form { background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:18px; }
-  .center input { width:100%; padding:10px 12px; margin:0 0 12px; }
-  .toolbar { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:0 0 12px; }
+  .center h1 { font-size:20px; font-weight:600; margin:0 0 6px; }
+  .center form { background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:18px; display:grid; gap:10px; }
+  .center input { width:100%; }
+  .toast { position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom, 0px)); transform:translateX(-50%); background:var(--ink); color:#fff; padding:10px 16px; border-radius:8px; font-size:13px; }
+  button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
   [hidden] { display:none !important; }
-  .st-nova { color:var(--warn); } .st-potvrdjena, .st-isporucena { color:var(--ok); } .st-otkazana { color:var(--bad); }
+  @media (max-width:560px) { .step { grid-template-columns:1fr; gap:4px; } .step .v { text-align:left; } }
 </style>
 </head>
 <body>
 
 <section id="gate" class="center">
   <h1>Collection Premium · Admin</h1>
-  <p class="muted" id="gateMsg">Prijavi se emailom koji ima admin pristup.</p>
-  <form id="loginForm"><input id="email" type="email" required placeholder="email" autocomplete="email"><button class="primary">Pošalji link</button></form>
+  <p class="sub" id="gateMsg">Upiši svoj email. Poslat ćemo ti link za prijavu.</p>
+  <form id="loginForm">
+    <input id="email" type="email" required placeholder="tvoj@email.com" autocomplete="email">
+    <button class="btn dark" type="submit">Pošalji link za prijavu</button>
+  </form>
 </section>
 
 <div id="app" hidden>
-  <header><div><h1>Collection Premium · Admin</h1><small id="me"></small></div><button class="act" id="logout">Odjava</button></header>
-  <nav role="tablist">
-    <button role="tab" data-tab="pregled" aria-selected="true">Pregled</button>
-    <button role="tab" data-tab="rezervacije">Rezervacije</button>
-    <button role="tab" data-tab="klikovi">Klikovi</button>
-    <button role="tab" data-tab="izvori">Izvori</button>
-    <button role="tab" data-tab="uzivo">Uživo</button>
-  </nav>
-  <main>
-    <section data-panel="pregled">
-      <div class="tiles" id="tiles"></div>
-      <div class="card"><h2>Po danima (14 dana)</h2><table id="daily"></table></div>
-      <div class="card"><h2>Rezervacije po mirisu</h2><table id="byProduct"></table></div>
-      <div class="card"><h2>Referal kodovi</h2><table id="referrals"></table></div>
-    </section>
-    <section data-panel="rezervacije" hidden>
-      <div class="toolbar">
-        <select id="statusFilter"><option value="">Sve</option><option value="nova">Nove</option><option value="kontaktirana">Kontaktirane</option><option value="potvrdjena">Potvrđene</option><option value="isporucena">Isporučene</option><option value="otkazana">Otkazane</option></select>
-        <input id="search" placeholder="Traži ime, telefon, email">
-        <button class="act" id="csv">Izvezi CSV</button>
-        <span class="muted" id="resCount"></span>
+  <header><div class="wrap"><div><h1>Collection Premium · Admin</h1><small id="me"></small></div><div class="actions"><button class="btn" id="reload" type="button">Osvježi</button><button class="btn" id="logout" type="button">Odjava</button></div></div></header>
+  <nav><div class="wrap" role="tablist">
+    <button role="tab" type="button" data-tab="danas" aria-selected="true">Pregled</button>
+    <button role="tab" type="button" data-tab="rezervacije">Rezervacije<span class="count" id="newCount" hidden></span></button>
+    <button role="tab" type="button" data-tab="stranica">Šta ljudi klikaju</button>
+    <button role="tab" type="button" data-tab="izvori">Odakle dolaze</button>
+    <button role="tab" type="button" data-tab="uzivo">Uživo</button>
+  </div></nav>
+
+  <main class="wrap">
+    <!-- PREGLED -->
+    <section data-panel="danas">
+      <div class="block">
+        <h2>Treba nazvati</h2>
+        <p class="sub">Nove rezervacije koje još niko nije kontaktirao. Kad se javiš kupcu, označi ga kao kontaktiranog.</p>
+        <div class="panel todo" id="todo"></div>
       </div>
-      <div class="card"><table id="resTable"></table></div>
+
+      <div class="block">
+        <div class="row"><div><h2>Kako stranica radi</h2><p class="sub" style="margin:0">Brojimo samo posjetioce koji su prihvatili kolačiće.</p></div>
+          <div class="seg" id="period"><button type="button" data-d="1" aria-pressed="false">Danas</button><button type="button" data-d="7" aria-pressed="true">7 dana</button><button type="button" data-d="30" aria-pressed="false">30 dana</button></div></div>
+        <div class="tiles" id="tiles"></div>
+      </div>
+
+      <div class="block">
+        <h2>Od posjete do rezervacije</h2>
+        <p class="sub">Koliko ljudi stigne do svakog koraka. Najveći pad pokazuje gdje stranica gubi ljude.</p>
+        <div class="panel funnel" id="funnel"></div>
+      </div>
+
+      <div class="block">
+        <h2>Najtraženiji mirisi</h2>
+        <p class="sub">Rezervisane bočice po mirisu, bez otkazanih.</p>
+        <div class="panel scroll"><table id="byProduct"></table></div>
+      </div>
+
+      <div class="block">
+        <h2>Partneri i referal kodovi</h2>
+        <p class="sub">Saloni, kafići i kreatori: koliko je rezervacija stiglo preko njihovog koda.</p>
+        <div class="panel scroll"><table id="referrals"></table></div>
+      </div>
     </section>
-    <section data-panel="klikovi" hidden><div class="card"><h2>Najviše klikova (30 dana)</h2><table id="clicks"></table></div></section>
-    <section data-panel="izvori" hidden><div class="card"><h2>Odakle dolaze (30 dana)</h2><table id="sources"></table></div></section>
-    <section data-panel="uzivo" hidden><div class="toolbar"><button class="act" id="refreshLive">Osvježi</button><span class="muted">Zadnjih 100 događaja</span></div><div class="card"><table id="live"></table></div></section>
+
+    <!-- REZERVACIJE -->
+    <section data-panel="rezervacije" hidden>
+      <div class="row">
+        <div><h2>Sve rezervacije</h2><p class="sub" style="margin:0" id="resCount"></p></div>
+        <div class="actions">
+          <select id="statusFilter" aria-label="Filtriraj po statusu"><option value="">Svi statusi</option><option value="nova">Nove</option><option value="kontaktirana">Kontaktirane</option><option value="potvrdjena">Potvrđene</option><option value="isporucena">Isporučene</option><option value="otkazana">Otkazane</option></select>
+          <button class="btn" id="csv" type="button">Preuzmi Excel (CSV)</button>
+        </div>
+      </div>
+      <div class="row"><input type="search" id="search" placeholder="Traži po imenu, telefonu, emailu ili gradu"></div>
+      <div class="panel scroll"><table id="resTable"></table></div>
+    </section>
+
+    <!-- KLIKOVI -->
+    <section data-panel="stranica" hidden>
+      <h2>Šta ljudi klikaju</h2>
+      <p class="sub">Dugmad i linkovi na stranici, zadnjih 30 dana. Ono na vrhu je ono što ljude najviše zanima.</p>
+      <div class="panel scroll"><table id="clicks"></table></div>
+    </section>
+
+    <!-- IZVORI -->
+    <section data-panel="izvori" hidden>
+      <h2>Odakle dolaze</h2>
+      <p class="sub">Instagram, story, Google, tester u salonu ili kreator. Zadnjih 30 dana. Kolona "Rezervisali" pokazuje koji izvor donosi kupce, a ne samo posjete.</p>
+      <div class="panel scroll"><table id="sources"></table></div>
+    </section>
+
+    <!-- UZIVO -->
+    <section data-panel="uzivo" hidden>
+      <div class="row"><div><h2>Uživo</h2><p class="sub" style="margin:0">Šta posjetioci rade upravo sada. Zadnjih 100 radnji.</p></div><button class="btn" id="refreshLive" type="button">Osvježi</button></div>
+      <div class="panel feed" id="live"></div>
+    </section>
   </main>
 </div>
+<div class="toast" id="toast" hidden role="status"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/js/cp-backend.js"></script>
@@ -88,118 +179,167 @@
 (async function () {
   const sb = CP.sb, $ = (id) => document.getElementById(id);
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const fmt = (d) => new Date(d).toLocaleString('bs-BA', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-  const STATUSES = [['nova', 'Nova'], ['kontaktirana', 'Kontaktirana'], ['potvrdjena', 'Potvrđena'], ['isporucena', 'Isporučena'], ['otkazana', 'Otkazana']];
-  let reservations = [];
+  const when = (d) => {
+    const t = new Date(d), now = new Date(), mins = Math.round((now - t) / 60000);
+    if (mins < 1) return 'upravo';
+    if (mins < 60) return 'prije ' + mins + ' min';
+    if (t.toDateString() === now.toDateString()) return 'danas ' + t.toLocaleTimeString('bs-BA', { hour: '2-digit', minute: '2-digit' });
+    const p2 = (n) => String(n).padStart(2, '0');
+    return t.getDate() + '.' + (t.getMonth() + 1) + '. ' + p2(t.getHours()) + ':' + p2(t.getMinutes());
+  };
+  const STATUS = { nova: 'Nova', kontaktirana: 'Kontaktirana', potvrdjena: 'Potvrđena', isporucena: 'Isporučena', otkazana: 'Otkazana' };
+  const NEXT = { nova: 'kontaktirana', kontaktirana: 'potvrdjena', potvrdjena: 'isporucena' };
+  const NEXT_LABEL = { nova: 'Kontaktirao/la sam', kontaktirana: 'Potvrdi', potvrdjena: 'Isporučeno' };
+  const EV = { page_view: 'otvorio/la stranicu', click: 'kliknuo/la', quiz_start: 'počeo/la kviz', quiz_result: 'završio/la kviz, rezultat', reserve_open: 'otvorio/la rezervaciju za', reserve_submit: 'REZERVISAO/LA', video_play: 'pustio/la film', share: 'podijelio/la rezultat', login: 'prijavio/la se' };
+  let daily = [], reservations = [], period = 7;
 
+  const toast = (m) => { const t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => { t.hidden = true; }, 2200); };
+  const phoneDigits = (p) => { let d = String(p || '').replace(/\D/g, ''); if (d.startsWith('00')) d = d.slice(2); else if (d.startsWith('0')) d = '387' + d.slice(1); return d; };
+
+  // ---- login ----
   $('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const r = await CP.auth.sendLink($('email').value, '/admin/');
-    $('gateMsg').textContent = r.ok ? 'Link je poslan. Otvori ga na ovom uređaju.' : 'Greška: ' + r.error;
+    $('gateMsg').textContent = r.ok ? 'Link je poslan. Otvori email na ovom uređaju i klikni na link.' : 'Slanje nije uspjelo: ' + r.error;
   });
   $('logout').addEventListener('click', async () => { await CP.auth.signOut(); location.reload(); });
+  $('reload').addEventListener('click', () => { loadAll(); toast('Osvježeno'); });
 
-  document.querySelectorAll('nav [data-tab]').forEach((b) => b.addEventListener('click', () => {
-    document.querySelectorAll('nav [data-tab]').forEach((x) => x.setAttribute('aria-selected', x === b));
-    document.querySelectorAll('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== b.dataset.tab; });
-    if (b.dataset.tab === 'uzivo') loadLive();
-  }));
+  // ---- tabs ----
+  function openTab(name) {
+    document.querySelectorAll('nav [data-tab]').forEach((x) => x.setAttribute('aria-selected', String(x.dataset.tab === name)));
+    document.querySelectorAll('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== name; });
+    if (name === 'uzivo') loadLive();
+  }
+  document.querySelectorAll('nav [data-tab]').forEach((b) => b.addEventListener('click', () => openTab(b.dataset.tab)));
 
   function table(el, cols, rows, empty) {
-    if (!rows || !rows.length) { el.innerHTML = '<tr><td class="muted">' + (empty || 'Još nema podataka.') + '</td></tr>'; return; }
+    if (!rows || !rows.length) { el.innerHTML = '<tr><td class="empty">' + empty + '</td></tr>'; return; }
     el.innerHTML = '<tr>' + cols.map((c) => '<th class="' + (c.num ? 'num' : '') + '">' + c.h + '</th>').join('') + '</tr>' +
       rows.map((r) => '<tr>' + cols.map((c) => '<td class="' + (c.num ? 'num' : '') + '">' + (c.html ? c.html(r) : esc(r[c.k])) + '</td>').join('') + '</tr>').join('');
   }
-  const barCol = (k, max) => ({ h: '', html: (r) => '<div class="bar" style="width:' + Math.max(2, Math.round(100 * (r[k] || 0) / (max || 1))) + 'px"></div>' });
+  const barCol = (k, max) => ({ h: '', html: (r) => '<div class="bar" style="width:' + Math.max(2, Math.round(120 * (r[k] || 0) / (max || 1))) + 'px"></div>' });
 
-  async function loadOverview() {
-    const [{ data: daily }, { data: prod }, { data: refs }] = await Promise.all([
-      sb.from('admin_daily').select('*').limit(14),
-      sb.from('admin_reservations_by_product').select('*'),
-      sb.from('admin_referrals').select('*'),
-    ]);
-    const d = daily || [], week = d.slice(0, 7);
-    const sum = (k) => week.reduce((a, r) => a + (r[k] || 0), 0);
-    const resTotal = (prod || []).reduce((a, r) => a + r.reservations, 0);
-    const bottles = (prod || []).reduce((a, r) => a + r.bottles, 0);
-    $('tiles').innerHTML = [
-      ['Posjetioci, 7 dana', sum('visitors')], ['Pregledi stranica, 7 dana', sum('page_views')],
-      ['Završen kviz, 7 dana', sum('quiz_done')], ['Rezervacije, 7 dana', sum('reserved')],
-      ['Rezervacije ukupno', resTotal], ['Bočica rezervisano', bottles],
-    ].map(([l, n]) => '<div class="tile"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>').join('');
-    const maxV = Math.max(1, ...d.map((r) => r.visitors));
-    table($('daily'), [
-      { h: 'Dan', k: 'day' }, { h: 'Posjetioci', k: 'visitors', num: 1 }, barCol('visitors', maxV),
-      { h: 'Pregledi', k: 'page_views', num: 1 }, { h: 'Klikovi', k: 'clicks', num: 1 },
-      { h: 'Kviz', k: 'quiz_done', num: 1 }, { h: 'Otvorili formu', k: 'reserve_opened', num: 1 }, { h: 'Rezervisali', k: 'reserved', num: 1 },
-    ], d);
-    const maxB = Math.max(1, ...(prod || []).map((r) => r.bottles));
-    table($('byProduct'), [{ h: 'Miris', k: 'name' }, { h: 'Rezervacije', k: 'reservations', num: 1 }, { h: 'Bočice', k: 'bottles', num: 1 }, barCol('bottles', maxB), { h: 'Otvorene', k: 'open', num: 1 }], prod);
-    table($('referrals'), [{ h: 'Kod', k: 'code' }, { h: 'Rezervacije', k: 'reservations', num: 1 }, { h: 'Bočice', k: 'bottles', num: 1 }, { h: 'Zadnja', html: (r) => fmt(r.last) }], refs, 'Niko još nije koristio referal kod.');
+  // ---- overview ----
+  function renderPeriod() {
+    document.querySelectorAll('#period button').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.d) === period)));
+    const since = new Date(); since.setHours(0, 0, 0, 0); since.setDate(since.getDate() - (period - 1));
+    const rows = daily.filter((r) => new Date(r.day + 'T00:00:00') >= since);
+    const s = (k) => rows.reduce((a, r) => a + (r[k] || 0), 0);
+    const word = period === 1 ? 'danas' : 'zadnjih ' + period + ' dana';
+    const tiles = [
+      [s('visitors'), 'Posjetioci', 'različitih posjeta ' + word],
+      [s('page_views'), 'Pregledi stranica', 'otvorenih stranica ' + word],
+      [s('quiz_done'), 'Završen kviz', 'ljudi koji su dobili svoj miris'],
+      [s('reserved'), 'Rezervacije', 'poslanih formi ' + word],
+    ];
+    $('tiles').innerHTML = tiles.map(([n, l, h]) => '<div class="tile"><div class="n">' + n + '</div><div class="l">' + l + '</div><div class="h">' + h + '</div></div>').join('');
+    const steps = [['Posjetili stranicu', s('visitors')], ['Završili kviz', s('quiz_done')], ['Otvorili rezervaciju', s('reserve_opened')], ['Rezervisali', s('reserved')]];
+    const top = Math.max(1, steps[0][1]);
+    $('funnel').innerHTML = steps[0][1] === 0
+      ? '<div class="empty">Još nema posjeta u ovom periodu. Brojke se pojave čim prvi posjetioci prihvate kolačiće.</div>'
+      : steps.map(([l, n], i) => '<div class="step"><div>' + l + '</div><div class="track"><div class="fill" style="width:' + Math.max(0.5, 100 * n / top) + '%"></div></div><div class="v"><b>' + n + '</b> <small>' + (i ? Math.round(100 * n / top) + '% posjetilaca' : '') + '</small></div></div>').join('');
+  }
+  document.querySelectorAll('#period button').forEach((b) => b.addEventListener('click', () => { period = Number(b.dataset.d); renderPeriod(); }));
+
+  function renderTodo() {
+    const open = reservations.filter((r) => r.status === 'nova');
+    $('newCount').hidden = !open.length; $('newCount').textContent = open.length;
+    $('todo').innerHTML = open.length ? open.slice(0, 20).map(itemHtml).join('') +
+      (open.length > 20 ? '<div class="item"><button class="btn" type="button" data-goto="rezervacije">Prikaži svih ' + open.length + '</button></div>' : '')
+      : '<div class="empty">Nema novih rezervacija. Sve je obrađeno.</div>';
+  }
+  function itemHtml(r) {
+    const d = phoneDigits(r.phone);
+    const msg = encodeURIComponent('Zdravo ' + (r.full_name || '').split(' ')[0] + ', javljam se iz Collection Premium Sarajevo u vezi s tvojom rezervacijom (' + (r.products ? r.products.name : r.product_slug) + ').');
+    return '<div class="item"><div class="who"><b>' + esc(r.full_name) + '</b> · ' + esc(r.products ? r.products.name : r.product_slug) + ' × ' + r.quantity +
+      '<div class="meta">' + esc(r.phone) + (r.city ? ' · ' + esc(r.city) : '') + ' · ' + when(r.created_at) + (r.note ? ' · „' + esc(r.note) + '"' : '') + '</div></div>' +
+      '<div class="actions"><a class="btn wa" href="https://wa.me/' + d + '?text=' + msg + '" target="_blank" rel="noopener">WhatsApp</a>' +
+      '<a class="btn" href="tel:+' + d + '">Pozovi</a>' +
+      '<button class="btn dark" type="button" data-set="kontaktirana" data-id="' + r.id + '">Kontaktirao/la sam</button></div></div>';
   }
 
+  async function loadOverview() {
+    const [{ data: d }, { data: prod }, { data: refs }] = await Promise.all([
+      sb.from('admin_daily').select('*').limit(31), sb.from('admin_reservations_by_product').select('*'), sb.from('admin_referrals').select('*'),
+    ]);
+    daily = d || []; renderPeriod();
+    const maxB = Math.max(1, ...(prod || []).map((r) => r.bottles));
+    table($('byProduct'), [{ h: 'Miris', k: 'name' }, { h: 'Bočice', k: 'bottles', num: 1 }, barCol('bottles', maxB), { h: 'Rezervacije', k: 'reservations', num: 1 }, { h: 'Čeka poziv', k: 'open', num: 1 }], prod, 'Još nema rezervacija.');
+    table($('referrals'), [{ h: 'Kod', k: 'code' }, { h: 'Rezervacije', k: 'reservations', num: 1 }, { h: 'Bočice', k: 'bottles', num: 1 }, { h: 'Zadnja', html: (r) => when(r.last) }], refs, 'Niko još nije rezervisao s referal kodom. Kod se dodaje u link, npr. cpsarajevo.ba/?ref=salon-lejla');
+  }
+
+  // ---- reservations ----
   async function loadReservations() {
-    const { data } = await sb.from('reservations').select('*, products(name)').order('created_at', { ascending: false }).limit(1000);
-    reservations = data || [];
-    renderReservations();
+    const { data } = await sb.from('reservations').select('*, products(name)').order('created_at', { ascending: false }).limit(2000);
+    reservations = data || []; renderReservations(); renderTodo();
   }
   function renderReservations() {
     const f = $('statusFilter').value, q = $('search').value.trim().toLowerCase();
-    const rows = reservations.filter((r) => (!f || r.status === f) &&
-      (!q || [r.full_name, r.phone, r.email, r.city].join(' ').toLowerCase().includes(q)));
-    $('resCount').textContent = rows.length + ' od ' + reservations.length;
+    const rows = reservations.filter((r) => (!f || r.status === f) && (!q || [r.full_name, r.phone, r.email, r.city].join(' ').toLowerCase().includes(q)));
+    $('resCount').textContent = rows.length === reservations.length ? reservations.length + ' ukupno' : rows.length + ' od ' + reservations.length;
     table($('resTable'), [
-      { h: 'Kada', html: (r) => fmt(r.created_at) },
-      { h: 'Kupac', html: (r) => '<b>' + esc(r.full_name) + '</b><div class="muted">' + esc(r.phone) + (r.email ? ' · ' + esc(r.email) : '') + '</div>' },
-      { h: 'Miris', html: (r) => esc(r.products && r.products.name) + ' × ' + r.quantity },
-      { h: 'Grad', k: 'city' },
-      { h: 'Izvor', html: (r) => esc([r.utm_source, r.utm_campaign, r.referral_code && 'ref:' + r.referral_code].filter(Boolean).join(' · ')) },
+      { h: 'Kada', html: (r) => when(r.created_at) },
+      { h: 'Kupac', html: (r) => '<b>' + esc(r.full_name) + '</b><div class="muted">' + esc(r.phone) + (r.email ? '<br>' + esc(r.email) : '') + '</div>' },
+      { h: 'Miris', html: (r) => esc(r.products ? r.products.name : r.product_slug) + ' × ' + r.quantity + (r.city ? '<div class="muted">' + esc(r.city) + '</div>' : '') },
+      { h: 'Odakle', html: (r) => esc([r.utm_source, r.utm_campaign].filter(Boolean).join(' · ') || 'direktno') + (r.referral_code ? '<div class="muted">kod: ' + esc(r.referral_code) + '</div>' : '') },
       { h: 'Napomena', html: (r) => esc(r.note) },
-      { h: 'Status', html: (r) => '<select data-id="' + r.id + '" class="st-' + r.status + '">' + STATUSES.map(([v, l]) => '<option value="' + v + '"' + (v === r.status ? ' selected' : '') + '>' + l + '</option>').join('') + '</select>' },
-    ], rows, 'Još nema rezervacija.');
+      { h: 'Status', html: (r) => '<span class="pill p-' + r.status + '">' + STATUS[r.status] + '</span>' },
+      { h: '', html: (r) => '<div class="actions">' + (NEXT[r.status] ? '<button class="btn" type="button" data-set="' + NEXT[r.status] + '" data-id="' + r.id + '">' + NEXT_LABEL[r.status] + '</button>' : '') +
+          '<select data-id="' + r.id + '" aria-label="Promijeni status">' + Object.keys(STATUS).map((v) => '<option value="' + v + '"' + (v === r.status ? ' selected' : '') + '>' + STATUS[v] + '</option>').join('') + '</select></div>' },
+    ], rows, reservations.length ? 'Nijedna rezervacija ne odgovara pretrazi.' : 'Još nema rezervacija. Pojavit će se ovdje čim neko pošalje formu na stranici.');
   }
-  $('resTable').addEventListener('change', async (e) => {
-    const s = e.target.closest('select[data-id]'); if (!s) return;
-    const { error } = await sb.from('reservations').update({ status: s.value }).eq('id', s.dataset.id);
-    if (error) { alert('Status nije promijenjen.'); return; }
-    s.className = 'st-' + s.value;
-    const r = reservations.find((x) => x.id === s.dataset.id); if (r) r.status = s.value;
+  async function setStatus(id, status) {
+    const { error } = await sb.from('reservations').update({ status }).eq('id', id);
+    if (error) { toast('Status nije sačuvan. Provjeri internet i pokušaj ponovo.'); return; }
+    const r = reservations.find((x) => x.id === id); if (r) r.status = status;
+    renderReservations(); renderTodo(); toast('Sačuvano: ' + STATUS[status]);
+  }
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-set]'); if (b) setStatus(b.dataset.id, b.dataset.set);
+    const g = e.target.closest('[data-goto]'); if (g) { $('statusFilter').value = 'nova'; renderReservations(); openTab(g.dataset.goto); }
   });
+  $('resTable').addEventListener('change', (e) => { const s = e.target.closest('select[data-id]'); if (s) setStatus(s.dataset.id, s.value); });
   $('statusFilter').addEventListener('change', renderReservations);
   $('search').addEventListener('input', renderReservations);
   $('csv').addEventListener('click', () => {
     const cols = ['created_at', 'full_name', 'phone', 'email', 'product_slug', 'quantity', 'city', 'address', 'status', 'utm_source', 'utm_campaign', 'referral_code', 'note'];
     const q = (v) => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
-    const csv = [cols.join(',')].concat(reservations.map((r) => cols.map((c) => q(r[c])).join(','))).join('\n');
+    const csv = [cols.join(';')].concat(reservations.map((r) => cols.map((c) => q(r[c])).join(';'))).join('\n');
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));
-    a.download = 'rezervacije-' + new Date().toISOString().slice(0, 10) + '.csv';
-    a.click();
+    a.download = 'rezervacije-' + new Date().toISOString().slice(0, 10) + '.csv'; a.click();
   });
 
+  // ---- clicks & sources ----
+  const nice = (el) => ({ 'hero-rezervisi': 'Glavno dugme "Rezerviši"', 'hero-kviz': 'Dugme "Pronađi svoj miris"', whatsapp: 'WhatsApp dugme', link: 'Link', button: 'Dugme', 'kviz-share': 'Podijeli rezultat kviza', 'film-karavan': 'Film Karavan' }[el] || (el && el.startsWith('kolekcija-') ? 'Kolekcija: ' + el.slice(10) : el));
   async function loadClicks() {
     const { data } = await sb.from('admin_top_clicks').select('*').limit(100);
     const max = Math.max(1, ...(data || []).map((r) => r.clicks));
-    table($('clicks'), [{ h: 'Element', k: 'element' }, { h: 'Tekst / link', k: 'label' }, { h: 'Stranica', k: 'path' }, { h: 'Klikovi', k: 'clicks', num: 1 }, barCol('clicks', max), { h: 'Zadnji', html: (r) => fmt(r.last_click) }], data);
+    table($('clicks'), [{ h: 'Šta', html: (r) => '<b>' + esc(nice(r.element)) + '</b><div class="muted">' + esc(r.label) + '</div>' }, { h: 'Klikovi', k: 'clicks', num: 1 }, barCol('clicks', max), { h: 'Gdje', k: 'path' }, { h: 'Zadnji put', html: (r) => when(r.last_click) }], data, 'Još nema klikova. Pojave se kad posjetioci prihvate kolačiće i počnu klikati.');
   }
   async function loadSources() {
     const { data } = await sb.from('admin_sources').select('*');
     const max = Math.max(1, ...(data || []).map((r) => r.visitors));
-    table($('sources'), [{ h: 'Izvor', k: 'source' }, { h: 'Kampanja', k: 'campaign' }, { h: 'Posjetioci', k: 'visitors', num: 1 }, barCol('visitors', max), { h: 'Rezervisali', k: 'reserving_sessions', num: 1 }], data);
+    table($('sources'), [{ h: 'Izvor', html: (r) => '<b>' + esc(r.source) + '</b>' + (r.campaign ? '<div class="muted">' + esc(r.campaign) + '</div>' : '') }, { h: 'Posjetioci', k: 'visitors', num: 1 }, barCol('visitors', max), { h: 'Rezervisali', k: 'reserving_sessions', num: 1 }], data, 'Još nema posjeta.');
   }
   async function loadLive() {
-    const { data } = await sb.from('events').select('created_at, type, element, label, path, device, utm_source, session_id').order('created_at', { ascending: false }).limit(100);
-    table($('live'), [{ h: 'Vrijeme', html: (r) => fmt(r.created_at) }, { h: 'Događaj', k: 'type' }, { h: 'Element', k: 'element' }, { h: 'Tekst', k: 'label' }, { h: 'Stranica', k: 'path' }, { h: 'Uređaj', k: 'device' }, { h: 'Izvor', k: 'utm_source' }, { h: 'Posjeta', html: (r) => esc(r.session_id.slice(0, 6)) }], data);
+    const { data } = await sb.from('events').select('created_at, type, element, label, path, device, utm_source').order('created_at', { ascending: false }).limit(100);
+    $('live').innerHTML = (data && data.length) ? data.map((e) => '<div class="ev"><time>' + when(e.created_at) + '</time><span class="dot ' + e.type + '"></span><div>Posjetilac (' + esc(e.device === 'mobile' ? 'mobitel' : e.device === 'tablet' ? 'tablet' : 'računar') + (e.utm_source ? ', s ' + esc(e.utm_source) : '') + ') ' +
+      (e.type === 'reserve_submit' ? '<b>' + EV[e.type] + '</b>' : EV[e.type] || e.type) + ' ' + (e.type === 'click' ? '<b>' + esc(nice(e.element)) + '</b>' : esc(e.label || '')) +
+      ' <span class="muted">' + esc(e.path || '') + '</span></div></div>').join('') : '<div class="empty">Još nema aktivnosti.</div>';
   }
   $('refreshLive').addEventListener('click', loadLive);
+
+  function loadAll() { loadOverview(); loadReservations(); loadClicks(); loadSources(); }
 
   async function start() {
     const user = await CP.auth.user();
     if (!user) return;
     const { data: isAdmin } = await sb.rpc('is_admin');
-    if (!isAdmin) { $('gateMsg').textContent = user.email + ' nema admin pristup.'; return; }
+    if (!isAdmin) { $('gateMsg').textContent = 'Prijavljen/a si kao ' + user.email + ', ali ovaj račun još nema admin pristup.'; return; }
     $('gate').hidden = true; $('app').hidden = false; $('me').textContent = user.email;
-    loadOverview(); loadReservations(); loadClicks(); loadSources();
+    loadAll();
   }
   sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_IN') start(); });
   start();
