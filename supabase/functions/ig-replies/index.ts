@@ -13,6 +13,8 @@ import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 const SITE = Deno.env.get("SITE_URL") ?? "https://collection-premium-sarajevo.netlify.app";
 const GRAPH = "https://graph.instagram.com/v23.0";
 const MODEL = Deno.env.get("CLAUDE_MODEL") ?? "claude-sonnet-5-5";
+// the API key is organisation-wide, so every call names the workspace it bills to
+const WORKSPACE = Deno.env.get("ANTHROPIC_WORKSPACE_ID") ?? "wrkspc_016PxM4V7oG9fmChYv4P1Dwa";
 const SB_URL = Deno.env.get("SUPABASE_URL")!;
 const sb = createClient(SB_URL, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
 const CORS = {
@@ -21,6 +23,10 @@ const CORS = {
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
 };
 const json = (b: unknown, status = 200) => new Response(JSON.stringify(b), { status, headers: { ...CORS, "Content-Type": "application/json" } });
+
+// tolerate a stray comma or space typed into the secret name in the dashboard
+const anthropicKey = () => Deno.env.get("ANTHROPIC_API_KEY") ?? Deno.env.get("ANTHROPIC_API_KEY,") ??
+  Object.entries(Deno.env.toObject()).find(([k]) => k.replace(/[^A-Z_]/g, "") === "ANTHROPIC_API_KEY")?.[1];
 
 async function secret(key: string) {
   const { data } = await sb.from("app_secrets").select("value").eq("key", key).maybeSingle();
@@ -84,7 +90,7 @@ skip = true kada poruka ne traži odgovor (samo emoji, "hvala", spam, reklama, u
 Vrati SAMO JSON: {"reply": "...", "needs_human": true|false, "skip": true|false, "reason": "kratko zašto, na bosanskom"}`;
 
 async function askClaude(kind: "dm" | "comment", text: string, history: { direction: string; text: string | null; draft: string | null }[]) {
-  const key = Deno.env.get("ANTHROPIC_API_KEY");
+  const key = anthropicKey();
   if (!key) throw new Error("ANTHROPIC_API_KEY nije postavljen");
   const msgs: { role: "user" | "assistant"; content: string }[] = [];
   for (const h of history) {
@@ -100,7 +106,7 @@ async function askClaude(kind: "dm" | "comment", text: string, history: { direct
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+    headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "anthropic-workspace-id": WORKSPACE, "content-type": "application/json" },
     body: JSON.stringify({ model: MODEL, max_tokens: 500, system: SYSTEM(await knowledge(), kind), messages: msgs }),
   });
   if (!res.ok) throw new Error(`Claude ${res.status}: ${(await res.text()).slice(0, 300)}`);
@@ -248,7 +254,7 @@ async function adminAction(body: any) {
   }
   if (action === "status") {
     return json({
-      anthropic: !!Deno.env.get("ANTHROPIC_API_KEY"), meta_secret: !!Deno.env.get("META_APP_SECRET"), ig_token: !!Deno.env.get("IG_ACCESS_TOKEN"),
+      anthropic: !!anthropicKey(), meta_secret: !!Deno.env.get("META_APP_SECRET"), ig_token: !!Deno.env.get("IG_ACCESS_TOKEN"),
       auto_send: (await secret("ig_ai_auto_send")) === "true", model: MODEL,
     });
   }
@@ -303,5 +309,6 @@ Deno.serve(async (req) => {
   if (!(await isAdmin(req))) return json({ error: "forbidden" }, 403);
   let body: any = {};
   try { body = JSON.parse(raw || "{}"); } catch { /* empty */ }
-  return adminAction(body);
+  try { return await adminAction(body); }
+  catch (e) { return json({ error: String((e as Error)?.message ?? e) }, 500); }
 });
