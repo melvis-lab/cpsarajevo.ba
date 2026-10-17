@@ -138,12 +138,12 @@ footer{border-top:1px solid var(--line);padding:28px 20px;text-align:center;font
 <footer>Collection Premium Paris · by MESO · Sarajevo</footer>
 
 <script>
-(()=>{let LANG='bs';try{LANG=localStorage.getItem('lang')||'bs'}catch(e){}
+(()=>{let LANG='bs';try{LANG=sessionStorage.getItem('lang')||'bs'}catch(e){}
 const els=[...document.querySelectorAll('[data-en]')];els.forEach(el=>el.dataset.bs=el.innerHTML);
 const apply=()=>{document.documentElement.lang=LANG;els.forEach(el=>el.innerHTML=LANG==='en'?el.dataset.en:el.dataset.bs);
  document.querySelectorAll('#lang [data-l]').forEach(s=>s.classList.toggle('on',s.dataset.l===LANG));
  document.title=LANG==='en'?'The story of MESO · Collection Premium Sarajevo':'Priča o MESO-u · Collection Premium Sarajevo';};
-apply();document.getElementById('lang').onclick=()=>{LANG=LANG==='en'?'bs':'en';try{localStorage.setItem('lang',LANG)}catch(e){}apply();};
+apply();document.getElementById('lang').onclick=()=>{LANG=LANG==='en'?'bs':'en';try{sessionStorage.setItem('lang',LANG)}catch(e){}apply();};
 const bar=document.getElementById('bar');const up=()=>{const h=document.documentElement;bar.style.transform=`scaleX(${h.scrollTop/(h.scrollHeight-innerHeight)})`;};addEventListener('scroll',up,{passive:true});up();
 const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{rootMargin:'0px 0px -10% 0px'});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));})();

@@ -514,6 +514,7 @@ section.trust{background:radial-gradient(70% 70% at 50% 45%,rgba(14,11,9,.82),rg
 .qz-alt{margin-top:1rem;font-size:.86rem;color:var(--muted);display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
 .qz-alt button{color:var(--cream-2);border-bottom:1px solid rgba(226,197,143,.5);padding:.1rem 0}
 @media (min-width:860px){.qz-opts{grid-template-columns:repeat(4,1fr)}.qz-o{min-height:260px}}
+@media (min-width:1100px){.qz-q{max-width:1180px}.qz-opts{gap:22px}.qz-o{min-height:min(420px,52vh);padding:26px}.qz-t{font-size:clamp(3rem,4vw,4.2rem)}.qz-o b{font-size:1.9rem}.qz-o b:last-child{font-size:2.2rem}.qz-o small{font-size:1rem}}
 @media (prefers-reduced-motion:reduce){.qz-in,.qz-in .qz-o,.qz-card,.qz-think img{animation:none}.qz-o,.qz-fan img{transition:none}}
 
 /* reviews */
@@ -599,7 +600,8 @@ form.order .fine{font-size:.78rem;color:var(--muted);text-align:center}
 const force=/[?&]intro=1/.test(location.search);
 if(!force&&(seen||location.hash==='#kviz'||/[?&]kviz/.test(location.search)||innerWidth>=860||matchMedia('(prefers-reduced-motion: reduce)').matches)){el.remove();return;}
 try{localStorage.setItem('introSeen','1')}catch(e){}
-let en=false;try{en=localStorage.getItem('lang')==='en'}catch(e){}
+try{localStorage.removeItem('lang')}catch(e){}
+let en=false;try{en=sessionStorage.getItem('lang')==='en'}catch(e){}
 const words=en?['Spice','Sweetness','Amber','Smoke']:['Začin','Slast','Ambra','Dim'];
 if(en)el.querySelector('.skip').textContent='Skip';
 const wm=el.querySelector('.wm');[...'Collection Premium'].forEach((c,i)=>{const s=document.createElement('span');s.textContent=c===' '?' ':c;s.style.transitionDelay=(120+i*38)+'ms';wm.appendChild(s);});
@@ -1027,7 +1029,7 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
 <script>
 /* ---------- LANGUAGE ---------- */
 let LANG='bs';
-try{ const saved=localStorage.getItem('lang'); if(saved==='en'||saved==='bs') LANG=saved; }catch(e){}
+try{ const saved=sessionStorage.getItem('lang'); if(saved==='en'||saved==='bs') LANG=saved; }catch(e){}
 const L=(bs,en)=>LANG==='en'?en:bs;
 
 /* ---------- DATA ---------- */
@@ -1291,7 +1293,7 @@ function applyLang(){
   renderGrid(); renderReviews(); renderQ(); if(window.__setProd&&window.__curProd) window.__setProd(window.__curProd);
 }
 document.getElementById('lang').addEventListener('click',()=>{
-  LANG=LANG==='bs'?'en':'bs'; try{localStorage.setItem('lang',LANG);}catch(e){} qi=Math.min(qi,Q.length); applyLang();
+  LANG=LANG==='bs'?'en':'bs'; try{sessionStorage.setItem('lang',LANG);}catch(e){} qi=Math.min(qi,Q.length); applyLang();
 });
 applyLang();
 
