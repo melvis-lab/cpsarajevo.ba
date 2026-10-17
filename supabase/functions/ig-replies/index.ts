@@ -316,6 +316,47 @@ async function adminAction(body: any) {
   return json({ error: "nepoznata akcija" }, 400);
 }
 
+// ---------- ManyChat bridge ----------
+// ManyChat Pro "External Request": POST {source:"manychat", user_id, username, text} with header x-manychat-key.
+// Returns {reply, auto}. ManyChat sends `reply` when it is not empty.
+const HOLD = "Hvala ti na poruci 🤍 Ovo ću ti lično provjeriti i javljam ti se uskoro ovdje.";
+async function manychat(body: any) {
+  const text = String(body.text ?? "").trim();
+  const userId = String(body.user_id ?? "");
+  if (!text || !userId) return json({ reply: "", auto: false });
+  // daily safety cap so a flood of messages can never run up the Claude bill
+  const since = new Date(Date.now() - 86400000).toISOString();
+  const { count } = await sb.from("ig_messages").select("id", { count: "exact", head: true }).gte("created_at", since);
+  const { data: row } = await sb.from("ig_messages")
+    .insert({ kind: "dm", direction: "in", ig_user_id: "mc_" + userId, username: body.username ?? null, mid: "mc_" + userId + "_" + Date.now(), text })
+    .select("id").single();
+  if ((count ?? 0) > 600) {
+    await sb.from("ig_messages").update({ status: "ceka", reason: "Dnevni limit dostignut" }).eq("id", row!.id);
+    return json({ reply: HOLD, auto: false });
+  }
+  const { data: hist } = await sb.from("ig_messages").select("status,text,draft")
+    .eq("ig_user_id", "mc_" + userId).lt("id", row!.id).order("created_at", { ascending: false }).limit(8);
+  try {
+    const ai = await askClaude("dm", text, (hist ?? []).reverse());
+    if (ai.skip) {
+      await sb.from("ig_messages").update({ status: "preskoceno", draft: ai.reply || null, reason: ai.reason }).eq("id", row!.id);
+      return json({ reply: "", auto: false });
+    }
+    const auto = (await secret("ig_ai_auto_send")) === "true";
+    if (!ai.needs_human && auto && ai.reply) {
+      await sb.from("ig_messages").update({ status: "poslano_auto", draft: ai.reply, reason: ai.reason, sent_at: new Date().toISOString() }).eq("id", row!.id);
+      return json({ reply: ai.reply, auto: true });
+    }
+    const reason = ai.needs_human ? ai.reason : "Automatsko slanje je isključeno";
+    await sb.from("ig_messages").update({ status: "ceka", draft: ai.reply, reason }).eq("id", row!.id);
+    await notifyAdmin({ id: row!.id, kind: "dm", username: body.username ?? null, text, draft: ai.reply, reason });
+    return json({ reply: HOLD, auto: false });
+  } catch (e) {
+    await sb.from("ig_messages").update({ status: "greska", error: String(e).slice(0, 500) }).eq("id", row!.id);
+    return json({ reply: HOLD, auto: false });
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
   const url = new URL(req.url);
@@ -338,9 +379,14 @@ Deno.serve(async (req) => {
     return new Response("ok", { status: 200 });
   }
 
-  if (!(await isAdmin(req))) return json({ error: "forbidden" }, 403);
   let body: any = {};
   try { body = JSON.parse(raw || "{}"); } catch { /* empty */ }
+  const mcKey = req.headers.get("x-manychat-key");
+  if (mcKey) {
+    if (mcKey !== (await secret("manychat_key"))) return json({ error: "forbidden" }, 403);
+    return manychat(body);
+  }
+  if (!(await isAdmin(req))) return json({ error: "forbidden" }, 403);
   try { return await adminAction(body); }
   catch (e) { return json({ error: String((e as Error)?.message ?? e) }, 500); }
 });
