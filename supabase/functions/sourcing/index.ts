@@ -78,7 +78,8 @@ async function claude(system: string, user: string, opts: { tools?: any[]; max?:
   }
   throw new Error("Claude: pretraga je trajala predugo");
 }
-const tag = (raw: string, n: string) => raw.match(new RegExp(`<${n}>([\\s\\S]*?)</${n}>`))?.[1]?.trim() ?? "";
+// tolerant: also accepts a missing closing tag (answer cut off at max_tokens)
+const tag = (raw: string, n: string) => (raw.match(new RegExp(`<${n}>([\\s\\S]*?)(?:</${n}>|$)`))?.[1] ?? "").replace(/<\/?[a-z]+>/gi, "").trim();
 
 // ---------- writing rules ----------
 const BANNED = /(kopij|original|replik|dupe|inspirisan|\b\d+[.,]?\d*\s?(km|kn|eur|€|bam)\b)/i;
@@ -171,17 +172,19 @@ Vrati SAMO:
     : lead.segment === "poklon"
       ? "Napiši PRVI mail ovoj firmi: nudiš parfeme kao novogodišnje i praznične poklone za zaposlene i klijente, u većim količinama. NE spominji da javna prodaja počinje 1. januara (pokloni im trebaju prije)."
       : "Napiši PRVI mail ovoj firmi: pitaš da li bi htjeli biti preprodavač (imati mirise u ponudi).";
+  let last = "";
   for (let attempt = 0; attempt < 2; attempt++) {
-    const raw = await claude(system, `${task}${extra}\n\n${who}`, { max: 1200 });
+    const raw = await claude(system, `${task}${extra}\n\n${who}`, { max: 3000 });
+    last = raw;
     let subject = clean(tag(raw, "predmet")).replace(/^predmet:\s*/i, "");
     let body = clean(tag(raw, "tijelo"));
     if (!body) {                       // no tags: take "Predmet: ..." line and the rest
       const m = raw.match(/Predmet:\s*(.+)\n+([\s\S]+)/i);
       if (m) { subject = subject || clean(m[1]); body = clean(m[2].replace(/<\/?[a-z]+>/gi, "")); }
     }
-    if (subject && body) return { subject, body, warn: BANNED.test(subject + " " + body) ? "Provjeri tekst: spominje cijenu ili zabranjenu riječ." : null };
+    if (subject && body && /Melvis[^\n]*\s*$/.test(body)) return { subject, body, warn: BANNED.test(subject + " " + body) ? "Provjeri tekst: spominje cijenu ili zabranjenu riječ." : null };
   }
-  throw new Error("Claude nije vratio mail, pokušaj ponovo");
+  throw new Error(`Claude nije vratio mail, pokušaj ponovo (${last.slice(0, 160).replace(/\s+/g, " ")})`);
 }
 
 // short Viber / WhatsApp message for companies that only list a mobile number
