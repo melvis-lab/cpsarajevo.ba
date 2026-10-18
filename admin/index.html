@@ -82,6 +82,26 @@
   @media (max-width:560px) { .step { grid-template-columns:1fr; gap:4px; } .step .v { text-align:left; } }
 .gbtn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:260px}
 .alt{margin-top:18px;color:#6b6b6b;font-size:14px}.alt summary{cursor:pointer;margin-bottom:10px}
+  .ld-find { display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px; padding:14px; align-items:end; }
+  .ld-find label, .ld-set label { display:grid; gap:4px; font-size:12px; color:var(--muted); }
+  .ld-find input, .ld-find select, .ld-set input, .ld-set textarea, .ld-card input, .ld-card textarea { font:inherit; font-size:14px; color:var(--ink); padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:var(--bg); width:100%; }
+  .ld-set { display:grid; gap:10px; padding:14px; }
+  .ld-more { margin-top:12px; } .ld-more summary { cursor:pointer; color:var(--accent); font-weight:500; padding:4px 0; }
+  .ld-jobs { display:grid; gap:6px; margin-top:10px; font-size:13px; color:var(--muted); }
+  .ld-list { display:grid; gap:12px; }
+  .ld-card { background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; display:grid; gap:10px; }
+  .ld-card .top { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:flex-start; }
+  .ld-card .name { font-weight:600; font-size:15px; } .ld-card .meta { color:var(--muted); font-size:13px; }
+  .ld-card textarea { min-height:190px; resize:vertical; line-height:1.55; }
+  .ld-card .about { font-size:13px; }
+  .ld-viber { border-top:1px dashed var(--line); padding-top:10px; display:grid; gap:8px; }
+  .ld-viber textarea { min-height:90px; }
+  .ld-ok { color:var(--ok); } .ld-bad { color:var(--bad); }
+  .ig-auto { display:flex; align-items:center; gap:8px; font-size:14px; white-space:nowrap; cursor:pointer; }
+  .ig-filter { display:flex; gap:6px; margin:14px 0 10px; }
+  .ig-filter button { border:1px solid var(--line); background:transparent; border-radius:999px; padding:6px 14px; font:inherit; font-size:13px; cursor:pointer; color:inherit; }
+  .ig-filter button[aria-pressed="true"] { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .ig-draft { width:100%; min-width:240px; font:inherit; font-size:14px; padding:8px; border:1px solid var(--line); border-radius:8px; background:transparent; color:inherit; resize:vertical; }
 </style>
 </head>
 <body>
@@ -104,6 +124,8 @@
     <button role="tab" type="button" data-tab="rezervacije">Rezervacije<span class="count" id="newCount" hidden></span></button>
     <button role="tab" type="button" data-tab="korisnici">Korisnici<span class="count" id="accCount" hidden></span></button>
     <button role="tab" type="button" data-tab="firme">Firme<span class="count" id="b2bCount" hidden></span></button>
+    <button role="tab" type="button" data-tab="prospekti">Prospekti<span class="count" id="ldCount" hidden></span></button>
+    <button role="tab" type="button" data-tab="instagram">Instagram<span class="count" id="igCount" hidden></span></button>
     <button role="tab" type="button" data-tab="stranica">Šta ljudi klikaju</button>
     <button role="tab" type="button" data-tab="izvori">Odakle dolaze</button>
     <button role="tab" type="button" data-tab="uzivo">Uživo</button>
@@ -177,6 +199,63 @@
       <h2>Firme i preprodavači</h2>
       <p class="sub">Registracije s forme "Za firme" na stranici: korporativni pokloni, saloni, butici i preprodavači.</p>
       <div class="panel scroll"><table id="b2bTable"></table></div>
+    </section>
+
+    <!-- PROSPEKTI (sourcing) -->
+    <section data-panel="prospekti" hidden>
+      <div class="block">
+        <h2>Pronađi firme</h2>
+        <p class="sub">Claude pretraži web i zadrži samo firme čiji je email objavljen na njihovoj vlastitoj stranici (link je sačuvan kao dokaz). Svaki email se provjeri da domena prima poštu. Ništa se ne šalje bez tvog klika.</p>
+        <form class="panel ld-find" id="ldFind">
+          <label>Šta tražiš<select name="segment"><option value="preprodavac">Preprodavači (parfimerije, butici, saloni, drogerije)</option><option value="poklon">Firme za novogodišnje poklone</option></select></label>
+          <label>Grad<input name="city" list="ldCities" value="Sarajevo" required></label>
+          <label>Fokus (nije obavezno)<input name="category" placeholder="npr. frizerski saloni, banke, IT firme"></label>
+          <label>Koliko<select name="count"><option>5</option><option selected>10</option><option>15</option></select></label>
+          <button class="btn dark" type="submit">Pronađi</button>
+          <datalist id="ldCities"><option>Sarajevo</option><option>Tuzla</option><option>Zenica</option><option>Mostar</option><option>Banja Luka</option><option>Bihać</option><option>Travnik</option><option>Brčko</option><option>Bijeljina</option><option>Cazin</option><option>Visoko</option><option>Gračanica</option><option>Goražde</option><option>Livno</option><option>Konjic</option></datalist>
+        </form>
+        <div id="ldJobs" class="ld-jobs"></div>
+        <details class="ld-more"><summary>Dodaj ručno ili uvezi listu (CSV)</summary>
+          <form class="panel ld-find" id="ldAdd">
+            <label>Firma<input name="company" required></label>
+            <label>Email<input name="email" type="email"></label>
+            <label>Grad<input name="city" list="ldCities"></label>
+            <label>Tip<select name="segment"><option value="preprodavac">Preprodavač</option><option value="poklon">Poklon za firmu</option></select></label>
+            <label>Djelatnost<input name="category"></label>
+            <label>Kontakt osoba<input name="contact_name"></label>
+            <label style="grid-column:1/-1">Šta znaš o njima (Claude to koristi u mailu)<input name="about"></label>
+            <button class="btn dark" type="submit">Dodaj</button>
+          </form>
+          <p class="sub" style="margin-top:10px">CSV s kolonama <code>firma, email, grad, djelatnost, web, telefon, kontakt, o_njima, segment</code> (segment: preprodavac ili poklon). Za kupljene liste (InfobelPRO, Bisnode) ili listu članica komore.</p>
+          <input type="file" id="ldCsv" accept=".csv,text/csv">
+        </details>
+        <details class="ld-more"><summary>O meni i ponuda (Claude piše samo ovo)</summary>
+          <div class="panel ld-set">
+            <label>O meni<textarea id="setOme" rows="3"></textarea></label>
+            <label>Ponuda i činjenice<textarea id="setPonuda" rows="6"></textarea></label>
+            <label>Najviše mailova dnevno<input id="setLimit" type="number" min="1" max="150"></label>
+            <label>Podsjetnik nakon (dana)<input id="setFu" type="number" min="2" max="21"></label>
+            <button class="btn dark" type="button" id="setSave">Sačuvaj</button>
+          </div>
+        </details>
+      </div>
+      <div class="block">
+        <div class="row"><div><h2>Firme</h2><p class="sub" style="margin:0" id="ldSum"></p></div>
+          <div class="ig-filter" id="ldFilter" role="group" aria-label="Filter">
+            <button type="button" data-f="pregled" aria-pressed="true">Za pregled</button><button type="button" data-f="poslano" aria-pressed="false">Poslano</button><button type="button" data-f="odgovor" aria-pressed="false">Odgovorili</button><button type="button" data-f="sve" aria-pressed="false">Sve</button>
+          </div></div>
+        <div id="ldList" class="ld-list"></div>
+      </div>
+    </section>
+
+    <!-- INSTAGRAM -->
+    <section data-panel="instagram" hidden>
+      <div class="row"><div><h2>Instagram poruke</h2><p class="sub" style="margin:0">Svaki DM odgovara Claude. Pitanja koja traže tebe (dostava, uslovi, žalbe) čekaju ovdje s prijedlogom odgovora, a kupac je dobio poruku da mu se javljaš lično.</p></div>
+        <label class="ig-auto"><input type="checkbox" id="igAuto"> Claude šalje sam</label></div>
+      <div class="ig-filter" id="igFilter" role="group" aria-label="Filter">
+        <button type="button" data-f="ceka" aria-pressed="true">Čeka tebe</button><button type="button" data-f="sve" aria-pressed="false">Sve poruke</button>
+      </div>
+      <div class="panel scroll"><table id="igTable"></table></div>
     </section>
 
     <!-- KLIKOVI -->
@@ -382,7 +461,7 @@
   // ---- accounts & approvals ----
   const ACC_TYPE = { kupac: 'Kupac', firma: 'Firma', preprodavac: 'Preprodavač', salon: 'Salon / butik' };
   const ACC_ST = { na_cekanju: 'Čeka odobrenje', odobren: 'Odobren', odbijen: 'Odbijen' };
-  const MAIL = { welcome: 'Dobrodošlica', welcome_b2b: 'Dobrodošlica (firma)', approved: 'Odobrenje', partner_approved: 'Odobrenje partnera', rejected: 'Odbijanje', partner_received: 'Potvrda zahtjeva', reservation_confirm: 'Potvrda rezervacije', countdown: 'Odbrojavanje', admin_new_account: 'Tebi: novi račun', admin_new_reservation: 'Tebi: nova rezervacija', admin_new_partner: 'Tebi: nova firma' };
+  const MAIL = { welcome: 'Dobrodošlica', welcome_b2b: 'Dobrodošlica (firma)', approved: 'Odobrenje', partner_approved: 'Odobrenje partnera', rejected: 'Odbijanje', partner_received: 'Potvrda zahtjeva', reservation_confirm: 'Potvrda rezervacije', countdown: 'Odbrojavanje', admin_new_account: 'Tebi: novi račun', admin_new_reservation: 'Tebi: nova rezervacija', admin_new_partner: 'Tebi: nova firma', admin_ig_message: 'Tebi: Instagram poruka', outreach: 'Prospekt (tvoj mail firmi)' };
   const MAIL_ST = { pending: 'Čeka slanje', sending: 'Šalje se', sent: 'Poslan', error: 'Greška', skipped: 'Preskočen' };
   let accounts = [];
   async function loadAccounts() {
@@ -460,7 +539,232 @@
     toast(error ? 'Status nije sačuvan.' : 'Sačuvano: ' + B2B_STATUS[sel.value]); if (!error) loadB2b();
   });
 
-  function loadAll() { loadOverview(); loadScents(); loadB2b(); loadAccounts(); loadMails(); loadReservations(); loadClicks(); loadSources(); }
+  // ---- instagram ----
+  const IG_ST = { poslano_auto: 'Claude odgovorio', poslano: 'Odgovoreno', ceka: 'Čeka tebe', preskoceno: 'Bez odgovora', greska: 'Greška', nova: 'Nova' };
+  const IG_PILL = { poslano_auto: 'potvrdjena', poslano: 'isporucena', ceka: 'nova', preskoceno: 'kontaktirana', greska: 'otkazana', nova: 'nova' };
+  let ig = [], igFilter = 'ceka';
+  const FN = 'https://wjbhenmqmpbccelqfddf.supabase.co/functions/v1/ig-replies';
+  async function igCall(body) {
+    const { data: { session } } = await sb.auth.getSession();
+    const r = await fetch(FN, { method: 'POST', headers: { Authorization: 'Bearer ' + session.access_token, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    return r.json();
+  }
+  async function loadIg() {
+    const { data } = await sb.from('ig_messages').select('*').not('ig_user_id', 'eq', 'mc_test123').order('created_at', { ascending: false }).limit(500);
+    ig = data || [];
+    const n = ig.filter((r) => r.status === 'ceka').length;
+    $('igCount').hidden = !n; $('igCount').textContent = n;
+    const rows = igFilter === 'ceka' ? ig.filter((r) => r.status === 'ceka') : ig;
+    table($('igTable'), [
+      { h: 'Kada', html: (r) => when(r.created_at) },
+      { h: 'Ko', html: (r) => r.username ? '<a href="https://www.instagram.com/' + encodeURIComponent(r.username) + '/" target="_blank" rel="noopener">@' + esc(r.username) + '</a>' : '<span class="muted">' + (r.kind === 'comment' ? 'komentar' : 'DM') + '</span>' },
+      { h: 'Poruka', html: (r) => esc(r.text) },
+      { h: 'Odgovor', html: (r) => r.status === 'ceka'
+          ? '<textarea class="ig-draft" data-draft="' + r.id + '" rows="3">' + esc(r.draft) + '</textarea>' + (r.reason ? '<div class="muted">' + esc(r.reason) + '</div>' : '')
+          : esc(r.draft) + (r.error ? '<div class="muted">' + esc(r.error) + '</div>' : '') },
+      { h: 'Status', html: (r) => '<span class="pill p-' + (IG_PILL[r.status] || 'nova') + '">' + (IG_ST[r.status] || r.status) + '</span>' },
+      { h: '', html: (r) => r.status !== 'ceka' ? '' :
+          '<div class="actions"><button class="btn dark" type="button" data-igcopy="' + r.id + '">Kopiraj i otvori Instagram</button>' +
+          '<button class="btn" type="button" data-igdone="' + r.id + '">Odgovoreno</button><button class="btn" type="button" data-igskip="' + r.id + '">Preskoči</button></div>' },
+    ], rows, igFilter === 'ceka' ? 'Ništa ne čeka. Claude je odgovorio na sve poruke.' : 'Još nema Instagram poruka.');
+  }
+  $('igFilter').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-f]'); if (!b) return;
+    igFilter = b.dataset.f;
+    document.querySelectorAll('#igFilter button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    loadIg();
+  });
+  $('igTable').addEventListener('click', async (e) => {
+    const c = e.target.closest('[data-igcopy]'), d = e.target.closest('[data-igdone]'), k = e.target.closest('[data-igskip]');
+    if (c) {
+      const ta = document.querySelector('[data-draft="' + c.dataset.igcopy + '"]');
+      try { await navigator.clipboard.writeText(ta ? ta.value : ''); toast('Odgovor kopiran. Zalijepi ga u Instagram poruku.'); } catch { toast('Kopiraj tekst ručno iz polja.'); }
+      window.open('https://www.instagram.com/direct/inbox/', '_blank', 'noopener');
+      return;
+    }
+    const id = (d || k) && (d ? d.dataset.igdone : k.dataset.igskip); if (!id) return;
+    const ta = document.querySelector('[data-draft="' + id + '"]');
+    const upd = d ? { status: 'poslano', draft: ta ? ta.value : undefined, sent_at: new Date().toISOString() } : { status: 'preskoceno' };
+    const { error } = await sb.from('ig_messages').update(upd).eq('id', id);
+    toast(error ? 'Nije sačuvano.' : d ? 'Označeno kao odgovoreno. Claude to pamti za sljedeći razgovor.' : 'Preskočeno.');
+    loadIg();
+  });
+  async function loadIgAuto() { try { const s = await igCall({ action: 'status' }); $('igAuto').checked = !!s.auto_send; } catch { /* offline */ } }
+  $('igAuto').addEventListener('change', async (e) => {
+    const on = e.target.checked;
+    const r = await igCall({ action: 'auto', on });
+    toast(r.auto_send ? 'Claude odgovara sam.' : 'Claude sada samo predlaže. Svaki odgovor čeka tebe ovdje.');
+  });
+
+  // ---- prospekti (sourcing) ----
+  const LD_ST = { nova: 'Nova', nacrt: 'Mail spreman', u_redu: 'Šalje se', poslano: 'Poslano', followup: 'Podsjetnik spreman', odgovorili: 'Odgovorili', zainteresovani: 'Zainteresovani', nije_zainteresovan: 'Ne žele', odjava: 'Odjava', greska: 'Greška', preskoceno: 'Preskočeno' };
+  const LD_PILL = { nova: 'nova', nacrt: 'nova', u_redu: 'kontaktirana', poslano: 'kontaktirana', followup: 'nova', odgovorili: 'potvrdjena', zainteresovani: 'isporucena', nije_zainteresovan: 'otkazana', odjava: 'otkazana', greska: 'otkazana', preskoceno: 'kontaktirana' };
+  const LD_F = { pregled: ['nova', 'nacrt', 'followup', 'greska'], poslano: ['u_redu', 'poslano'], odgovor: ['odgovorili', 'zainteresovani', 'nije_zainteresovan', 'odjava'] };
+  const SRC = 'https://wjbhenmqmpbccelqfddf.supabase.co/functions/v1/sourcing';
+  let leads = [], ldFilter = 'pregled', jobTimer = null;
+  async function ldCall(body) {
+    const { data: { session } } = await sb.auth.getSession();
+    const r = await fetch(SRC, { method: 'POST', headers: { Authorization: 'Bearer ' + session.access_token, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const j = await r.json().catch(() => ({ error: 'Greška ' + r.status }));
+    if (!r.ok && !j.error) j.error = 'Greška ' + r.status;
+    return j;
+  }
+  function bihPhone(p) {
+    let d = String(p || '').replace(/[^0-9+]/g, '');
+    if (!d) return null;
+    if (d.startsWith('+')) d = d.slice(1); else if (d.startsWith('00')) d = d.slice(2); else if (d.startsWith('0')) d = '387' + d.slice(1);
+    return d.length >= 10 ? d : null;
+  }
+  const isMobile = (d) => !!d && /^3876\d{7,8}$/.test(d);
+  async function loadLeads() {
+    const { data } = await sb.from('leads').select('*').order('updated_at', { ascending: false }).limit(1000);
+    leads = data || [];
+    const todo = leads.filter((l) => ['nacrt', 'followup'].includes(l.status)).length;
+    $('ldCount').hidden = !todo; $('ldCount').textContent = todo;
+    const c = (f) => leads.filter((l) => f.includes(l.status)).length;
+    $('ldSum').textContent = leads.length + ' firmi · ' + c(['u_redu', 'poslano']) + ' poslano · ' + c(['odgovorili', 'zainteresovani']) + ' odgovorilo · ' + c(['zainteresovani']) + ' zainteresovano';
+    const rows = ldFilter === 'sve' ? leads : leads.filter((l) => LD_F[ldFilter].includes(l.status));
+    const el = $('ldList');
+    if (!rows.length) { el.innerHTML = '<div class="panel"><p class="empty" style="padding:16px;margin:0">' + (ldFilter === 'pregled' ? 'Ništa za pregled. Pronađi nove firme gore.' : 'Ništa ovdje.') + '</p></div>'; return; }
+    el.innerHTML = rows.map((l) => {
+      const editable = ['nova', 'nacrt', 'followup', 'greska'].includes(l.status);
+      const mail = l.email ? esc(l.email) + ' ' + (l.email_ok === true ? '<span class="ld-ok" title="' + esc(l.email_check) + '">✓ ' + esc(l.email_check) + '</span>' : l.email_ok === false ? '<span class="ld-bad">✗ ' + esc(l.email_check) + '</span>' : '') : '<span class="ld-bad">nema emaila</span>';
+      return '<article class="ld-card" data-id="' + l.id + '">' +
+        '<div class="top"><div><div class="name">' + (l.website ? '<a href="' + esc(/^https?:/.test(l.website) ? l.website : 'https://' + l.website) + '" target="_blank" rel="noopener">' + esc(l.company) + '</a>' : esc(l.company)) + '</div>' +
+          '<div class="meta">' + [l.segment === 'poklon' ? 'Poklon za firmu' : 'Preprodavač', l.category, l.city, l.contact_name, l.phone].filter(Boolean).map(esc).join(' · ') + '</div>' +
+          '<div class="meta">' + mail + (l.source_url ? ' · <a href="' + esc(l.source_url) + '" target="_blank" rel="noopener">izvor</a>' : '') + '</div></div>' +
+          '<div><span class="pill p-' + (LD_PILL[l.status] || 'nova') + '">' + (LD_ST[l.status] || l.status) + '</span>' + (l.last_sent_at ? '<div class="meta">poslano ' + when(l.last_sent_at) + '</div>' : '') + '</div></div>' +
+        (l.about ? '<div class="about">' + esc(l.about) + '</div>' : '') +
+        (l.error ? '<div class="ld-bad meta">' + esc(l.error) + '</div>' : '') +
+        (editable && l.body ? '<input data-subj value="' + esc(l.subject) + '" aria-label="Predmet"><textarea data-body aria-label="Mail">' + esc(l.body) + '</textarea>' :
+          !editable && l.body ? '<details><summary class="meta">Poslani mail: ' + esc(l.subject) + '</summary><pre style="white-space:pre-wrap;font:inherit;font-size:13px">' + esc(l.body) + '</pre></details>' : '') +
+        (isMobile(bihPhone(l.phone)) && !['odjava', 'nije_zainteresovan'].includes(l.status) ? '<div class="ld-viber"><div class="meta">Viber / WhatsApp: +' + bihPhone(l.phone) + (l.viber_sent_at ? ' · poslano ' + when(l.viber_sent_at) : '') + '</div>' +
+          (l.viber_text ? '<textarea data-viber rows="4" aria-label="Viber poruka">' + esc(l.viber_text) + '</textarea>' : '') +
+          '<div class="actions"><button class="btn" type="button" data-ld="viber">' + (l.viber_text ? 'Napiši ponovo' : 'Napiši Viber poruku') + '</button>' +
+          (l.viber_text ? '<button class="btn dark" type="button" data-ld="viber_open">Kopiraj i otvori Viber</button><button class="btn wa" type="button" data-ld="wa_open">WhatsApp</button><button class="btn" type="button" data-ld="viber_sent">Poslao sam</button>' : '') +
+          '</div></div>' : '') +
+        '<div class="actions">' +
+          (editable ? '<button class="btn" type="button" data-ld="draft">' + (l.body ? 'Napiši ponovo' : (l.step >= 1 ? 'Napiši podsjetnik' : 'Napiši mail')) + '</button>' : '') +
+          (editable && l.body && l.email && l.email_ok !== false ? '<button class="btn dark" type="button" data-ld="send">Pošalji sa melvis@hadzic.com</button>' : '') +
+          (['poslano', 'u_redu', 'followup'].includes(l.status) ? '<button class="btn" type="button" data-ld="odgovorili">Odgovorili</button>' : '') +
+          (['poslano', 'odgovorili', 'followup'].includes(l.status) ? '<button class="btn wa" type="button" data-ld="zainteresovani">Zainteresovani</button><button class="btn" type="button" data-ld="nije_zainteresovan">Ne žele</button>' : '') +
+          (editable ? '<button class="btn" type="button" data-ld="preskoceno">Preskoči</button>' : '') +
+          (l.status === 'preskoceno' ? '<button class="btn" type="button" data-ld="nova">Vrati</button>' : '') +
+          '<button class="btn" type="button" data-ld="note">' + (l.note ? 'Bilješka: ' + esc(l.note.slice(0, 40)) : 'Bilješka') + '</button>' +
+        '</div></article>';
+    }).join('');
+  }
+  $('ldFilter').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-f]'); if (!b) return;
+    ldFilter = b.dataset.f;
+    document.querySelectorAll('#ldFilter button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    loadLeads();
+  });
+  $('ldList').addEventListener('click', async (e) => {
+    const b = e.target.closest('[data-ld]'); if (!b) return;
+    const card = b.closest('[data-id]'), id = Number(card.dataset.id), act = b.dataset.ld;
+    const lead = leads.find((l) => l.id === id);
+    if (act === 'draft') {
+      b.disabled = true; b.textContent = 'Claude piše…';
+      const r = await ldCall({ action: 'draft', id });
+      toast(r.error ? 'Nije uspjelo: ' + r.error : r.warn || 'Mail je spreman. Pročitaj ga i pošalji.');
+      return loadLeads();
+    }
+    if (act === 'send') {
+      if (!b.dataset.sure) { b.dataset.sure = '1'; b.textContent = 'Klikni opet: šalje na ' + lead.email; setTimeout(() => { delete b.dataset.sure; b.textContent = 'Pošalji sa melvis@hadzic.com'; }, 5000); return; }
+      b.disabled = true;
+      const r = await ldCall({ action: 'send', id, subject: card.querySelector('[data-subj]').value, body: card.querySelector('[data-body]').value });
+      toast(r.error ? r.error : 'U redu za slanje. Ide u roku od par minuta.');
+      return loadLeads();
+    }
+    if (act === 'viber') {
+      b.disabled = true; b.textContent = 'Claude piše…';
+      const r = await ldCall({ action: 'viber', id });
+      toast(r.error ? 'Nije uspjelo: ' + r.error : r.warn || 'Poruka je spremna.');
+      return loadLeads();
+    }
+    if (act === 'viber_open' || act === 'wa_open') {
+      const text = card.querySelector('[data-viber]').value, num = bihPhone(lead.phone);
+      try { await navigator.clipboard.writeText(text); } catch { /* manual copy */ }
+      if (act === 'wa_open') window.open('https://wa.me/' + num + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
+      else { location.href = 'viber://chat?number=%2B' + num; toast('Poruka je kopirana. U Viberu je samo zalijepi i pošalji, pa klikni "Poslao sam".'); }
+      return;
+    }
+    if (act === 'viber_sent') {
+      await ldCall({ action: 'viber_sent', id, text: card.querySelector('[data-viber]')?.value });
+      toast('Označeno kao poslano na Viberu.');
+      return loadLeads();
+    }
+    if (act === 'note') {
+      const n = prompt('Bilješka (npr. šta su odgovorili, kad nazvati):', lead.note || '');
+      if (n === null) return;
+      await sb.from('leads').update({ note: n, updated_at: new Date().toISOString() }).eq('id', id);
+      return loadLeads();
+    }
+    const upd = { status: act, updated_at: new Date().toISOString() };
+    if (['odgovorili', 'zainteresovani', 'nije_zainteresovan'].includes(act)) upd.next_followup_at = null;
+    const { error } = await sb.from('leads').update(upd).eq('id', id);
+    toast(error ? 'Nije sačuvano.' : 'Sačuvano.');
+    loadLeads();
+  });
+  async function loadJobs() {
+    const r = await ldCall({ action: 'jobs' });
+    const jobs = (r.jobs || []).slice(0, 4);
+    $('ldJobs').innerHTML = jobs.map((j) => '<div>' + when(j.at) + ' · ' + esc(j.segment === 'poklon' ? 'pokloni' : 'preprodavači') + ', ' + esc(j.city || '') + (j.category ? ' (' + esc(j.category) + ')' : '') + ': ' +
+      (!j.gotovo ? '<b>Claude traži… (1 do 3 minute)</b>' : j.greska ? '<span class="ld-bad">' + esc(j.greska) + '</span>' : 'pronašao ' + j.nadjeno + ', dodano ' + j.dodano + ' novih') + '</div>').join('');
+    clearTimeout(jobTimer);
+    if (jobs.some((j) => !j.gotovo)) jobTimer = setTimeout(() => { loadJobs(); loadLeads(); }, 10000);
+  }
+  $('ldFind').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = Object.fromEntries(new FormData(e.target));
+    const r = await ldCall({ action: 'find', ...f, count: Number(f.count) });
+    toast(r.error ? 'Nije uspjelo: ' + r.error : 'Claude traži firme. Lista se sama osvježi.');
+    loadJobs();
+  });
+  $('ldAdd').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = Object.fromEntries(new FormData(e.target));
+    const r = await ldCall({ action: 'import', rows: [f], source: 'ručno' });
+    toast(r.added ? 'Dodano.' : 'Već postoji ili nije sačuvano.');
+    if (r.added) { e.target.reset(); await ldCall({ action: 'check', all: true }); }
+    loadLeads();
+  });
+  function parseCsv(t) {
+    const rows = []; let row = [], cell = '', q = false;
+    const sep = (t.split('\n')[0].match(/;/g) || []).length > (t.split('\n')[0].match(/,/g) || []).length ? ';' : ',';
+    for (let i = 0; i < t.length; i++) {
+      const ch = t[i];
+      if (q) { if (ch === '"' && t[i + 1] === '"') { cell += '"'; i++; } else if (ch === '"') q = false; else cell += ch; }
+      else if (ch === '"') q = true; else if (ch === sep) { row.push(cell); cell = ''; }
+      else if (ch === '\n' || ch === '\r') { if (ch === '\r' && t[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+      else cell += ch;
+    }
+    if (cell || row.length) { row.push(cell); rows.push(row); }
+    const head = rows.shift().map((h) => h.trim().toLowerCase());
+    return rows.filter((r) => r.some((c) => c.trim())).map((r) => Object.fromEntries(head.map((h, i) => [h, (r[i] || '').trim()])));
+  }
+  $('ldCsv').addEventListener('change', async (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    const rows = parseCsv(await file.text());
+    const r = await ldCall({ action: 'import', rows, source: file.name });
+    toast(r.error ? r.error : 'Uvezeno ' + r.added + ' firmi, preskočeno ' + r.skipped + ' (već postoje ili nemaju naziv). Provjeravam emailove…');
+    e.target.value = '';
+    await ldCall({ action: 'check', all: true });
+    loadLeads();
+  });
+  async function loadSettings() {
+    const { data } = await sb.from('sourcing_settings').select('key,value');
+    const m = Object.fromEntries((data || []).map((r) => [r.key, r.value]));
+    $('setOme').value = m.o_meni || ''; $('setPonuda').value = m.ponuda || ''; $('setLimit').value = m.dnevni_limit || 40; $('setFu').value = m.followup_dana || 5;
+  }
+  $('setSave').addEventListener('click', async () => {
+    const rows = [['o_meni', $('setOme').value], ['ponuda', $('setPonuda').value], ['dnevni_limit', $('setLimit').value], ['followup_dana', $('setFu').value]].map(([key, value]) => ({ key, value: String(value), updated_at: new Date().toISOString() }));
+    const { error } = await sb.from('sourcing_settings').upsert(rows);
+    toast(error ? 'Nije sačuvano.' : 'Sačuvano. Novi mailovi koriste ovaj tekst.');
+  });
+
+  function loadAll() { loadOverview(); loadScents(); loadB2b(); loadAccounts(); loadMails(); loadReservations(); loadClicks(); loadSources(); loadIg(); loadIgAuto(); loadLeads(); loadJobs(); loadSettings(); }
 
   async function start() {
     const user = await CP.auth.user();

@@ -77,6 +77,19 @@ async function products() {
   return PRODUCTS;
 }
 
+// ---------- outreach: a plain personal email from Melvis, not a newsletter ----------
+const DOMAIN = SITE.replace(/^https?:\/\//, "").replace(/\/$/, "");
+function outreach(d: Record<string, any>) {
+  const body = String(d.body ?? "").trim();
+  const paras = body.split(/\n{2,}/).map((x) => `<p style="margin:0 0 14px">${esc(x).replace(/\n/g, "<br>")}</p>`).join("");
+  const sig = `<p style="margin:18px 0 0;color:#555;font-size:14px;line-height:1.5">Melvis Hadžić<br>Collection Premium Sarajevo<br>
+    <a href="${SITE}/?utm_source=email&utm_medium=outreach&utm_campaign=b2b" style="color:#8a6a3a">${esc(DOMAIN)}</a> · <a href="https://www.instagram.com/collectionpremiumsarajevo/" style="color:#8a6a3a">Instagram</a></p>
+    <p style="margin:22px 0 0;color:#999;font-size:12px">Ako vam ovakve poruke ne odgovaraju, samo odgovorite s "ne" i neću vam se više javljati.</p>`;
+  const html = `<!doctype html><html lang="bs"><head><meta charset="utf-8"></head><body style="margin:0;padding:18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#222">${paras}${sig}</body></html>`;
+  const text = `${body}\n\n--\nMelvis Hadžić\nCollection Premium Sarajevo\n${SITE}\n\nAko vam ovakve poruke ne odgovaraju, samo odgovorite s "ne" i neću vam se više javljati.`;
+  return { subject: String(d.subject ?? ""), html, text };
+}
+
 // ---------- templates ----------
 async function render(t: string, d: Record<string, any>, to: string): Promise<{ subject: string; html: string }> {
   const admin = `${SITE}/admin/`;
@@ -185,14 +198,24 @@ Deno.serve(async (req) => {
   const user = Deno.env.get("SMTP_USER") ?? "melvis@hadzic.com", pass = Deno.env.get("SMTP_PASS");
   if (!pass) return new Response(JSON.stringify({ waiting: "SMTP_PASS not set; emails stay queued" }), { status: 503 });
 
-  const { data: jobs } = await sb.from("email_outbox").select("*").or("status.eq.pending,and(status.eq.error,attempts.lt.3)").order("created_at").limit(25);
-  if (!jobs?.length) return Response.json({ sent: 0 });
+  // outreach goes out slowly (one per run = one per minute) so Gmail sees normal personal sending
+  const due = "status.eq.pending,and(status.eq.error,attempts.lt.3)";
+  const { data: normal } = await sb.from("email_outbox").select("*").or(due).neq("template", "outreach").order("created_at").limit(25);
+  const { data: cold } = await sb.from("email_outbox").select("*").or(due).eq("template", "outreach").order("created_at").limit(1);
+  const jobs = [...(normal ?? []), ...(cold ?? [])];
+  if (!jobs.length) return Response.json({ sent: 0 });
   await sb.from("email_outbox").update({ status: "sending" }).in("id", jobs.map((j) => j.id));
 
   const client = new SMTPClient({ connection: { hostname: Deno.env.get("SMTP_HOST") ?? "smtp.gmail.com", port: 465, tls: true, auth: { username: user, password: pass } } });
   let sent = 0;
   for (const j of jobs) {
     try {
+      if (j.template === "outreach") {
+        const o = outreach(j.data ?? {});
+        await client.send({ from: `Melvis Hadžić <${user}>`, replyTo: user, to: j.to_email, subject: o.subject, content: o.text, html: o.html });
+        await sb.from("email_outbox").update({ status: "sent", sent_at: new Date().toISOString(), attempts: j.attempts + 1, error: null }).eq("id", j.id);
+        sent++; continue;
+      }
       const { subject, html } = await render(j.template, j.data ?? {}, j.to_email);
       await client.send({ from: `Collection Premium Sarajevo <${user}>`, replyTo: user, to: j.to_email, subject, html,
         headers: j.template === "countdown" ? { "List-Unsubscribe": `<${FN_URL}?unsub=${j.data?.unsub}>` } : undefined });
