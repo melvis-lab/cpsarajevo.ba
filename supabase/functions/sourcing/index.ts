@@ -166,7 +166,7 @@ Vrati SAMO:
   ].filter(Boolean).join("\n");
   const extra = followup
     ? " Kratko ih podsjeti da se registruju preko linka da bi prvi dobili cjenovnik."
-    : " U jednoj rečenici spomeni da u prilogu šalješ katalog sa svih 12 mirisa. Zamoli ih da se registruju na stranici preko linka, jer cjenovnik uskoro šaljemo samo registrovanim firmama. Registracija je besplatna. Link stavi sam u svom redu, prije pozdrava.";
+    : " U jednoj rečenici spomeni da u prilogu šalješ katalog sa svih 12 mirisa, a u njemu su i novi travel spray od 10 ml i 7 mirisa za dom od 250 ml. Zamoli ih da se registruju na stranici preko linka, jer cjenovnik uskoro šaljemo samo registrovanim firmama. Registracija je besplatna. Link stavi sam u svom redu, prije pozdrava.";
   const task = followup
     ? `Ovo je KRATAK podsjetnik (najviše 60 riječi) firmi koja nije odgovorila na prvi mail prije nekoliko dana. Ne ponavljaj cijeli prvi mail. Ljubazno, bez prigovora što nisu odgovorili, jedna nova korisna rečenica (npr. da se pokloni za kraj godine naručuju ranije, ili da možeš ostaviti uzorke), i lako pitanje na koje se odgovara jednom rečenicom. Predmet počinje s "Re: " i ponavlja stari predmet.\n\nPrvi mail:\n${prev}`
     : lead.segment === "poklon"
