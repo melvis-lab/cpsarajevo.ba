@@ -11,18 +11,80 @@
           --ok:#127a3c; --ok-soft:#e8f5ec; --warn:#a15c00; --warn-soft:#fff4e0; --bad:#b42318; --bad-soft:#fdecea; --info:#2557a7; --info-soft:#eaf1fb; color-scheme:light; }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--soft); color:var(--ink); font:14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-  .wrap { max-width:1180px; margin:0 auto; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); }
-  header { background:var(--bg); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
-  header .wrap { display:flex; align-items:center; justify-content:space-between; gap:12px; padding-block:12px; }
-  header h1 { font-size:16px; font-weight:600; margin:0; }
-  header small { color:var(--muted); display:block; font-size:12px; }
-  nav { background:var(--bg); border-bottom:1px solid var(--line); }
-  nav .wrap { display:flex; gap:4px; overflow-x:auto; padding-block:8px; }
-  nav button { background:none; border:0; color:var(--muted); border-radius:8px; padding:8px 12px; cursor:pointer; white-space:nowrap; font:inherit; font-weight:500; }
-  nav button:hover { background:var(--soft); color:var(--ink); }
-  nav button[aria-selected="true"] { background:var(--accent-soft); color:var(--accent); }
-  nav .count { background:var(--warn); color:#fff; border-radius:999px; font-size:11px; padding:1px 7px; margin-left:6px; }
-  main { padding-block:20px 60px; }
+  .wrap { max-width:1240px; margin:0 auto; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); }
+  /* ---- shell: dark sidebar on the left, content on the right ---- */
+  .shell { display:grid; grid-template-columns:248px minmax(0, 1fr); min-height:100vh; min-height:100dvh; }
+  .side { background:#0e0b09; color:#d9cfbf; position:sticky; top:0; height:100vh; height:100dvh; display:flex; flex-direction:column; padding:20px 12px 14px; overflow-y:auto; z-index:20; }
+  .side .brand { display:flex; align-items:center; gap:10px; padding:2px 10px 18px; border-bottom:1px solid #2a2219; margin-bottom:10px; text-decoration:none; }
+  .side .brand img { width:112px; height:auto; display:block; }
+  .side .brand span { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#8f8170; }
+  .side nav { display:grid; gap:2px; }
+  .side .grp { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#7d705f; padding:16px 12px 6px; }
+  .side nav button { display:flex; align-items:center; gap:11px; width:100%; background:none; border:0; color:#cfc4b3; border-radius:8px; padding:9px 12px; min-height:40px; cursor:pointer; font:inherit; font-weight:500; text-align:left; transition:background .15s cubic-bezier(.23,1,.32,1), color .15s cubic-bezier(.23,1,.32,1); }
+  .side nav button svg { width:18px; height:18px; flex:none; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; opacity:.85; }
+  .side nav button:hover { background:#1c1611; color:#fff; }
+  .side nav button[aria-current="page"] { background:#241c14; color:#e2c58f; box-shadow:inset 3px 0 0 #b8935a; }
+  .side nav button[aria-current="page"] svg { opacity:1; }
+  .side .count { margin-left:auto; background:#b8935a; color:#0e0b09; border-radius:999px; font-size:11px; font-weight:600; padding:1px 8px; font-variant-numeric:tabular-nums; }
+  .side .foot { margin-top:auto; padding:14px 10px 0; border-top:1px solid #2a2219; font-size:12px; color:#8f8170; display:grid; gap:8px; }
+  .side .foot button { justify-self:start; background:none; border:1px solid #3a2f24; color:#cfc4b3; border-radius:8px; padding:6px 10px; font:inherit; font-size:12px; cursor:pointer; }
+  .side .foot button:hover { border-color:#b8935a; color:#fff; }
+  .content { min-width:0; display:flex; flex-direction:column; }
+  .content > main, .topbar .wrap { width:100%; }
+  .topbar { position:sticky; top:0; z-index:10; background:rgba(245,246,248,.92); backdrop-filter:saturate(1.4) blur(8px); -webkit-backdrop-filter:saturate(1.4) blur(8px); border-bottom:1px solid var(--line); }
+  .topbar .wrap { display:flex; align-items:center; gap:12px; padding-block:12px; }
+  .topbar h1 { font-size:18px; font-weight:600; margin:0; letter-spacing:-.01em; }
+  .topbar .spacer { flex:1; }
+  .chip { display:inline-flex; align-items:center; gap:6px; background:var(--accent-soft); color:var(--accent); border-radius:999px; padding:5px 11px; font-size:12px; font-weight:500; white-space:nowrap; }
+  .iconbtn { display:none; width:40px; height:40px; align-items:center; justify-content:center; background:var(--bg); border:1px solid var(--line); border-radius:8px; cursor:pointer; color:var(--ink); }
+  .iconbtn svg, .btn svg { width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+  .scrim { position:fixed; inset:0; background:rgba(14,11,9,.45); z-index:15; }
+  @media (max-width:900px) {
+    .shell { grid-template-columns:1fr; }
+    .side { position:fixed; left:0; top:0; bottom:0; width:264px; transform:translateX(-102%); transition:transform .22s cubic-bezier(.23,1,.32,1); }
+    .side.open { transform:none; box-shadow:0 0 40px rgba(0,0,0,.35); }
+    .iconbtn { display:inline-flex; }
+    .topbar .chip { display:none; }
+  }
+  @media (prefers-reduced-motion:reduce) { .side, .side nav button { transition:none; } }
+
+  /* ---- dashboard ---- */
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:16px; }
+  .kpi { background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:16px 18px; display:grid; gap:4px; min-width:0; text-align:left; font:inherit; color:inherit; }
+  button.kpi { cursor:pointer; transition:border-color .15s, box-shadow .15s; }
+  button.kpi:hover { border-color:#d8c6a3; box-shadow:0 6px 18px -12px rgba(60,40,10,.35); }
+  .kpi .l { color:var(--muted); font-size:13px; font-weight:500; }
+  .kpi .n { font-size:30px; font-weight:600; line-height:1.15; font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
+  .kpi .h { color:var(--muted); font-size:12px; }
+  .delta { font-weight:600; } .delta.up { color:var(--ok); } .delta.down { color:var(--bad); }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:16px; margin-bottom:24px; }
+  .card { background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:16px 18px; min-width:0; position:relative; }
+  .card h3 { font-size:14px; font-weight:600; margin:0 0 2px; }
+  .card .sub { margin-bottom:10px; }
+  .chart svg { display:block; width:100%; height:auto; overflow:visible; }
+  .chart .gl { stroke:var(--line); stroke-width:1; }
+  .chart text { fill:var(--muted); font-size:11px; font-family:inherit; }
+  .chart .bar-m { fill:#b8935a; }
+  .chart .hit { fill:transparent; cursor:crosshair; }
+  .chart .hit:hover + .bar-m, .chart g.on .bar-m { fill:#8a6a2f; }
+  .tip { position:absolute; pointer-events:none; background:var(--ink); color:#fff; border-radius:8px; padding:7px 10px; font-size:12px; line-height:1.4; white-space:nowrap; transform:translate(-50%, calc(-100% - 10px)); z-index:3; }
+  .tip b { font-variant-numeric:tabular-nums; }
+  .inbox { display:grid; }
+  .inbox button { display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:none; border:0; border-top:1px solid var(--line); padding:12px 2px; font:inherit; color:inherit; cursor:pointer; min-height:48px; }
+  .inbox button:first-child { border-top:0; }
+  .inbox button:hover .t { color:var(--accent); }
+  .inbox .num { min-width:34px; height:28px; border-radius:8px; background:var(--warn-soft); color:var(--warn); display:inline-flex; align-items:center; justify-content:center; font-weight:600; font-variant-numeric:tabular-nums; }
+  .inbox .t { flex:1; } .inbox .t small { display:block; color:var(--muted); font-size:12px; }
+  .inbox .go { color:var(--muted); }
+  .done { display:flex; align-items:center; gap:10px; color:var(--ok); padding:10px 2px; }
+  .hbars { display:grid; gap:10px; }
+  .hbar { display:grid; grid-template-columns:120px 1fr 44px; gap:10px; align-items:center; font-size:13px; }
+  .hbar .track { background:var(--soft); border-radius:4px; height:12px; overflow:hidden; }
+  .hbar .fill { height:100%; background:#b8935a; border-radius:0 4px 4px 0; min-width:2px; }
+  .hbar .v { text-align:right; font-variant-numeric:tabular-nums; font-weight:600; }
+  .sec-title { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:8px 0 10px; }
+  @media (max-width:900px) { .kpis { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; } .kpi { padding:14px; } .kpi .n { font-size:26px; } .grid2 { grid-template-columns:1fr; } }
+  main { padding-block:22px 60px; }
   h2 { font-size:15px; font-weight:600; margin:0 0 4px; }
   .sub { color:var(--muted); margin:0 0 12px; font-size:13px; }
   section > .block { margin-bottom:24px; }
@@ -118,22 +180,46 @@
 </section>
 
 <div id="app" hidden>
-  <header><div class="wrap"><div><h1>Collection Premium · Admin</h1><small id="me"></small></div><div class="actions"><button class="btn" id="reload" type="button">Osvježi</button><button class="btn" id="logout" type="button">Odjava</button></div></div></header>
-  <nav><div class="wrap" role="tablist">
-    <button role="tab" type="button" data-tab="danas" aria-selected="true">Pregled</button>
-    <button role="tab" type="button" data-tab="rezervacije">Rezervacije<span class="count" id="newCount" hidden></span></button>
-    <button role="tab" type="button" data-tab="korisnici">Korisnici<span class="count" id="accCount" hidden></span></button>
-    <button role="tab" type="button" data-tab="firme">Firme<span class="count" id="b2bCount" hidden></span></button>
-    <button role="tab" type="button" data-tab="prospekti">Prospekti<span class="count" id="ldCount" hidden></span></button>
-    <button role="tab" type="button" data-tab="instagram">Instagram<span class="count" id="igCount" hidden></span></button>
-    <button role="tab" type="button" data-tab="stranica">Šta ljudi klikaju</button>
-    <button role="tab" type="button" data-tab="izvori">Odakle dolaze</button>
-    <button role="tab" type="button" data-tab="uzivo">Uživo</button>
-  </div></nav>
-
+<div class="shell">
+  <aside class="side" id="side" aria-label="Meni">
+    <a class="brand" href="/" target="_blank" rel="noopener" title="Otvori stranicu"><img src="/img/brand/logo-nav.webp" alt="Collection Premium Sarajevo"></a>
+    <nav aria-label="Admin meni">
+      <button type="button" data-tab="danas" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Pregled</span></button>
+      <div class="grp">Prodaja</div>
+      <button type="button" data-tab="rezervacije"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg><span>Rezervacije</span><span class="count" id="newCount" hidden></span></button>
+      <button type="button" data-tab="korisnici"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Korisnici</span><span class="count" id="accCount" hidden></span></button>
+      <button type="button" data-tab="firme"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg><span>Firme</span><span class="count" id="b2bCount" hidden></span></button>
+      <div class="grp">Rast</div>
+      <button type="button" data-tab="prospekti"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg><span>Prospekti</span><span class="count" id="ldCount" hidden></span></button>
+      <button type="button" data-tab="instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Instagram</span><span class="count" id="igCount" hidden></span></button>
+      <div class="grp">Analitika</div>
+      <button type="button" data-tab="stranica"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 4 7.07 17 2.51-7.39L21 11.07z"/></svg><span>Šta ljudi klikaju</span></button>
+      <button type="button" data-tab="izvori"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg><span>Odakle dolaze</span></button>
+      <button type="button" data-tab="uzivo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span>Uživo</span></button>
+    </nav>
+    <div class="foot"><span id="me"></span><button id="logout" type="button">Odjava</button></div>
+  </aside>
+  <div class="scrim" id="scrim" hidden></div>
+  <div class="content">
+  <header class="topbar"><div class="wrap">
+    <button class="iconbtn" id="menuBtn" type="button" aria-label="Otvori meni" aria-controls="side" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <h1 id="pageTitle">Pregled</h1>
+    <span class="spacer"></span>
+    <span class="chip" id="countdown"></span>
+    <button class="btn" id="reload" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36L21 8"/><path d="M21 3v5h-5"/></svg>Osvježi</button>
+  </div></header>
   <main class="wrap">
     <!-- PREGLED -->
     <section data-panel="danas">
+      <div class="kpis" id="kpis"></div>
+      <div class="grid2">
+        <div class="card"><h3>Šta čeka tebe</h3><p class="sub">Sve što treba tvoju odluku, na jednom mjestu.</p><div class="inbox" id="inbox"></div></div>
+        <div class="card"><h3>Prospekti</h3><p class="sub" id="pipeSub">Firme kojima pišemo za preprodaju i poklone.</p><div class="hbars" id="pipe"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="card chart"><h3>Posjetioci po danu</h3><p class="sub">Zadnjih 30 dana. Samo posjetioci koji su prihvatili kolačiće.</p><div id="chVisits"></div></div>
+        <div class="card chart"><h3>Rezervisane bočice po danu</h3><p class="sub">Zadnjih 30 dana, bez otkazanih.</p><div id="chRes"></div></div>
+      </div>
       <div class="block">
         <h2>Treba nazvati</h2>
         <p class="sub">Nove rezervacije koje još niko nije kontaktirao. Kad se javiš kupcu, označi ga kao kontaktiranog.</p>
@@ -278,6 +364,8 @@
       <div class="panel feed" id="live"></div>
     </section>
   </main>
+  </div>
+</div>
 </div>
 <div class="toast" id="toast" hidden role="status"></div>
 
@@ -319,11 +407,109 @@
 
   // ---- tabs ----
   function openTab(name) {
-    document.querySelectorAll('nav [data-tab]').forEach((x) => x.setAttribute('aria-selected', String(x.dataset.tab === name)));
+    let label = 'Pregled';
+    document.querySelectorAll('nav [data-tab]').forEach((x) => {
+      const on = x.dataset.tab === name;
+      if (on) { x.setAttribute('aria-current', 'page'); label = x.querySelector('span').textContent; } else x.removeAttribute('aria-current');
+    });
     document.querySelectorAll('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== name; });
+    $('pageTitle').textContent = label;
+    document.title = label + ' · Admin · Collection Premium Sarajevo';
+    try { history.replaceState(null, '', name === 'danas' ? location.pathname : '#' + name); } catch { /* file preview */ }
+    closeMenu(); window.scrollTo(0, 0);
     if (name === 'uzivo') loadLive();
   }
   document.querySelectorAll('nav [data-tab]').forEach((b) => b.addEventListener('click', () => openTab(b.dataset.tab)));
+  function closeMenu() { $('side').classList.remove('open'); $('scrim').hidden = true; $('menuBtn').setAttribute('aria-expanded', 'false'); }
+  $('menuBtn').addEventListener('click', () => { $('side').classList.add('open'); $('scrim').hidden = false; $('menuBtn').setAttribute('aria-expanded', 'true'); });
+  $('scrim').addEventListener('click', closeMenu);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+  document.addEventListener('click', (e) => { const o = e.target.closest('[data-open]'); if (o) openTab(o.dataset.open); });
+
+  // ---- dashboard ----
+  const pend = {};
+  const setPend = (k, n) => { pend[k] = n; renderInbox(); };
+  const daysToOpen = () => { const t = new Date(2027, 0, 1), n = new Date(); n.setHours(0, 0, 0, 0); return Math.max(0, Math.round((t - n) / 86400000)); };
+  $('countdown').textContent = daysToOpen() ? daysToOpen() + ' dana do otvaranja' : 'Otvoreno';
+  function renderInbox() {
+    const items = [
+      ['rez', pend.rez, 'novih rezervacija za nazvati', 'Kupci čekaju tvoj poziv ili WhatsApp', 'rezervacije'],
+      ['acc', pend.acc, 'računa čeka odobrenje', 'Firme, preprodavači i saloni', 'korisnici'],
+      ['b2b', pend.b2b, 'zahtjeva za saradnju', 'Firme s forme na stranici', 'firme'],
+      ['ig', pend.ig, 'Instagram poruka čeka tvoj odgovor', 'Claude je predložio odgovor', 'instagram'],
+      ['ld', pend.ld, 'mailova firmama spremno za slanje', 'Pročitaj i pošalji iz Prospekata', 'prospekti'],
+    ].filter((x) => x[1] > 0);
+    $('inbox').innerHTML = items.length
+      ? items.map(([, n, t, h, tab]) => '<button type="button" data-open="' + tab + '"><span class="num">' + n + '</span><span class="t">' + t + '<small>' + h + '</small></span><span class="go" aria-hidden="true">→</span></button>').join('')
+      : '<div class="done"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Sve je riješeno. Ništa ne čeka.</div>';
+  }
+  const lastDays = (n) => { const out = []; const d = new Date(); d.setHours(0, 0, 0, 0); for (let i = n - 1; i >= 0; i--) { const x = new Date(d); x.setDate(d.getDate() - i); out.push(x); } return out; };
+  const dayKey = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  const fmtDay = (d) => d.getDate() + '.' + (d.getMonth() + 1) + '.';
+  // single-series column chart, one axis, hover tooltip per bar
+  function columns(el, pts, unit) {
+    const W = 600, H = 190, L = 30, B = 22, T = 8, n = pts.length;
+    const max = Math.max(1, ...pts.map((p) => p.v));
+    const step = max <= 4 ? 1 : max <= 10 ? 2 : Math.ceil(max / 4 / 5) * 5;
+    const top = Math.ceil(max / step) * step;
+    const y = (v) => T + (H - T - B) * (1 - v / top), slot = (W - L) / n, bw = Math.max(3, slot - 3);
+    let g = '';
+    for (let v = 0; v <= top; v += step) g += '<line class="gl" x1="' + L + '" x2="' + W + '" y1="' + y(v) + '" y2="' + y(v) + '"/><text x="' + (L - 6) + '" y="' + (y(v) + 4) + '" text-anchor="end">' + v + '</text>';
+    pts.forEach((p, i) => {
+      const x = L + i * slot + (slot - bw) / 2, h = Math.max(0, y(0) - y(p.v)), r = Math.min(4, bw / 2, h);
+      const path = h > 0 ? 'M' + x + ',' + y(0) + 'V' + (y(p.v) + r) + 'q0,-' + r + ' ' + r + ',-' + r + 'H' + (x + bw - r) + 'q' + r + ',0 ' + r + ',' + r + 'V' + y(0) + 'Z' : '';
+      g += '<g data-i="' + i + '"><rect class="hit" x="' + (L + i * slot) + '" y="' + T + '" width="' + slot + '" height="' + (H - T - B) + '"/>' + (path ? '<path class="bar-m" d="' + path + '"/>' : '') + '</g>';
+      if ((n - 1 - i) % 7 === 0) g += '<text x="' + (x + bw / 2) + '" y="' + (H - 5) + '" text-anchor="middle">' + fmtDay(p.d) + '</text>';
+    });
+    const total = pts.reduce((a, p) => a + p.v, 0);
+    el.innerHTML = total === 0 ? '<div class="empty" style="padding:30px 0">Još nema podataka za ovaj period.</div>'
+      : '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(unit) + ' po danu, zadnjih 30 dana, ukupno ' + total + '">' + g + '</svg><div class="tip" hidden></div>';
+    const svg = el.querySelector('svg'), tip = el.querySelector('.tip');
+    if (!svg) return;
+    svg.addEventListener('pointermove', (e) => {
+      const gEl = e.target.closest('g[data-i]'); svg.querySelectorAll('g.on').forEach((x) => x.classList.remove('on'));
+      if (!gEl) { tip.hidden = true; return; }
+      gEl.classList.add('on');
+      const p = pts[Number(gEl.dataset.i)], box = el.getBoundingClientRect(), hb = gEl.firstChild.getBoundingClientRect();
+      tip.innerHTML = fmtDay(p.d) + ' · <b>' + p.v + '</b> ' + esc(unit);
+      tip.style.left = (hb.left - box.left + hb.width / 2) + 'px'; tip.style.top = (e.clientY - box.top) + 'px'; tip.hidden = false;
+    });
+    svg.addEventListener('pointerleave', () => { tip.hidden = true; svg.querySelectorAll('g.on').forEach((x) => x.classList.remove('on')); });
+  }
+  const pct = (a, b) => b ? Math.round(100 * (a - b) / b) : null;
+  const deltaHtml = (a, b, word) => { const d = pct(a, b); if (d === null) return a ? 'novo ' + word : ''; return '<span class="delta ' + (d >= 0 ? 'up' : 'down') + '">' + (d >= 0 ? '▲ ' : '▼ ') + Math.abs(d) + '%</span> ' + word; };
+  function renderDash() {
+    const days = lastDays(30), byDay = {};
+    (daily || []).forEach((r) => { byDay[String(r.day).slice(0, 10)] = r; });
+    const visits = days.map((d) => ({ d, v: (byDay[dayKey(d)] || {}).visitors || 0 }));
+    const live = reservations.filter((r) => r.status !== 'otkazana'), bott = {};
+    live.forEach((r) => { const k = dayKey(new Date(r.created_at)); bott[k] = (bott[k] || 0) + (r.quantity || 1); });
+    const resPts = days.map((d) => ({ d, v: bott[dayKey(d)] || 0 }));
+    columns($('chVisits'), visits, 'posjetilaca');
+    columns($('chRes'), resPts, 'bočica');
+    const sum = (a, from, to) => a.slice(from, to).reduce((x, p) => x + p.v, 0);
+    const v7 = sum(visits, 23, 30), v7p = sum(visits, 16, 23), r7 = sum(resPts, 23, 30), r7p = sum(resPts, 16, 23);
+    const bottles = live.reduce((a, r) => a + (r.quantity || 1), 0);
+    const L = leads || [];
+    const sent = L.filter((l) => l.last_sent_at || l.viber_sent_at || ['u_redu', 'poslano', 'followup', 'odgovorili', 'zainteresovani', 'nije_zainteresovan'].includes(l.status)).length;
+    const replied = L.filter((l) => ['odgovorili', 'zainteresovani', 'nije_zainteresovan'].includes(l.status)).length;
+    const waiting = Object.values(pend).reduce((a, n) => a + (n || 0), 0);
+    $('kpis').innerHTML = [
+      ['rezervacije', 'Rezervisane bočice', bottles, live.length + ' rezervacija · ' + deltaHtml(r7, r7p, 'ove sedmice')],
+      ['stranica', 'Posjetioci, 7 dana', v7, deltaHtml(v7, v7p, 'u odnosu na sedmicu prije')],
+      [null, 'Čeka tebe', waiting, waiting ? 'stvari za odluku, vidi listu ispod' : 'sve je riješeno'],
+      ['prospekti', 'Prospekti', L.length, sent + ' kontaktirano · ' + replied + ' odgovorilo' + (sent ? ' (' + Math.round(100 * replied / sent) + '%)' : '')],
+    ].map(([tab, l, n, h]) => (tab ? '<button type="button" class="kpi" data-open="' + tab + '">' : '<div class="kpi">') + '<span class="l">' + l + '</span><span class="n">' + n + '</span><span class="h">' + h + '</span>' + (tab ? '</button>' : '</div>')).join('');
+    const stages = [
+      ['Nove', L.filter((l) => ['nova', 'nacrt', 'greska'].includes(l.status) && !l.viber_sent_at).length],
+      ['Kontaktirane', sent], ['Odgovorile', replied],
+      ['Zainteresovane', L.filter((l) => l.status === 'zainteresovani').length],
+    ];
+    const top = Math.max(1, ...stages.map((x) => x[1]));
+    $('pipe').innerHTML = L.length ? stages.map(([l, n]) => '<div class="hbar"><span>' + l + '</span><span class="track"><span class="fill" style="display:block;width:' + Math.max(n ? 2 : 0, 100 * n / top) + '%"></span></span><span class="v">' + n + '</span></div>').join('') +
+      '<button class="btn" type="button" data-open="prospekti" style="justify-self:start;margin-top:4px">Otvori prospekte</button>'
+      : '<div class="empty" style="padding:0">Još nema firmi. Pronađi ih u Prospektima.</div>';
+  }
 
   function table(el, cols, rows, empty) {
     if (!rows || !rows.length) { el.innerHTML = '<tr><td class="empty">' + empty + '</td></tr>'; return; }
@@ -356,7 +542,7 @@
 
   function renderTodo() {
     const open = reservations.filter((r) => r.status === 'nova');
-    $('newCount').hidden = !open.length; $('newCount').textContent = open.length;
+    $('newCount').hidden = !open.length; $('newCount').textContent = open.length; setPend('rez', open.length);
     $('todo').innerHTML = open.length ? open.slice(0, 20).map(itemHtml).join('') +
       (open.length > 20 ? '<div class="item"><button class="btn" type="button" data-goto="rezervacije">Prikaži svih ' + open.length + '</button></div>' : '')
       : '<div class="empty">Nema novih rezervacija. Sve je obrađeno.</div>';
@@ -390,7 +576,7 @@
     const [{ data: d }, { data: prod }, { data: refs }] = await Promise.all([
       sb.from('admin_daily').select('*').limit(31), sb.from('admin_reservations_by_product').select('*'), sb.from('admin_referrals').select('*'),
     ]);
-    daily = d || []; renderPeriod();
+    daily = d || []; renderPeriod(); renderDash();
     const maxB = Math.max(1, ...(prod || []).map((r) => r.bottles));
     table($('byProduct'), [{ h: 'Miris', k: 'name' }, { h: 'Bočice', k: 'bottles', num: 1 }, barCol('bottles', maxB), { h: 'Rezervacije', k: 'reservations', num: 1 }, { h: 'Čeka poziv', k: 'open', num: 1 }], prod, 'Još nema rezervacija.');
     table($('referrals'), [{ h: 'Kod', k: 'code' }, { h: 'Rezervacije', k: 'reservations', num: 1 }, { h: 'Bočice', k: 'bottles', num: 1 }, { h: 'Zadnja', html: (r) => when(r.last) }], refs, 'Niko još nije rezervisao s referal kodom. Kod se dodaje u link, npr. cpsarajevo.ba/?ref=salon-lejla');
@@ -399,7 +585,7 @@
   // ---- reservations ----
   async function loadReservations() {
     const { data } = await sb.from('reservations').select('*, products(name)').order('created_at', { ascending: false }).limit(2000);
-    reservations = data || []; renderReservations(); renderTodo();
+    reservations = data || []; renderReservations(); renderTodo(); renderDash();
   }
   function renderReservations() {
     const f = $('statusFilter').value, q = $('search').value.trim().toLowerCase();
@@ -468,7 +654,7 @@
     const { data } = await sb.from('profiles').select('*').order('created_at', { ascending: false }).limit(2000);
     accounts = data || []; renderAccounts();
     const n = accounts.filter((a) => a.approval_status === 'na_cekanju').length;
-    $('accCount').hidden = !n; $('accCount').textContent = n;
+    $('accCount').hidden = !n; $('accCount').textContent = n; setPend('acc', n);
   }
   function renderAccounts() {
     const f = $('accFilter').value;
@@ -512,7 +698,7 @@
     const { data } = await sb.from('partner_requests').select('*').order('created_at', { ascending: false }).limit(1000);
     b2b = data || [];
     const n = b2b.filter((r) => r.status === 'nova').length;
-    $('b2bCount').hidden = !n; $('b2bCount').textContent = n;
+    $('b2bCount').hidden = !n; $('b2bCount').textContent = n; setPend('b2b', n);
     table($('b2bTable'), [
       { h: 'Kada', html: (r) => when(r.created_at) },
       { h: 'Firma', html: (r) => '<b>' + esc(r.company) + '</b><div class="muted">' + esc(B2B_KIND[r.kind] || r.kind) + (r.city ? ' · ' + esc(r.city) : '') + '</div>' },
@@ -553,7 +739,7 @@
     const { data } = await sb.from('ig_messages').select('*').not('ig_user_id', 'eq', 'mc_test123').order('created_at', { ascending: false }).limit(500);
     ig = data || [];
     const n = ig.filter((r) => r.status === 'ceka').length;
-    $('igCount').hidden = !n; $('igCount').textContent = n;
+    $('igCount').hidden = !n; $('igCount').textContent = n; setPend('ig', n); renderDash();
     const rows = igFilter === 'ceka' ? ig.filter((r) => r.status === 'ceka') : ig;
     table($('igTable'), [
       { h: 'Kada', html: (r) => when(r.created_at) },
@@ -620,7 +806,7 @@
     const { data } = await sb.from('leads').select('*').order('updated_at', { ascending: false }).limit(1000);
     leads = data || [];
     const todo = leads.filter((l) => ['nacrt', 'followup'].includes(l.status)).length;
-    $('ldCount').hidden = !todo; $('ldCount').textContent = todo;
+    $('ldCount').hidden = !todo; $('ldCount').textContent = todo; setPend('ld', todo); renderDash();
     const c = (f) => leads.filter((l) => f.includes(l.status)).length;
     $('ldSum').textContent = leads.length + ' firmi · ' + c(['u_redu', 'poslano']) + ' poslano · ' + c(['odgovorili', 'zainteresovani']) + ' odgovorilo · ' + c(['zainteresovani']) + ' zainteresovano';
     const rows = ldFilter === 'sve' ? leads : leads.filter((l) => LD_F[ldFilter].includes(l.status));
