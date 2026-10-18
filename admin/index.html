@@ -890,7 +890,9 @@
         (isMobile(bihPhone(l.phone)) && !['odjava', 'nije_zainteresovan'].includes(l.status) ? '<div class="ld-viber"><div class="meta">Viber / WhatsApp: +' + bihPhone(l.phone) + (l.viber_sent_at ? ' · poslano ' + when(l.viber_sent_at) : '') + '</div>' +
           (l.viber_text ? '<textarea data-viber rows="4" aria-label="Viber poruka">' + esc(l.viber_text) + '</textarea>' : '') +
           '<div class="actions"><button class="btn" type="button" data-ld="viber">' + (l.viber_text ? 'Napiši ponovo' : 'Napiši Viber poruku') + '</button>' +
-          (l.viber_text ? '<button class="btn dark" type="button" data-ld="viber_open">Kopiraj i otvori Viber</button><button class="btn wa" type="button" data-ld="wa_open">WhatsApp</button><button class="btn" type="button" data-ld="viber_sent">Poslao sam</button>' : '') +
+          (l.viber_text ? '<button class="btn dark" type="button" data-ld="viber_open">Kopiraj i otvori Viber</button><button class="btn wa" type="button" data-ld="wa_open">WhatsApp</button>' +
+            (catalog() ? '<button class="btn" type="button" data-ld="cat_share">Pošalji katalog (PDF)</button>' : '') + '<button class="btn" type="button" data-ld="viber_sent">Poslao sam</button>' : '') +
+          (l.viber_text && catalog() ? '<div class="meta">Uz poruku ide i link na katalog. Dugme "Pošalji katalog" šalje sam PDF kao prilog.</div>' : '') +
           '</div></div>' : '') +
         '<div class="actions">' +
           (editable ? '<button class="btn" type="button" data-ld="draft">' + (l.body ? 'Napiši ponovo' : (l.step >= 1 ? 'Napiši podsjetnik' : 'Napiši mail')) + '</button>' : '') +
@@ -914,6 +916,7 @@
         (f.size_kb ? ' <span class="meta">(' + (f.size_kb >= 1024 ? (f.size_kb / 1024).toFixed(1) + ' MB' : f.size_kb + ' KB') + ')</span>' : '') + (forced ? ' <span class="meta">· uvijek uz prvi mail</span>' : '') + '</label>';
     }).join('') + '</div>';
   }
+  const catalog = () => (oFiles || []).find((f) => f.first_email && f.active);
   async function loadOFiles() {
     const { data } = await sb.from('outreach_files').select('*').order('created_at');
     oFiles = data || [];
@@ -1025,8 +1028,28 @@
       toast(r.error ? 'Nije uspjelo: ' + r.error : r.warn || 'Poruka je spremna.');
       return loadLeads();
     }
+    if (act === 'cat_share') {
+      const c = catalog(); if (!c) return toast('Nema kataloga u prilozima.');
+      const msg = 'Katalog Collection Premium Sarajevo, svih 12 mirisa, travel spray i mirisi za dom.';
+      b.disabled = true; b.textContent = 'Pripremam PDF…';
+      try {
+        const blob = await (await fetch(c.url)).blob();
+        const file = new File([blob], c.name, { type: 'application/pdf' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: c.name, text: msg });
+          toast('Izaberi Viber ili WhatsApp i kontakt. Poslije klikni "Poslao sam".');
+        } else {
+          const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = c.name; document.body.appendChild(a); a.click(); a.remove();
+          toast('Katalog je preuzet. Prevuci PDF u otvoreni Viber ili WhatsApp chat.');
+        }
+      } catch (err) { if (err?.name !== 'AbortError') toast('Nije uspjelo: ' + (err?.message || err)); }
+      b.disabled = false; b.textContent = 'Pošalji katalog (PDF)';
+      return;
+    }
     if (act === 'viber_open' || act === 'wa_open') {
-      const text = card.querySelector('[data-viber]').value, num = bihPhone(lead.phone);
+      const c = catalog(), num = bihPhone(lead.phone);
+      let text = card.querySelector('[data-viber]').value;
+      if (c && !text.includes(c.url)) text += '\n\nKatalog: ' + c.url;
       try { await navigator.clipboard.writeText(text); } catch { /* manual copy */ }
       if (act === 'wa_open') window.open('https://wa.me/' + num + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
       else { location.href = 'viber://chat?number=%2B' + num; toast('Poruka je kopirana. U Viberu je samo zalijepi i pošalji, pa klikni "Poslao sam".'); }
