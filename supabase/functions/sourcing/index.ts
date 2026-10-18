@@ -71,7 +71,9 @@ async function claude(system: string, user: string, opts: { tools?: any[]; max?:
     }
     const out = await res.json();
     if (out.stop_reason === "pause_turn") { messages = [...messages, { role: "assistant", content: out.content }]; continue; }
-    return (out.content ?? []).filter((c: any) => c.type === "text").map((c: any) => c.text).join("");
+    const text = (out.content ?? []).filter((c: any) => c.type === "text").map((c: any) => c.text).join("");
+    if (!text.trim()) throw new Error(`Claude je vratio prazan odgovor (${out.stop_reason}; ${(out.content ?? []).map((c: any) => c.type).join(",")})`);
+    return text;
   }
   throw new Error("Claude: pretraga je trajala predugo");
 }
@@ -186,7 +188,7 @@ PRAVILA:
 Vrati SAMO tekst poruke unutar <poruka></poruka>.`;
   const who = [`Firma: ${lead.company}`, lead.category && `Djelatnost: ${lead.category}`, lead.city && `Grad: ${lead.city}`,
     lead.contact_name && `Kontakt: ${lead.contact_name}`, lead.about && `O njima: ${lead.about}`].filter(Boolean).join("\n");
-  const raw = await claude(system, who, { max: 500 });
+  const raw = await claude(system, who, { max: 1500 });
   const text = clean(tag(raw, "poruka") || raw.replace(/<\/?[a-z]+>/gi, ""));
   if (!text) throw new Error("Claude nije vratio poruku");
   return { text, warn: BANNED.test(text) ? "Provjeri tekst: spominje cijenu ili zabranjenu riječ." : null };
