@@ -188,6 +188,13 @@
   .ld-card .name { font-weight:600; font-size:15px; } .ld-card .meta { color:var(--muted); font-size:13px; }
   .ld-card textarea { min-height:190px; resize:vertical; line-height:1.55; }
   .ld-card .about { font-size:13px; }
+  .of-list { display:grid; gap:6px; }
+  .of-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:14px; padding:8px 10px; border:1px solid var(--line); border-radius:8px; }
+  .of-row .nm { flex:1; min-width:180px; font-weight:500; }
+  .of-row .tag { font-size:11px; background:var(--accent-soft); color:var(--accent); border-radius:999px; padding:1px 8px; }
+  .ld-att { display:grid; gap:6px; border:1px solid var(--line); border-radius:8px; padding:10px 12px; }
+  .ld-att label { display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer; }
+  .ld-att label[aria-disabled="true"] { cursor:default; color:var(--muted); }
   .ld-viber { border-top:1px dashed var(--line); padding-top:10px; display:grid; gap:8px; }
   .ld-viber textarea { min-height:90px; }
   .ld-ok { color:var(--ok); } .ld-bad { color:var(--bad); }
@@ -348,6 +355,13 @@
           </form>
           <p class="sub" style="margin-top:10px">CSV s kolonama <code>firma, email, grad, djelatnost, web, telefon, kontakt, o_njima, segment</code> (segment: preprodavac ili poklon). Za kupljene liste (InfobelPRO, Bisnode) ili listu članica komore.</p>
           <input type="file" id="ldCsv" accept=".csv,text/csv">
+        </details>
+        <details class="ld-more" open><summary>Prilozi za mailove</summary>
+          <div class="panel ld-set">
+            <p class="sub" style="margin:0">Katalog ide uz svaki prvi mail. Ostale priloge (npr. cjenovnik) biraš sam kod svakog maila. Najviše 10 MB po fajlu.</p>
+            <div id="ofList" class="of-list"></div>
+            <label>Dodaj prilog (PDF ili slika)<input type="file" id="ofUpload" accept=".pdf,image/jpeg,image/png"></label>
+          </div>
         </details>
         <details class="ld-more"><summary>O meni i ponuda (Claude piše samo ovo)</summary>
           <div class="panel ld-set">
@@ -871,7 +885,7 @@
           '<div><span class="pill p-' + (LD_PILL[l.status] || 'nova') + '">' + (LD_ST[l.status] || l.status) + '</span>' + (l.last_sent_at ? '<div class="meta">poslano ' + when(l.last_sent_at) + '</div>' : '') + '</div></div>' +
         (l.about ? '<div class="about">' + esc(l.about) + '</div>' : '') +
         (l.error ? '<div class="ld-bad meta">' + esc(l.error) + '</div>' : '') +
-        (editable && l.body ? '<input data-subj value="' + esc(l.subject) + '" aria-label="Predmet"><textarea data-body aria-label="Mail">' + esc(l.body) + '</textarea>' :
+        (editable && l.body ? '<input data-subj value="' + esc(l.subject) + '" aria-label="Predmet"><textarea data-body aria-label="Mail">' + esc(l.body) + '</textarea>' + attHtml(l) :
           !editable && l.body ? '<details><summary class="meta">Poslani mail: ' + esc(l.subject) + '</summary><pre style="white-space:pre-wrap;font:inherit;font-size:13px">' + esc(l.body) + '</pre></details>' : '') +
         (isMobile(bihPhone(l.phone)) && !['odjava', 'nije_zainteresovan'].includes(l.status) ? '<div class="ld-viber"><div class="meta">Viber / WhatsApp: +' + bihPhone(l.phone) + (l.viber_sent_at ? ' · poslano ' + when(l.viber_sent_at) : '') + '</div>' +
           (l.viber_text ? '<textarea data-viber rows="4" aria-label="Viber poruka">' + esc(l.viber_text) + '</textarea>' : '') +
@@ -889,7 +903,43 @@
         '</div></article>';
     }
   }
-  let ldSel = null, ldShown = [];
+  let ldSel = null, ldShown = [], oFiles = [];
+  function attHtml(l) {
+    const files = oFiles.filter((f) => f.active);
+    if (!files.length) return '';
+    const first = !(l.step >= 1), had = new Set(l.attachments || []);
+    return '<div class="ld-att" role="group" aria-label="Prilozi"><span class="meta">Prilozi uz ovaj mail</span>' + files.map((f) => {
+      const forced = first && f.first_email;
+      return '<label' + (forced ? ' aria-disabled="true"' : '') + '><input type="checkbox" data-att="' + f.id + '"' + (forced || had.has(f.id) ? ' checked' : '') + (forced ? ' disabled' : '') + '> ' + esc(f.name) +
+        (f.size_kb ? ' <span class="meta">(' + (f.size_kb >= 1024 ? (f.size_kb / 1024).toFixed(1) + ' MB' : f.size_kb + ' KB') + ')</span>' : '') + (forced ? ' <span class="meta">· uvijek uz prvi mail</span>' : '') + '</label>';
+    }).join('') + '</div>';
+  }
+  async function loadOFiles() {
+    const { data } = await sb.from('outreach_files').select('*').order('created_at');
+    oFiles = data || [];
+    $('ofList').innerHTML = oFiles.length ? oFiles.map((f) => '<div class="of-row"><span class="nm">' + esc(f.name) + '</span>' + (f.first_email ? '<span class="tag">uz prvi mail</span>' : '') +
+      '<a class="btn" href="' + esc(f.url) + '" target="_blank" rel="noopener">Otvori</a>' +
+      (f.first_email ? '' : '<button class="btn" type="button" data-of="' + f.id + '">' + (f.active ? 'Sakrij' : 'Vrati') + '</button>') + '</div>').join('') : '<span class="meta">Nema priloga.</span>';
+    renderLeadDetail();
+  }
+  $('ofList').addEventListener('click', async (e) => {
+    const b = e.target.closest('[data-of]'); if (!b) return;
+    const f = oFiles.find((x) => x.id === Number(b.dataset.of));
+    await sb.from('outreach_files').update({ active: !f.active }).eq('id', f.id);
+    loadOFiles();
+  });
+  $('ofUpload').addEventListener('change', async (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    if (file.size > 10 * 1024 * 1024) { toast('Fajl je veći od 10 MB. Smanji ga pa probaj ponovo.'); e.target.value = ''; return; }
+    toast('Učitavam ' + file.name + '…');
+    const path = Date.now() + '-' + file.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9._-]+/g, '-');
+    const up = await sb.storage.from('outreach').upload(path, file, { contentType: file.type, upsert: false });
+    if (up.error) { toast('Nije učitano: ' + up.error.message); return; }
+    const url = sb.storage.from('outreach').getPublicUrl(path).data.publicUrl;
+    const { error } = await sb.from('outreach_files').insert({ name: file.name, url, size_kb: Math.round(file.size / 1024) });
+    toast(error ? 'Nije sačuvano.' : 'Prilog dodan. Možeš ga izabrati kod svakog maila.');
+    e.target.value = ''; loadOFiles();
+  });
   const NEXT_STEP = { nova: 'Napiši mail', nacrt: 'Pročitaj i pošalji', followup: 'Podsjetnik spreman', greska: 'Provjeri grešku', u_redu: 'Šalje se', poslano: 'Čeka odgovor', odgovorili: 'Javi se nazad', zainteresovani: 'Dogovori sastanak' };
   function renderLeadList(rows) {
     const q = $('ldSearch').value.trim().toLowerCase(), seg = $('ldSeg').value, city = $('ldCity').value;
@@ -964,8 +1014,9 @@
     if (act === 'send') {
       if (!b.dataset.sure) { b.dataset.sure = '1'; b.textContent = 'Klikni opet: šalje na ' + lead.email; setTimeout(() => { delete b.dataset.sure; b.textContent = 'Pošalji sa melvis@hadzic.com'; }, 5000); return; }
       b.disabled = true;
-      const r = await ldCall({ action: 'send', id, subject: card.querySelector('[data-subj]').value, body: card.querySelector('[data-body]').value });
-      toast(r.error ? r.error : 'U redu za slanje. Ide u roku od par minuta.');
+      const attachments = [...card.querySelectorAll('[data-att]:checked')].map((x) => Number(x.dataset.att));
+      const r = await ldCall({ action: 'send', id, subject: card.querySelector('[data-subj]').value, body: card.querySelector('[data-body]').value, attachments });
+      toast(r.error ? r.error : 'U redu za slanje' + (r.attachments && r.attachments.length ? ', s prilogom: ' + r.attachments.join(', ') : '') + '. Ide u roku od par minuta.');
       return loadLeads();
     }
     if (act === 'viber') {
@@ -1055,7 +1106,7 @@
     toast(error ? 'Nije sačuvano.' : 'Sačuvano. Novi mailovi koriste ovaj tekst.');
   });
 
-  function loadAll() { loadOverview(); loadScents(); loadB2b(); loadAccounts(); loadMails(); loadReservations(); loadClicks(); loadSources(); loadIg(); loadIgAuto(); loadLeads(); loadJobs(); loadSettings(); }
+  function loadAll() { loadOverview(); loadScents(); loadB2b(); loadAccounts(); loadMails(); loadReservations(); loadClicks(); loadSources(); loadIg(); loadIgAuto(); loadLeads(); loadJobs(); loadSettings(); loadOFiles(); }
 
   async function start() {
     const user = await CP.auth.user();

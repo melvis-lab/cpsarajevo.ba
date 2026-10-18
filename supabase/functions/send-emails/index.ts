@@ -81,12 +81,13 @@ async function products() {
 const DOMAIN = SITE.replace(/^https?:\/\//, "").replace(/\/$/, "");
 function outreach(d: Record<string, any>) {
   const body = String(d.body ?? "").trim();
-  const paras = body.split(/\n{2,}/).map((x) => `<p style="margin:0 0 14px">${esc(x).replace(/\n/g, "<br>")}</p>`).join("");
-  const sig = `<p style="margin:18px 0 0;color:#555;font-size:14px;line-height:1.5">Melvis Hadžić<br>Collection Premium Sarajevo<br>
+  const link = (h: string) => h.replace(/https?:\/\/[^\s<]+/g, (u) => `<a href="${u}" style="color:#8a6a3a">${u.replace(/^https?:\/\//, "").replace(/\?.*$/, "")}</a>`);
+  const paras = body.split(/\n{2,}/).map((x) => `<p style="margin:0 0 14px">${link(esc(x)).replace(/\n/g, "<br>")}</p>`).join("");
+  const sig = `<p style="margin:18px 0 0;color:#555;font-size:14px;line-height:1.5">Melvis Hadžić<br>Collection Premium Sarajevo<br>+387 61 802 462 · <a href="mailto:melvis@hadzic.com" style="color:#8a6a3a">melvis@hadzic.com</a><br>
     <a href="${SITE}/?utm_source=email&utm_medium=outreach&utm_campaign=b2b" style="color:#8a6a3a">${esc(DOMAIN)}</a> · <a href="https://www.instagram.com/collectionpremiumsarajevo/" style="color:#8a6a3a">Instagram</a></p>
     <p style="margin:22px 0 0;color:#999;font-size:12px">Ako vam ovakve poruke ne odgovaraju, samo odgovorite s "ne" i neću vam se više javljati.</p>`;
   const html = `<!doctype html><html lang="bs"><head><meta charset="utf-8"></head><body style="margin:0;padding:18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#222">${paras}${sig}</body></html>`;
-  const text = `${body}\n\n--\nMelvis Hadžić\nCollection Premium Sarajevo\n${SITE}\n\nAko vam ovakve poruke ne odgovaraju, samo odgovorite s "ne" i neću vam se više javljati.`;
+  const text = `${body}\n\n--\nMelvis Hadžić\nCollection Premium Sarajevo\n+387 61 802 462 · melvis@hadzic.com\n${SITE}\n\nAko vam ovakve poruke ne odgovaraju, samo odgovorite s "ne" i neću vam se više javljati.`;
   return { subject: String(d.subject ?? ""), html, text };
 }
 
@@ -212,7 +213,13 @@ Deno.serve(async (req) => {
     try {
       if (j.template === "outreach") {
         const o = outreach(j.data ?? {});
-        await client.send({ from: `Melvis Hadžić <${user}>`, replyTo: user, to: j.to_email, subject: o.subject, content: o.text, html: o.html });
+        const attachments = [];
+        for (const a of (j.data?.attachments ?? []) as { name: string; url: string }[]) {
+          const r = await fetch(a.url);
+          if (!r.ok) throw new Error(`Prilog ${a.name} nije dostupan (${r.status})`);
+          attachments.push({ filename: a.name, content: new Uint8Array(await r.arrayBuffer()), encoding: "binary" as const, contentType: r.headers.get("content-type") ?? "application/pdf" });
+        }
+        await client.send({ from: `Melvis Hadžić <${user}>`, replyTo: user, to: j.to_email, subject: o.subject, content: o.text, html: o.html, attachments });
         await sb.from("email_outbox").update({ status: "sent", sent_at: new Date().toISOString(), attempts: j.attempts + 1, error: null }).eq("id", j.id);
         sent++; continue;
       }

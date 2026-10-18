@@ -14,6 +14,7 @@
 //   viber_sent  {id}                              marks it as sent on Viber
 //   import      {rows:[...]}                      CSV import from a bought list or a chamber member list
 //   jobs                                          last searches and how many leads they added
+//   (send also takes attachments: [outreach_files.id]; the first email always gets the files marked first_email)
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
 const SITE = Deno.env.get("SITE_URL") ?? "https://collection-premium-sarajevo.netlify.app";
@@ -83,7 +84,7 @@ const tag = (raw: string, n: string) => raw.match(new RegExp(`<${n}>([\\s\\S]*?)
 const BANNED = /(kopij|original|replik|dupe|inspirisan|\b\d+[.,]?\d*\s?(km|kn|eur|€|bam)\b)/i;
 // Bosnian business mail: every paragraph and sentence starts with a capital letter, also the line after "Poštovani,"
 const capitalize = (t: string) => t
-  .replace(/(^|\n\s*\n)(\s*)(\p{Ll})/gu, (_m, a, b, c) => a + b + c.toUpperCase())
+  .replace(/(^|\n\s*\n)(\s*)(?!https?:|www\.)(\p{Ll})/gu, (_m, a, b, c) => a + b + c.toUpperCase())
   .replace(/(?<!\d)(?<!\b(?:npr|tj|br|god|str|ul|itd))([.!?])( +)(\p{Ll})/gu, (_m, a, b, c) => a + b + c.toUpperCase());
 const clean = (t: string) => capitalize(t.replace(/\s*[—–]\s*/g, ", ").replace(/,\s*,/g, ",").replace(/[ \t]+\n/g, "\n").trim());
 
@@ -129,6 +130,9 @@ Ako planirate poklone ove godine, javite mi okvirni broj komada i do kada vam tr
 Srdačan pozdrav,
 Melvis`;
 
+// personal sign-up link: the price list goes only to companies that register
+const regLink = (lead: any) => `${SITE}/racun/?registracija=1&tip=${lead.segment === "poklon" ? "firma" : "preprodavac"}${lead.email ? "&email=" + encodeURIComponent(lead.email) : ""}`;
+
 async function draftFor(lead: any) {
   const [ome, ponuda] = await Promise.all([setting("o_meni"), setting("ponuda")]);
   const followup = lead.step >= 1;
@@ -157,14 +161,18 @@ Vrati SAMO:
     `Firma: ${lead.company}`, lead.category && `Djelatnost: ${lead.category}`, lead.city && `Grad: ${lead.city}`,
     lead.contact_name && `Kontakt osoba: ${lead.contact_name}`, lead.website && `Web: ${lead.website}`,
     lead.about && `Šta znamo o njima: ${lead.about}`, lead.note && `Melvisova bilješka: ${lead.note}`,
+    `Link za registraciju (napiši ga tačno ovako, sam u svom redu): ${regLink(lead)}`,
   ].filter(Boolean).join("\n");
+  const extra = followup
+    ? " Kratko ih podsjeti da se registruju preko linka da bi prvi dobili cjenovnik."
+    : " U jednoj rečenici spomeni da u prilogu šalješ katalog sa svih 12 mirisa. Zamoli ih da se registruju na stranici preko linka, jer cjenovnik uskoro šaljemo samo registrovanim firmama. Registracija je besplatna. Link stavi sam u svom redu, prije pozdrava.";
   const task = followup
     ? `Ovo je KRATAK podsjetnik (najviše 60 riječi) firmi koja nije odgovorila na prvi mail prije nekoliko dana. Ne ponavljaj cijeli prvi mail. Ljubazno, bez prigovora što nisu odgovorili, jedna nova korisna rečenica (npr. da se pokloni za kraj godine naručuju ranije, ili da možeš ostaviti uzorke), i lako pitanje na koje se odgovara jednom rečenicom. Predmet počinje s "Re: " i ponavlja stari predmet.\n\nPrvi mail:\n${prev}`
     : lead.segment === "poklon"
       ? "Napiši PRVI mail ovoj firmi: nudiš parfeme kao novogodišnje i praznične poklone za zaposlene i klijente, u većim količinama. NE spominji da javna prodaja počinje 1. januara (pokloni im trebaju prije)."
       : "Napiši PRVI mail ovoj firmi: pitaš da li bi htjeli biti preprodavač (imati mirise u ponudi).";
   for (let attempt = 0; attempt < 2; attempt++) {
-    const raw = await claude(system, `${task}\n\n${who}`, { max: 1200 });
+    const raw = await claude(system, `${task}${extra}\n\n${who}`, { max: 1200 });
     let subject = clean(tag(raw, "predmet")).replace(/^predmet:\s*/i, "");
     let body = clean(tag(raw, "tijelo"));
     if (!body) {                       // no tags: take "Predmet: ..." line and the rest
@@ -336,13 +344,17 @@ async function action(body: any) {
     if ((count ?? 0) >= limit) return json({ error: `Dnevni limit od ${limit} mailova je dostignut. Ostatak sutra.` }, 429);
     const step = lead.step >= 1 ? 2 : 1;
     if (step === 2 && lead.step >= 2) return json({ error: "Podsjetnik je već poslan" }, 400);
+    // attachments: the first email always carries the catalog, the rest is Melvis's pick
+    const { data: files } = await sb.from("outreach_files").select("id,name,url,first_email").eq("active", true);
+    const picked = new Set((body.attachments ?? []).map(Number));
+    const att = (files ?? []).filter((f: any) => picked.has(f.id) || (step === 1 && f.first_email)).map((f: any) => ({ id: f.id, name: f.name, url: f.url }));
     const { error } = await sb.from("email_outbox").insert({
       to_email: lead.email, template: "outreach", dedupe_key: `lead-${lead.id}-${step}`,
-      data: { lead_id: lead.id, step, subject, body: text, contact: lead.contact_name },
+      data: { lead_id: lead.id, step, subject, body: text, contact: lead.contact_name, attachments: att },
     });
     if (error) return json({ error: error.code === "23505" ? "Ovaj mail je već u redu za slanje" : error.message }, 400);
-    await sb.from("leads").update({ subject, body: text, status: "u_redu", updated_at: new Date().toISOString() }).eq("id", lead.id);
-    return json({ queued: true, step });
+    await sb.from("leads").update({ subject, body: text, status: "u_redu", attachments: att.map((a: any) => a.id), updated_at: new Date().toISOString() }).eq("id", lead.id);
+    return json({ queued: true, step, attachments: att.map((a: any) => a.name) });
   }
   return json({ error: "nepoznata akcija" }, 400);
 }
