@@ -81,7 +81,11 @@ const tag = (raw: string, n: string) => raw.match(new RegExp(`<${n}>([\\s\\S]*?)
 
 // ---------- writing rules ----------
 const BANNED = /(kopij|original|replik|dupe|inspirisan|\b\d+[.,]?\d*\s?(km|kn|eur|€|bam)\b)/i;
-const clean = (t: string) => t.replace(/\s*[—–]\s*/g, ", ").replace(/,\s*,/g, ",").replace(/[ \t]+\n/g, "\n").trim();
+// Bosnian business mail: every paragraph and sentence starts with a capital letter, also the line after "Poštovani,"
+const capitalize = (t: string) => t
+  .replace(/(^|\n\s*\n)(\s*)(\p{Ll})/gu, (_m, a, b, c) => a + b + c.toUpperCase())
+  .replace(/(?<!\d)(?<!\b(?:npr|tj|br|god|str|ul|itd))([.!?])( +)(\p{Ll})/gu, (_m, a, b, c) => a + b + c.toUpperCase());
+const clean = (t: string) => capitalize(t.replace(/\s*[—–]\s*/g, ", ").replace(/,\s*,/g, ",").replace(/[ \t]+\n/g, "\n").trim());
 
 const STYLE = `KAKO PIŠEŠ:
 - Pišeš kao Melvis lično, u prvom licu, kao čovjek koji šalje email drugom čovjeku. Nije reklama, nije newsletter.
@@ -94,6 +98,7 @@ const STYLE = `KAKO PIŠEŠ:
 - Ne izmišljaj ništa što nije u činjenicama: ni rokove isporuke, ni personalizaciju, ni ekskluzivnost. Ako nešto ne znaš, ponudi da se javiš s detaljima.
 - Prva rečenica nakon pozdrava je o NJIMA (šta rade, zašto baš oni), tek onda ko si ti. Ako o firmi ne znaš ništa konkretno, kratko i iskreno: zašto ti se čini da bi im ovo odgovaralo.
 - Jedan jasan i lagan sljedeći korak na kraju (kratak sastanak, da svratiš s testerima, ili da pošalješ ponudu). Nema pritiska.
+- Svaka rečenica i svaki pasus počinju VELIKIM slovom. I prvi pasus poslije pozdrava: "Poštovani," pa novi red i "Vidio sam..." (ne "vidio sam...").
 - Pozdrav: "Poštovani," ili "Poštovana gospođo X," / "Poštovani gospodine X," ako znaš ime kontakt osobe. Kraj: "Srdačan pozdrav," pa samo "Melvis" (potpis se dodaje automatski).`;
 
 const EXAMPLE_RESELLER = `Primjer tona (preprodavač, ne kopiraj doslovno):
@@ -101,7 +106,7 @@ Predmet: Parfemi iz Pariza za vašu parfimeriju
 
 Poštovani,
 
-pogledao sam vašu ponudu na Ferhadiji i vidim da držite mirise koje ljudi kupuju i za sebe i za poklon. Zato vam se javljam.
+Pogledao sam vašu ponudu na Ferhadiji i vidim da držite mirise koje ljudi kupuju i za sebe i za poklon. Zato vam se javljam.
 
 Zovem se Melvis Hadžić. Rođen sam u Rotterdamu, a nedavno sam se preselio u Sarajevo da otvorim Collection Premium Sarajevo, službenog partnera francuske kuće Collection Premium Paris. Imamo 12 mirisa u extrait koncentraciji, u bočicama od 50 ml. Prodaja kreće 1. januara, a do tada tražimo nekoliko partnera u BiH koji bi ih imali u ponudi.
 
@@ -115,7 +120,7 @@ Predmet: Novogodišnji pokloni za vaš tim
 
 Poštovani,
 
-kraj godine je blizu i pretpostavljam da i kod vas razmišljate šta pokloniti zaposlenima i klijentima. Zato vam pišem.
+Kraj godine je blizu i pretpostavljam da i kod vas razmišljate šta pokloniti zaposlenima i klijentima. Zato vam pišem.
 
 Zovem se Melvis Hadžić. Nedavno sam se iz Holandije preselio u Sarajevo i otvaram Collection Premium Sarajevo, službenog partnera francuske kuće Collection Premium Paris. Imamo 12 mirisa u extrait koncentraciji, bočice od 50 ml u poklon kutiji. Parfem je poklon koji se koristi svaki dan i ostane u sjećanju duže od korpe ili kalendara.
 

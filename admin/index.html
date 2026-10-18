@@ -150,7 +150,39 @@
   .ld-set { display:grid; gap:10px; padding:14px; }
   .ld-more { margin-top:12px; } .ld-more summary { cursor:pointer; color:var(--accent); font-weight:500; padding:4px 0; }
   .ld-jobs { display:grid; gap:6px; margin-top:10px; font-size:13px; color:var(--muted); }
-  .ld-list { display:grid; gap:12px; }
+  .ld-head { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
+  .ld-tools { margin-bottom:12px; }
+  .ld-tools .ld-find { border:0; padding:4px 0 0; }
+  .ld-bar { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin:10px 0 12px; }
+  .ld-tabs { display:inline-flex; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:3px; gap:2px; overflow-x:auto; max-width:100%; }
+  .ld-tabs button { border:0; background:none; border-radius:7px; padding:7px 12px; font:inherit; font-size:13px; font-weight:500; color:var(--muted); cursor:pointer; white-space:nowrap; min-height:34px; }
+  .ld-tabs button[aria-selected="true"] { background:var(--ink); color:#fff; }
+  .ld-tabs span { font-variant-numeric:tabular-nums; opacity:.7; margin-left:3px; }
+  .ld-fil { display:flex; gap:8px; flex-wrap:wrap; flex:1 1 420px; justify-content:flex-end; }
+  .ld-fil input { flex:1 1 200px; max-width:300px; }
+  .ld-split { display:grid; grid-template-columns:minmax(0, 1fr) minmax(380px, 460px); gap:16px; align-items:start; }
+  .ld-list { background:var(--bg); border:1px solid var(--line); border-radius:12px; overflow:hidden; max-height:calc(100vh - 230px); max-height:calc(100dvh - 230px); overflow-y:auto; }
+  .ld-group { position:sticky; top:0; z-index:1; background:#fafbfc; border-bottom:1px solid var(--line); padding:7px 14px; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600; }
+  .ld-row { display:grid; grid-template-columns:minmax(0, 1fr) auto; gap:4px 12px; align-items:center; width:100%; text-align:left; background:none; border:0; border-bottom:1px solid var(--line); padding:10px 14px; font:inherit; color:inherit; cursor:pointer; min-height:56px; }
+  .ld-row:hover { background:var(--soft); }
+  .ld-row[aria-selected="true"] { background:var(--accent-soft); box-shadow:inset 3px 0 0 var(--accent); }
+  .ld-row .nm { font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ld-row .mt { grid-column:1; color:var(--muted); font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:flex; gap:8px; align-items:center; }
+  .ld-row .rt { grid-column:2; grid-row:1 / span 2; display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
+  .ch { display:inline-flex; gap:4px; } .ch i { font-style:normal; font-size:11px; border:1px solid var(--line); border-radius:5px; padding:0 5px; color:var(--muted); }
+  .ch i.ok { border-color:#bfe3c9; color:var(--ok); } .ch i.no { color:var(--bad); border-color:#f3c3be; }
+  .ld-detail { position:sticky; top:76px; max-height:calc(100vh - 92px); max-height:calc(100dvh - 92px); overflow-y:auto; }
+  .ld-detail .ld-card { border-radius:12px; }
+  .ld-detail .close { display:none; }
+  .ld-nav { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px; color:var(--muted); font-size:12px; }
+  .ld-empty { background:var(--bg); border:1px dashed var(--line); border-radius:12px; padding:28px 18px; color:var(--muted); text-align:center; }
+  @media (max-width:1100px) {
+    .ld-split { grid-template-columns:1fr; }
+    .ld-list { max-height:none; }
+    .ld-detail { position:fixed; inset:0; top:0; max-height:none; z-index:30; background:var(--soft); padding:12px; transform:translateY(100%); transition:transform .22s cubic-bezier(.23,1,.32,1); }
+    .ld-detail.open { transform:none; }
+    .ld-detail .close { display:inline-flex; }
+  }
   .ld-card { background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; display:grid; gap:10px; }
   .ld-card .top { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:flex-start; }
   .ld-card .name { font-weight:600; font-size:15px; } .ld-card .meta { color:var(--muted); font-size:13px; }
@@ -289,9 +321,12 @@
 
     <!-- PROSPEKTI (sourcing) -->
     <section data-panel="prospekti" hidden>
-      <div class="block">
-        <h2>Pronađi firme</h2>
-        <p class="sub">Claude pretraži web i zadrži samo firme čiji je email objavljen na njihovoj vlastitoj stranici (link je sačuvan kao dokaz). Svaki email se provjeri da domena prima poštu. Ništa se ne šalje bez tvog klika.</p>
+      <div class="ld-head">
+        <div><p class="sub" style="margin:0" id="ldSum"></p></div>
+        <button class="btn dark" type="button" id="ldToolsBtn" aria-expanded="false" aria-controls="ldTools"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Pronađi nove firme</button>
+      </div>
+      <div class="ld-tools card" id="ldTools" hidden>
+        <p class="sub">Claude pretraži web i zadrži samo firme čiji je email ili mobitel objavljen na njihovoj vlastitoj stranici (link je sačuvan kao dokaz). Ništa se ne šalje bez tvog klika.</p>
         <form class="panel ld-find" id="ldFind">
           <label>Šta tražiš<select name="segment"><option value="preprodavac">Preprodavači (parfimerije, butici, saloni, drogerije)</option><option value="poklon">Firme za novogodišnje poklone</option></select></label>
           <label>Grad<input name="city" list="ldCities" value="Sarajevo" required></label>
@@ -300,7 +335,6 @@
           <button class="btn dark" type="submit">Pronađi</button>
           <datalist id="ldCities"><option>Sarajevo</option><option>Tuzla</option><option>Zenica</option><option>Mostar</option><option>Banja Luka</option><option>Bihać</option><option>Travnik</option><option>Brčko</option><option>Bijeljina</option><option>Cazin</option><option>Visoko</option><option>Gračanica</option><option>Goražde</option><option>Livno</option><option>Konjic</option></datalist>
         </form>
-        <div id="ldJobs" class="ld-jobs"></div>
         <details class="ld-more"><summary>Dodaj ručno ili uvezi listu (CSV)</summary>
           <form class="panel ld-find" id="ldAdd">
             <label>Firma<input name="company" required></label>
@@ -325,12 +359,23 @@
           </div>
         </details>
       </div>
-      <div class="block">
-        <div class="row"><div><h2>Firme</h2><p class="sub" style="margin:0" id="ldSum"></p></div>
-          <div class="ig-filter" id="ldFilter" role="group" aria-label="Filter">
-            <button type="button" data-f="pregled" aria-pressed="true">Za pregled</button><button type="button" data-f="poslano" aria-pressed="false">Poslano</button><button type="button" data-f="odgovor" aria-pressed="false">Odgovorili</button><button type="button" data-f="sve" aria-pressed="false">Sve</button>
-          </div></div>
-        <div id="ldList" class="ld-list"></div>
+      <div id="ldJobs" class="ld-jobs"></div>
+      <div class="ld-bar">
+        <div class="ld-tabs" id="ldFilter" role="tablist" aria-label="Filter">
+          <button type="button" role="tab" data-f="pregled" aria-selected="true">Za pregled <span data-c="pregled"></span></button>
+          <button type="button" role="tab" data-f="poslano" aria-selected="false">Poslano <span data-c="poslano"></span></button>
+          <button type="button" role="tab" data-f="odgovor" aria-selected="false">Odgovorili <span data-c="odgovor"></span></button>
+          <button type="button" role="tab" data-f="sve" aria-selected="false">Sve <span data-c="sve"></span></button>
+        </div>
+        <div class="ld-fil">
+          <input type="search" id="ldSearch" placeholder="Traži firmu, grad, email" aria-label="Traži">
+          <select id="ldSeg" aria-label="Tip"><option value="">Svi tipovi</option><option value="preprodavac">Preprodavači</option><option value="poklon">Pokloni za firme</option></select>
+          <select id="ldCity" aria-label="Grad"><option value="">Svi gradovi</option></select>
+        </div>
+      </div>
+      <div class="ld-split">
+        <div class="ld-list" id="ldList" role="listbox" aria-label="Firme"></div>
+        <aside class="ld-detail" id="ldDetail" aria-live="polite"></aside>
       </div>
     </section>
 
@@ -802,17 +847,21 @@
     return d.length >= 10 ? d : null;
   }
   const isMobile = (d) => !!d && /^3876\d{7,8}$/.test(d);
-  async function loadLeads() {
-    const { data } = await sb.from('leads').select('*').order('updated_at', { ascending: false }).limit(1000);
-    leads = data || [];
+  async function loadLeads(local) {
+    if (local !== true) { const { data } = await sb.from('leads').select('*').order('updated_at', { ascending: false }).limit(1000); leads = data || []; }
+    const cities = [...new Set(leads.map((l) => l.city).filter(Boolean))].sort();
+    const cs = $('ldCity'), cur = cs.value;
+    cs.innerHTML = '<option value="">Svi gradovi</option>' + cities.map((c) => '<option' + (c === cur ? ' selected' : '') + '>' + esc(c) + '</option>').join('');
+    Object.keys(LD_F).concat('sve').forEach((k) => { const sp = document.querySelector('#ldFilter [data-c="' + k + '"]'); if (sp) sp.textContent = k === 'sve' ? leads.length : leads.filter((l) => LD_F[k].includes(l.status)).length; });
     const todo = leads.filter((l) => ['nacrt', 'followup'].includes(l.status)).length;
     $('ldCount').hidden = !todo; $('ldCount').textContent = todo; setPend('ld', todo); renderDash();
     const c = (f) => leads.filter((l) => f.includes(l.status)).length;
     $('ldSum').textContent = leads.length + ' firmi · ' + c(['u_redu', 'poslano']) + ' poslano · ' + c(['odgovorili', 'zainteresovani']) + ' odgovorilo · ' + c(['zainteresovani']) + ' zainteresovano';
     const rows = ldFilter === 'sve' ? leads : leads.filter((l) => LD_F[ldFilter].includes(l.status));
-    const el = $('ldList');
-    if (!rows.length) { el.innerHTML = '<div class="panel"><p class="empty" style="padding:16px;margin:0">' + (ldFilter === 'pregled' ? 'Ništa za pregled. Pronađi nove firme gore.' : 'Ništa ovdje.') + '</p></div>'; return; }
-    el.innerHTML = rows.map((l) => {
+    renderLeadList(rows);
+  }
+  function cardHtml(l) {
+    {
       const editable = ['nova', 'nacrt', 'followup', 'greska'].includes(l.status);
       const mail = l.email ? esc(l.email) + ' ' + (l.email_ok === true ? '<span class="ld-ok" title="' + esc(l.email_check) + '">✓ ' + esc(l.email_check) + '</span>' : l.email_ok === false ? '<span class="ld-bad">✗ ' + esc(l.email_check) + '</span>' : '') : '<span class="ld-bad">nema emaila</span>';
       return '<article class="ld-card" data-id="' + l.id + '">' +
@@ -838,15 +887,71 @@
           (l.status === 'preskoceno' ? '<button class="btn" type="button" data-ld="nova">Vrati</button>' : '') +
           '<button class="btn" type="button" data-ld="note">' + (l.note ? 'Bilješka: ' + esc(l.note.slice(0, 40)) : 'Bilješka') + '</button>' +
         '</div></article>';
-    }).join('');
+    }
   }
+  let ldSel = null, ldShown = [];
+  const NEXT_STEP = { nova: 'Napiši mail', nacrt: 'Pročitaj i pošalji', followup: 'Podsjetnik spreman', greska: 'Provjeri grešku', u_redu: 'Šalje se', poslano: 'Čeka odgovor', odgovorili: 'Javi se nazad', zainteresovani: 'Dogovori sastanak' };
+  function renderLeadList(rows) {
+    const q = $('ldSearch').value.trim().toLowerCase(), seg = $('ldSeg').value, city = $('ldCity').value;
+    rows = rows.filter((l) => (!seg || l.segment === seg) && (!city || (l.city || '') === city) && (!q || [l.company, l.city, l.email, l.category, l.phone].join(' ').toLowerCase().includes(q)));
+    // most useful first: ready to send, then reminders, new, rest
+    const ord = { nacrt: 0, followup: 1, greska: 2, nova: 3, zainteresovani: 4, odgovorili: 5, u_redu: 6, poslano: 7 };
+    rows = rows.slice().sort((a, b) => (ord[a.status] ?? 9) - (ord[b.status] ?? 9) || String(a.city).localeCompare(String(b.city)) || a.company.localeCompare(b.company));
+    ldShown = rows;
+    const el = $('ldList');
+    if (!rows.length) { el.innerHTML = '<div class="empty">' + (ldFilter === 'pregled' && !q && !seg && !city ? 'Ništa za pregled. Klikni "Pronađi nove firme".' : 'Nijedna firma ne odgovara filteru.') + '</div>'; $('ldDetail').innerHTML = ''; return; }
+    if (!rows.some((l) => l.id === ldSel)) ldSel = window.innerWidth > 1100 ? rows[0].id : null;
+    let last = null, html = '';
+    rows.forEach((l) => {
+      const grp = ['nacrt', 'followup', 'greska'].includes(l.status) ? 'Spremno za slanje' : l.status === 'nova' ? 'Nove firme' : ['odgovorili', 'zainteresovani'].includes(l.status) ? 'Odgovorili' : ['u_redu', 'poslano'].includes(l.status) ? 'Poslano, čeka odgovor' : 'Ostalo';
+      if (grp !== last) { html += '<div class="ld-group">' + grp + '</div>'; last = grp; }
+      const mob = isMobile(bihPhone(l.phone));
+      html += '<button type="button" class="ld-row" role="option" data-sel="' + l.id + '" aria-selected="' + (l.id === ldSel) + '">' +
+        '<span class="nm">' + esc(l.company) + '</span>' +
+        '<span class="mt">' + esc([l.city, l.segment === 'poklon' ? 'Poklon' : 'Preprodavač', l.category].filter(Boolean).join(' · ')) + '</span>' +
+        '<span class="rt"><span class="pill p-' + (LD_PILL[l.status] || 'nova') + '">' + esc(NEXT_STEP[l.status] || LD_ST[l.status] || l.status) + '</span>' +
+        '<span class="ch">' + (l.email ? '<i class="' + (l.email_ok === false ? 'no' : l.email_ok ? 'ok' : '') + '" title="Email">mail</i>' : '') + (mob ? '<i class="' + (l.viber_sent_at ? 'ok' : '') + '" title="Viber / WhatsApp">viber</i>' : '') + '</span></span></button>';
+    });
+    el.innerHTML = html;
+    renderLeadDetail();
+  }
+  function renderLeadDetail() {
+    const d = $('ldDetail'), l = leads.find((x) => x.id === ldSel);
+    if (!l) { d.innerHTML = window.innerWidth > 1100 ? '<div class="ld-empty">Izaberi firmu s liste.</div>' : ''; d.classList.remove('open'); return; }
+    const i = ldShown.findIndex((x) => x.id === l.id);
+    d.innerHTML = '<div class="ld-nav"><button class="btn close" type="button" data-ldnav="close">← Lista</button><span>' + (i + 1) + ' od ' + ldShown.length + '</span>' +
+      '<span class="actions"><button class="btn" type="button" data-ldnav="-1" aria-label="Prethodna firma"' + (i <= 0 ? ' disabled' : '') + '>↑</button><button class="btn" type="button" data-ldnav="1" aria-label="Sljedeća firma"' + (i >= ldShown.length - 1 ? ' disabled' : '') + '>↓</button></span></div>' + cardHtml(l);
+  }
+  function selectLead(id, open) {
+    ldSel = id;
+    document.querySelectorAll('#ldList .ld-row').forEach((r) => r.setAttribute('aria-selected', String(Number(r.dataset.sel) === id)));
+    renderLeadDetail();
+    if (open && window.innerWidth <= 1100) $('ldDetail').classList.add('open');
+    const row = document.querySelector('#ldList [data-sel="' + id + '"]'); if (row) row.scrollIntoView({ block: 'nearest' });
+  }
+  $('ldList').addEventListener('click', (e) => { const r = e.target.closest('[data-sel]'); if (r) selectLead(Number(r.dataset.sel), true); });
+  $('ldDetail').addEventListener('click', (e) => {
+    const n = e.target.closest('[data-ldnav]'); if (!n) return;
+    if (n.dataset.ldnav === 'close') { $('ldDetail').classList.remove('open'); return; }
+    const i = ldShown.findIndex((x) => x.id === ldSel) + Number(n.dataset.ldnav);
+    if (ldShown[i]) selectLead(ldShown[i].id, true);
+  });
+  document.addEventListener('keydown', (e) => {
+    if ($('ldList').closest('[data-panel]').hidden || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+    e.preventDefault();
+    const i = ldShown.findIndex((x) => x.id === ldSel) + (e.key === 'ArrowDown' ? 1 : -1);
+    if (ldShown[i]) selectLead(ldShown[i].id, false);
+  });
+  ['ldSearch', 'ldSeg', 'ldCity'].forEach((id) => $(id).addEventListener(id === 'ldSearch' ? 'input' : 'change', () => loadLeads(true)));
+  $('ldToolsBtn').addEventListener('click', () => { const t = $('ldTools'); t.hidden = !t.hidden; $('ldToolsBtn').setAttribute('aria-expanded', String(!t.hidden)); });
   $('ldFilter').addEventListener('click', (e) => {
     const b = e.target.closest('[data-f]'); if (!b) return;
     ldFilter = b.dataset.f;
-    document.querySelectorAll('#ldFilter button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-    loadLeads();
+    document.querySelectorAll('#ldFilter button').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+    ldSel = null; loadLeads(true);
   });
-  $('ldList').addEventListener('click', async (e) => {
+  $('ldDetail').addEventListener('click', async (e) => {
     const b = e.target.closest('[data-ld]'); if (!b) return;
     const card = b.closest('[data-id]'), id = Number(card.dataset.id), act = b.dataset.ld;
     const lead = leads.find((l) => l.id === id);
