@@ -561,6 +561,7 @@ body::after{content:"";position:fixed;inset:-50%;z-index:30;pointer-events:none;
 .sheet .media .go span{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase}
 .sheet .media .go:active .ring{transform:scale(.95)}
 .sheet .media.playing .go{opacity:0;pointer-events:none}
+.sheet .media.loading .go{pointer-events:none}.sheet .media.loading .go .ring{animation:shPulse 1s ease-in-out infinite}@keyframes shPulse{50%{opacity:.45}}
 .sheet .body{overflow:auto;padding:clamp(28px,4vw,52px);display:flex;flex-direction:column;gap:1.2rem;background:radial-gradient(80% 60% at 100% 0,color-mix(in srgb,var(--c) 18%,transparent),transparent 70%)}
 .sheet .meta{display:flex;justify-content:space-between;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
 .sheet h3{font-size:clamp(2.4rem,4.4vw,3.6rem);line-height:1}
@@ -1938,8 +1939,8 @@ function fill(id){
   $('shFilm').textContent=L('Film · ','Film · ')+L(f[0],f[1]);
   $('shDots').innerHTML=P.map(q=>`<i class="${seen.includes(q.id)?'on':''}"></i>`).join('');
   $('shProg').textContent=seen.length>=12?L('Otkrili ste svih 12 mirisa. Koji je vaš?','You’ve discovered all 12. Which one is yours?'):L(`Otkrili ste ${seen.length} od 12 mirisa`,`You’ve discovered ${seen.length} of 12 scents`);
-  v.pause(); v.removeAttribute('src'); v.load(); v.controls=false; media.classList.remove('playing');
-  media.style.backgroundImage='url(film/bottles/'+id+'.webp)'; mark();
+  v.pause(); v.removeAttribute('src'); v.load(); v.controls=false; media.classList.remove('playing','loading');
+  media.style.backgroundImage='url(film/bottles/'+id+'.webp)'; v.poster='film/bottles/'+id+'.webp'; mark();
 }
 function open(id,from){
   last=from||document.activeElement; fill(id);
@@ -1947,7 +1948,8 @@ function open(id,from){
 }
 function close(){ sh.classList.remove('open'); document.body.style.overflow=''; v.pause();
   document.querySelectorAll('.p.lift').forEach(x=>x.classList.remove('lift')); if(last)last.focus({preventScroll:true}); }
-$('shPlay').addEventListener('click',()=>{try{window.CP&&CP.track('video_play',{element:'film',label:cur});}catch(e){} v.src=src(cur);v.controls=true;media.classList.add('playing');v.play().catch(()=>{});});
+$('shPlay').addEventListener('click',()=>{try{window.CP&&CP.track('video_play',{element:'film',label:cur});}catch(e){} v.src=src(cur);v.controls=true;media.classList.add('loading');v.play().catch(()=>{media.classList.remove('loading');});});
+v.addEventListener('playing',()=>{media.classList.remove('loading');media.classList.add('playing');});
 v.addEventListener('ended',()=>{media.classList.remove('playing');v.controls=false;});
 $('shClose').addEventListener('click',close);
 sh.addEventListener('click',e=>{if(e.target===sh)close();});
