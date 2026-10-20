@@ -2,3 +2,6 @@
 .DS_Store
 node_modules/
 social/r/
+social/c/
+social/s2/
+deploy-*.zip
