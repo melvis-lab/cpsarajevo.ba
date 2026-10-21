@@ -124,6 +124,8 @@ begin
   return c;
 end; $$;
 
+revoke all on function public.creator_make_code(text) from public, anon, authenticated;
+
 -- emails + code on approval
 create or replace function public.mail_on_creator()
 returns trigger language plpgsql security definer set search_path = '' as $$
