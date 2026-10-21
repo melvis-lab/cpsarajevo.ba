@@ -4,7 +4,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
 
-const SITE = Deno.env.get("SITE_URL") ?? "https://collection-premium-sarajevo.netlify.app";
+const SITE = Deno.env.get("SITE_URL") ?? "https://cpsarajevo.ba";
 const FN_URL = `${Deno.env.get("SUPABASE_URL")}/functions/v1/send-emails`;
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
 const OPENING = Date.UTC(2027, 0, 1);
@@ -34,7 +34,7 @@ function layout(o: { pre: string; eyebrow: string; title: string; body: string; 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.paper}"><tr><td align="center" class="outer" style="padding:28px 12px">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;border-radius:22px;overflow:hidden;background:${C.card};box-shadow:0 20px 50px -30px rgba(40,25,10,.45)">
 <tr><td align="center" style="background:${C.ink};padding:30px 24px 26px">
-  <a href="${SITE}"><img src="${SITE}/img/email/logo.png" width="150" alt="Collection Premium Sarajevo" style="display:block;border:0;width:150px;height:auto"></a>
+  <a href="${SITE}"><img src="${SITE}/img/email/logo-sarajevo.png" width="280" alt="Collection Premium Paris by MESO · Sarajevo" style="display:block;border:0;width:280px;max-width:100%;height:auto"></a>
 </td></tr>
 ${o.hero ?? ""}
 <tr><td style="padding:40px 44px 34px" class="pad">
@@ -79,15 +79,15 @@ async function products() {
 
 // ---------- outreach: a plain personal email from Melvis, not a newsletter ----------
 const DOMAIN = SITE.replace(/^https?:\/\//, "").replace(/\/$/, "");
-function outreach(d: Record<string, any>) {
+function outreach(d: Record<string, any>, from: string) {
   const body = String(d.body ?? "").trim();
   const link = (h: string) => h.replace(/https?:\/\/[^\s<]+/g, (u) => `<a href="${u}" style="color:#8a6a3a">${u.replace(/^https?:\/\//, "").replace(/\?.*$/, "")}</a>`);
   const paras = body.split(/\n{2,}/).map((x) => `<p style="margin:0 0 14px">${link(esc(x)).replace(/\n/g, "<br>")}</p>`).join("");
-  const sig = `<p style="margin:18px 0 0;color:#555;font-size:14px;line-height:1.5">Melvis Hadžić<br>Collection Premium Sarajevo<br>+387 61 802 462 · <a href="mailto:melvis@hadzic.com" style="color:#8a6a3a">melvis@hadzic.com</a><br>
+  const sig = `<p style="margin:18px 0 0;color:#555;font-size:14px;line-height:1.5">Melvis Hadžić<br>Collection Premium Sarajevo<br>+387 61 802 462 · <a href="mailto:${from}" style="color:#8a6a3a">${from}</a><br>
     <a href="${SITE}/?utm_source=email&utm_medium=outreach&utm_campaign=b2b" style="color:#8a6a3a">${esc(DOMAIN)}</a> · <a href="https://www.instagram.com/collectionpremiumsarajevo/" style="color:#8a6a3a">Instagram</a></p>
     <p style="margin:22px 0 0;color:#999;font-size:12px">Ako vam ovakve poruke ne odgovaraju, samo odgovorite s "ne" i neću vam se više javljati.</p>`;
   const html = `<!doctype html><html lang="bs"><head><meta charset="utf-8"></head><body style="margin:0;padding:18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#222">${paras}${sig}</body></html>`;
-  const text = `${body}\n\n--\nMelvis Hadžić\nCollection Premium Sarajevo\n+387 61 802 462 · melvis@hadzic.com\n${SITE}\n\nAko vam ovakve poruke ne odgovaraju, samo odgovorite s "ne" i neću vam se više javljati.`;
+  const text = `${body}\n\n--\nMelvis Hadžić\nCollection Premium Sarajevo\n+387 61 802 462 · ${from}\n${SITE}\n\nAko vam ovakve poruke ne odgovaraju, samo odgovorite s "ne" i neću vam se više javljati.`;
   return { subject: String(d.subject ?? ""), html, text };
 }
 
@@ -196,7 +196,9 @@ Deno.serve(async (req) => {
   const { data: sec } = await sb.from("app_secrets").select("value").eq("key", "cron_secret").maybeSingle();
   if (!sec?.value || req.headers.get("x-cron-secret") !== sec.value) return new Response("forbidden", { status: 403 });
 
-  const user = Deno.env.get("SMTP_USER") ?? "melvis@hadzic.com", pass = Deno.env.get("SMTP_PASS");
+  const user = Deno.env.get("SMTP_USER") ?? "melvis.hadzic@cpsarajevo.ba", pass = Deno.env.get("SMTP_PASS");
+  // website mail goes out as info@ (a Gmail "send mail as" alias of the same account); outreach stays personal
+  const site = user.endsWith("@cpsarajevo.ba") ? (Deno.env.get("SITE_FROM") ?? "info@cpsarajevo.ba") : user;
   if (!pass) return new Response(JSON.stringify({ waiting: "SMTP_PASS not set; emails stay queued" }), { status: 503 });
 
   // outreach goes out slowly (one per run = one per minute) so Gmail sees normal personal sending
@@ -212,7 +214,7 @@ Deno.serve(async (req) => {
   for (const j of jobs) {
     try {
       if (j.template === "outreach") {
-        const o = outreach(j.data ?? {});
+        const o = outreach(j.data ?? {}, user);
         const attachments = [];
         for (const a of (j.data?.attachments ?? []) as { name: string; url: string }[]) {
           const r = await fetch(a.url);
@@ -224,7 +226,7 @@ Deno.serve(async (req) => {
         sent++; continue;
       }
       const { subject, html } = await render(j.template, j.data ?? {}, j.to_email);
-      await client.send({ from: `Collection Premium Sarajevo <${user}>`, replyTo: user, to: j.to_email, subject, html,
+      await client.send({ from: `Collection Premium Sarajevo <${site}>`, replyTo: site, to: j.to_email, subject, html,
         headers: j.template === "countdown" ? { "List-Unsubscribe": `<${FN_URL}?unsub=${j.data?.unsub}>` } : undefined });
       await sb.from("email_outbox").update({ status: "sent", sent_at: new Date().toISOString(), attempts: j.attempts + 1, error: null }).eq("id", j.id);
       sent++;

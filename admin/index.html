@@ -896,7 +896,7 @@
           '</div></div>' : '') +
         '<div class="actions">' +
           (editable ? '<button class="btn" type="button" data-ld="draft">' + (l.body ? 'Napiši ponovo' : (l.step >= 1 ? 'Napiši podsjetnik' : 'Napiši mail')) + '</button>' : '') +
-          (editable && l.body && l.email && l.email_ok !== false ? '<button class="btn dark" type="button" data-ld="send">Pošalji sa melvis@hadzic.com</button>' : '') +
+          (editable && l.body && l.email && l.email_ok !== false ? '<button class="btn dark" type="button" data-ld="send">Pošalji sa melvis.hadzic@cpsarajevo.ba</button>' : '') +
           (['poslano', 'u_redu', 'followup'].includes(l.status) ? '<button class="btn" type="button" data-ld="odgovorili">Odgovorili</button>' : '') +
           (['poslano', 'odgovorili', 'followup'].includes(l.status) ? '<button class="btn wa" type="button" data-ld="zainteresovani">Zainteresovani</button><button class="btn" type="button" data-ld="nije_zainteresovan">Ne žele</button>' : '') +
           (editable ? '<button class="btn" type="button" data-ld="preskoceno">Preskoči</button>' : '') +
@@ -1015,7 +1015,7 @@
       return loadLeads();
     }
     if (act === 'send') {
-      if (!b.dataset.sure) { b.dataset.sure = '1'; b.textContent = 'Klikni opet: šalje na ' + lead.email; setTimeout(() => { delete b.dataset.sure; b.textContent = 'Pošalji sa melvis@hadzic.com'; }, 5000); return; }
+      if (!b.dataset.sure) { b.dataset.sure = '1'; b.textContent = 'Klikni opet: šalje na ' + lead.email; setTimeout(() => { delete b.dataset.sure; b.textContent = 'Pošalji sa melvis.hadzic@cpsarajevo.ba'; }, 5000); return; }
       b.disabled = true;
       const attachments = [...card.querySelectorAll('[data-att]:checked')].map((x) => Number(x.dataset.att));
       const r = await ldCall({ action: 'send', id, subject: card.querySelector('[data-subj]').value, body: card.querySelector('[data-body]').value, attachments });
