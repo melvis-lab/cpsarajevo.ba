@@ -64,7 +64,7 @@
     const lang = (document.documentElement.lang || 'bs').slice(0, 2);
     const T = {
       bs: { aria: 'Kolačići', text: 'Koristimo kolačiće da vidimo šta je posjetiocima zanimljivo na stranici. Bez tvog pristanka ništa ne bilježimo.', priv: 'Privatnost', href: '/privatnost/', no: 'Odbijam', yes: 'Prihvatam' },
-      en: { aria: 'Cookies', text: 'We use cookies to see what visitors find interesting on the site. Nothing is recorded without your consent.', priv: 'Privacy', href: '/privatnost/', no: 'Decline', yes: 'Accept' },
+      en: { aria: 'Cookies', text: 'We use cookies to see what visitors find interesting on the site. Nothing is recorded without your consent.', priv: 'Privacy', href: '/en/privatnost/', no: 'Decline', yes: 'Accept' },
       ar: { aria: 'ملفات تعريف الارتباط', text: 'نستخدم ملفات تعريف الارتباط لنعرف ما يهمّ زوّار الموقع. لا نسجّل أي شيء دون موافقتك.', priv: 'الخصوصية', href: '/ar/privatnost/', no: 'أرفض', yes: 'أوافق' },
     }[lang] || null;
     const t = T || { aria: 'Kolačići', text: 'Koristimo kolačiće da vidimo šta je posjetiocima zanimljivo na stranici. Bez tvog pristanka ništa ne bilježimo.', priv: 'Privatnost', href: '/privatnost/', no: 'Odbijam', yes: 'Prihvatam' };

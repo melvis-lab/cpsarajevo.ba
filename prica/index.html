@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <link rel="canonical" href="https://cpsarajevo.ba/prica/">
 <link rel="alternate" hreflang="bs" href="https://cpsarajevo.ba/prica/">
+<link rel="alternate" hreflang="en" href="https://cpsarajevo.ba/en/prica/">
 <link rel="alternate" hreflang="ar" href="https://cpsarajevo.ba/ar/prica/">
 <link rel="alternate" hreflang="x-default" href="https://cpsarajevo.ba/prica/">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -133,7 +134,7 @@ footer{border-top:1px solid var(--line);padding:28px 20px;text-align:center;font
 <nav>
   <a class='back' data-en='← Back' href='/#prica'>← Nazad</a>
   <a aria-label='Collection Premium' href='/'><img src="/img/brand/logo-nav.webp" alt="Collection Premium"></a>
-  <div class="lang" id="lang" role="group" aria-label="Jezik / Language / اللغة"><a data-l="bs" href="/prica/?lang=bs" lang="bs">BS</a><a data-l="en" href="/prica/?lang=en" lang="en">EN</a><a data-l="ar" href="/ar/prica/" lang="ar">عربي</a></div>
+  <div class="lang" id="lang" role="group" aria-label="Jezik / Language / اللغة"><a data-l="bs" href="/prica/" lang="bs">BS</a><a data-l="en" href="/en/prica/" lang="en">EN</a><a data-l="ar" href="/ar/prica/" lang="ar">عربي</a></div>
 </nav>
 
 <header class="hero">
@@ -239,12 +240,9 @@ footer{border-top:1px solid var(--line);padding:28px 20px;text-align:center;font
 <footer>Collection Premium Paris · by MESO · Sarajevo</footer>
 
 <script>
-(()=>{const AR=document.documentElement.lang==='ar';let LANG=AR?'ar':'bs';if(!AR){try{const q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='bs'){sessionStorage.setItem('lang',q);history.replaceState(null,'',location.pathname+location.hash);}const s=sessionStorage.getItem('lang');if(s==='en'||s==='bs')LANG=s;}catch(e){}}
-const els=[...document.querySelectorAll('[data-en]')];els.forEach(el=>el.dataset.bs=el.innerHTML);
-const apply=()=>{if(AR){document.querySelectorAll('#lang [data-l]').forEach(s=>s.classList.toggle('on',s.dataset.l==='ar'));return;}document.documentElement.lang=LANG;els.forEach(el=>el.innerHTML=LANG==='en'?el.dataset.en:el.dataset.bs);
- document.querySelectorAll('#lang [data-l]').forEach(s=>s.classList.toggle('on',s.dataset.l===LANG));
- document.title=LANG==='en'?'The story of MESO · Collection Premium Sarajevo':'Priča o MESO-u · Collection Premium Sarajevo';};
-apply();document.querySelectorAll('#lang [data-l]').forEach(a=>a.addEventListener('click',e=>{const l=a.dataset.l;if(l==='ar'||AR)return;e.preventDefault();LANG=l;try{sessionStorage.setItem('lang',LANG);history.replaceState(null,'',location.pathname)}catch(e){}apply();}));
+(()=>{const LANG=document.documentElement.lang;
+if(LANG==='bs'&&new URLSearchParams(location.search).get('lang')==='en')location.replace('/en/prica/');
+document.querySelectorAll('#lang [data-l]').forEach(s=>s.classList.toggle('on',s.dataset.l===LANG));
 const bar=document.getElementById('bar');const up=()=>{const h=document.documentElement;bar.style.transform=`scaleX(${h.scrollTop/(h.scrollHeight-innerHeight)})`;};const nav=document.querySelector('nav');const up2=()=>nav.classList.toggle('solid',scrollY>40);addEventListener('scroll',()=>{up();up2();},{passive:true});up();up2();
 const mv=()=>{const m=document.querySelector('.map');if(m)m.setAttribute('viewBox',matchMedia('(max-width:720px)').matches?'110 70 980 612':'0 0 1200 720');};mv();matchMedia('(max-width:720px)').addEventListener('change',mv);
 const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');if(x.target.classList.contains('journey')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const a=document.getElementById('trav');try{a&&a.beginElement()}catch(e){}}io.unobserve(x.target);}}),{rootMargin:'0px 0px -10% 0px'});

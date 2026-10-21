@@ -8,24 +8,29 @@ Website for Collection Premium Sarajevo (Collection Premium Paris, official part
 - `js/cp-backend.js`: Supabase client, cookie consent, click tracking, reservations
 - `film/`, `img/`, `vendor/`: media and libraries
 - `docs/`: integration notes and the SEO head snippet
-- `ar/`: Arabic pages (right-to-left). **Generated, do not edit by hand.**
+- `en/`, `ar/`: English and Arabic pages. **Generated, do not edit by hand** (except the privacy pages).
 
-## Arabic version (/ar/)
+## English (/en/) and Arabic (/ar/)
 
-`ar/index.html` and `ar/prica/index.html` are built from the Bosnian pages:
+Each language has its own address: `/` Bosnian, `/en/` English, `/ar/` Arabic (right-to-left).
+`en/index.html`, `en/prica/index.html`, `ar/index.html` and `ar/prica/index.html` are built from the Bosnian pages:
 
 ```
-python3 tools/build_ar.py
+python3 tools/build_pages.py
 ```
 
 Run it after every change to `index.html` or `prica/index.html`, and commit the result.
-It writes the Arabic text straight into the HTML (crawlable by Google and AI assistants) and
-regenerates `js/i18n-ar.js` for the parts JavaScript draws (quiz, scent sheets, reviews).
-It stops and lists the strings if any English text (`data-en`) has no Arabic yet:
-add them to `tools/ar-home.json` or `tools/ar-prica.json` (keyed by the English text).
+English comes from the `data-en` attributes; Arabic is looked up by that English text in
+`tools/ar-home.json` and `tools/ar-prica.json`. The build stops and lists any string with no Arabic yet.
+`js/i18n-ar.js` (generated) covers what JavaScript draws on the Arabic page (quiz, scent sheets, reviews).
 
 - `css/ar.css`: Arabic fonts (Amiri, IBM Plex Sans Arabic) and right-to-left layout fixes
-- `ar/privatnost/index.html`: hand-written Arabic privacy page (update it when the Bosnian one changes)
+- `en/privatnost/`, `ar/privatnost/`: hand-written translations; update them when the Bosnian privacy page changes
 - The Arabic pages play the English films. Bottle names stay in Latin letters.
+- Old links with `?lang=en` forward to `/en/`.
 
-Backend: Supabase project `collection-premium-sarajevo` (eu-central-1). Schema changes go through migrations, not from the site.
+## Reservations
+
+The form saves to Supabase (admin) and Netlify Forms (email) at the same time and shows "thank you"
+if either one worked. If both fail, the visitor gets a WhatsApp link with the reservation prefilled.
+Each attempt is logged as event `reserve_saved` with label `db/no-db form/no-form`.

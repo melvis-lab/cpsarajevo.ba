@@ -51,3 +51,4 @@ html[lang=ar] .qz-notes em{margin-inline-end:.45em}
 html[lang=ar] .drop::first-letter{float:none;font:inherit;padding:0;color:inherit;line-height:inherit}
 html[lang=ar] blockquote{border-left:0;border-right:1px solid var(--gold);padding:0 clamp(18px,3vw,28px) 0 0}
 html[lang=ar] article p{line-height:2}
+html[lang=ar] a.wa{right:auto;left:16px;padding:.75rem .85rem .75rem 1.05rem}

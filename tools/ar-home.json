@@ -236,7 +236,6 @@
 "Address (optional)": "العنوان أو اسم الفندق (اختياري)",
 "Referral code (optional)": "رمز الإحالة (اختياري)",
 "Note": "ملاحظة",
-"I agree to be contacted about my reservation. See the privacy note.": "أوافق على أن تتواصلوا معي بخصوص حجزي.",
 "Reserve now": "احجز الآن",
 "No payment now. We open on 1 January and you’ll hear from us first, before anyone else.": "لا دفع الآن. نفتتح في 1 يناير وستكون أول من نتواصل معه.",
 "Your scent is reserved. You’ll be among the first to hear from us before 1 January.": "تمّ حجز عطرك. ستكون من أوائل من نتواصل معهم قبل 1 يناير.",
@@ -382,11 +381,18 @@
 "Which one are you?": "وأنت، أيّ عطرٍ أنت؟",
 "50 ml · price revealed on 1 January": "50 مل · يُعلن السعر في 1 يناير",
 "Sending…": "جارٍ الإرسال…",
-"Something went wrong, please try again": "حدث خطأ، يُرجى المحاولة مجددًا",
 "Price revealed on 1 January": "يُعلن السعر في 1 يناير",
 "Next: ": "التالي: ",
 "Film · ": "فيلم · ",
 "You’ve discovered all 12. Which one is yours?": "اكتشفت العطور الاثني عشر كلها. أيّها عطرك؟",
 "Sending failed. Please try again or message us on Instagram.": "تعذّر الإرسال. حاول مجددًا أو راسلنا على إنستغرام.",
-"Answer five quick questions and the quiz will suggest a scent. Still not sure? Ask us. We reply personally.": "أجب عن خمسة أسئلة قصيرة وسيقترح عليك الاختبار عطرًا. وإن بقيت مترددًا، اسألنا، فنحن نردّ عليك شخصيًّا."
+"Answer five quick questions and the quiz will suggest a scent. Still not sure? Ask us. We reply personally.": "أجب عن خمسة أسئلة قصيرة وسيقترح عليك الاختبار عطرًا. وإن بقيت مترددًا، اسألنا، فنحن نردّ عليك شخصيًّا.",
+"Phone (WhatsApp or Viber)": "الهاتف (واتساب أو فايبر)",
+"More options: quantity, email, address, note": "خيارات إضافية: الكمية، البريد، العنوان، ملاحظة",
+"I agree to be contacted about my reservation. <a href=\"/en/privatnost/\">Privacy</a>": "أوافق على أن تتواصلوا معي بخصوص حجزي. <a href=\"/ar/privatnost/\">الخصوصية</a>",
+"Hi! I’m interested in Collection Premium Sarajevo.": "مرحبًا! أودّ الاستفسار عن عطور Collection Premium Sarajevo.",
+"Hi! I’d like to reserve ": "مرحبًا! أودّ حجز عطر ",
+"Sending failed. Please try again or ": "تعذّر الإرسال. حاول مجددًا أو ",
+"message us on WhatsApp": "راسلنا على واتساب",
+"Message us on WhatsApp": "راسلنا على واتساب"
 }
