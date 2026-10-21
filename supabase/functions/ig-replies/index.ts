@@ -205,6 +205,27 @@ async function notifyAdmin(row: { id: number; kind: string; username: string | n
   });
 }
 
+// ---------- creators: fixed replies, no Claude needed ----------
+// "CPS-1234" verifies a creator (the database trigger marks the profile), "KREATOR" gets the sign-up link.
+const CODE = /CPS[\s-]?(\d{4})/i;
+async function creatorReply(text: string, username: string | null): Promise<string | null> {
+  const m = text.match(CODE);
+  if (m) {
+    const code = "CPS-" + m[1];
+    const { data: c } = await sb.from("creators").select("full_name,instagram,dm_verified_at").eq("verify_code", code).maybeSingle();
+    if (!c) return `Kod ${code} ne prepoznajemo. Provjeri kod iz emaila ili se prijavi ovdje: ${SITE}/kreatori/`;
+    const first = String(c.full_name ?? "").split(" ")[0];
+    if (username && username.toLowerCase() !== c.instagram) {
+      return `Kod ${code} je prijavljen za profil @${c.instagram}, a poruka je stigla s @${username}. Pošalji kod s profila @${c.instagram} da potvrdiš prijavu.`;
+    }
+    return `Hvala${first ? ", " + first : ""}! Profil @${c.instagram} je potvrđen i tvoja prijava za kreatore je kompletna. Lično pregledamo profile i javljamo se emailom nakon 31. oktobra 🤍`;
+  }
+  if (/^\W*kreator(ka|i)?\W*$/i.test(text) || (/kreator/i.test(text) && text.length <= 60 && !/\?/.test(text))) {
+    return `Super, drago nam je! Prijava za kreatore traje dvije minute: ${SITE}/kreatori/ Nakon prijave dobiješ kod koji nam pošalješ ovdje u poruci, i to je to. Prijave traju do 31. oktobra.`;
+  }
+  return null;
+}
+
 // ---------- handlers ----------
 async function handleDM(ownId: string, ev: any) {
   const senderId = ev.sender?.id, msg = ev.message;
@@ -218,6 +239,17 @@ async function handleDM(ownId: string, ev: any) {
     .insert({ kind: "dm", direction: "in", ig_user_id: senderId, username, mid: msg.mid, text })
     .select("id").single();
   if (error) return;                                       // duplicate delivery from Meta
+
+  const fixed = await creatorReply(text, username).catch(() => null);
+  if (fixed) {
+    try {
+      await igSendDM(senderId, fixed);
+      await sb.from("ig_messages").update({ status: "poslano_auto", draft: fixed, reason: "Kreatori: automatski odgovor", sent_at: new Date().toISOString() }).eq("id", row.id);
+    } catch (e) {
+      await sb.from("ig_messages").update({ status: "greska", draft: fixed, error: String(e).slice(0, 500) }).eq("id", row.id);
+    }
+    return;
+  }
 
   const { data: hist } = await sb.from("ig_messages").select("status,text,draft")
     .eq("ig_user_id", senderId).lt("id", row.id).in("status", ["poslano_auto", "poslano", "nova", "ceka", "preskoceno"])
@@ -330,6 +362,11 @@ async function manychat(body: any) {
   const { data: row } = await sb.from("ig_messages")
     .insert({ kind: "dm", direction: "in", ig_user_id: "mc_" + userId, username: body.username ?? null, mid: "mc_" + userId + "_" + Date.now(), text })
     .select("id").single();
+  const fixed = await creatorReply(text, body.username ?? null).catch(() => null);
+  if (fixed) {
+    await sb.from("ig_messages").update({ status: "poslano_auto", draft: fixed, reason: "Kreatori: automatski odgovor", sent_at: new Date().toISOString() }).eq("id", row!.id);
+    return json({ reply: fixed, auto: true });
+  }
   if ((count ?? 0) > 600) {
     await sb.from("ig_messages").update({ status: "ceka", reason: "Dnevni limit dostignut" }).eq("id", row!.id);
     return json({ reply: HOLD, auto: false });

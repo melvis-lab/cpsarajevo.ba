@@ -164,6 +164,38 @@ async function render(t: string, d: Record<string, any>, to: string): Promise<{ 
           button(pr ? `Rezerviši ${pr.name}` : "Rezerviši svoj miris", `${SITE}/?utm_source=email&utm_medium=countdown&utm_campaign=odbrojavanje#kolekcija`),
         footer: `Primaš ovo jer si se prijavio/la na odbrojavanje. <a href="${unsub}" style="color:#bcae99">Odjavi se</a>` }) };
     }
+    // ---------- creators (kreatori) ----------
+    case "creator_received": return {
+      subject: `Još jedan korak: tvoj kod ${d.verify_code} · Collection Premium Sarajevo`,
+      html: layout({ pre: `Pošalji kod ${d.verify_code} u DM sa @${d.instagram} i prijava je potvrđena.`, eyebrow: "Kreatori · prijava", title: `${hi(d.name)}hvala<br><em style="color:${C.gold}">na prijavi.</em>`,
+        body: p(`Još jedan korak: potvrdi da je <b>@${esc(d.instagram)}</b> tvoj profil. Pošalji nam ovaj kod kao poruku (DM) sa tog profila na <b>@collectionpremiumsarajevo</b>:`) +
+          `<p style="margin:18px 0;padding:18px;text-align:center;background:${C.paper};border:1px dashed ${C.gold};border-radius:14px;font-family:${serif};font-size:34px;letter-spacing:.08em;color:${C.text}">${esc(d.verify_code)}</p>` +
+          button("Otvori Instagram poruke", "https://ig.me/m/collectionpremiumsarajevo") +
+          p("Kad kod stigne, prijava je potvrđena automatski. Zatim lično pregledamo profil. Biramo 10 kreatora i javljamo se svima emailom nakon 31. oktobra.") +
+          p(`<span style="color:${C.muted};font-size:14px">Status prijave vidiš na <a href="${SITE}/kreator/?k=${esc(d.token)}" style="color:${C.gold}">svojoj stranici</a>.</span>`) }) };
+    case "creator_approved": return {
+      subject: "Izabran/a si · Collection Premium Sarajevo",
+      html: layout({ pre: "Dobrodošao/la u tim kreatora. Tvoj kod čeka na tvojoj stranici.", eyebrow: "Kreatori · odobreno", title: `${hi(d.name)}dobrodošao/la<br><em style="color:${C.gold}">u tim.</em>`,
+        body: p("Izabrali smo te za saradnju s Collection Premium Sarajevo. Hvala ti što si se prijavio/la.") +
+          p("<b>Sljedeći korak:</b> otvori svoju stranicu, pročitaj pravila i potvrdi ih jednim klikom. Tada se aktivira tvoj lični kod i link, i vidiš koliko je rezervacija stiglo preko tebe.") +
+          button("Otvori svoju stranicu", `${SITE}/kreator/?k=${esc(d.token)}`) +
+          p(`<span style="color:${C.muted};font-size:14px">Za preuzimanje paketa javljamo ti se telefonom ili emailom. Pitanje? Samo odgovori na ovaj email.</span>`) }) };
+    case "creator_rejected": return {
+      subject: "Tvoja prijava · Collection Premium Sarajevo",
+      html: layout({ pre: "Hvala na prijavi za saradnju.", eyebrow: "Kreatori", title: "Hvala na prijavi.",
+        body: p(`${hi(d.name)}hvala što si se prijavio/la. Ovaj put smo izabrali druge profile, jer je mjesta samo za 10 kreatora.`) +
+          p("To nije zauvijek. Kad otvorimo sljedeći krug saradnje, rado ćemo ti se javiti.") +
+          button("Pogledaj kolekciju", `${SITE}/#kolekcija`) }) };
+    case "admin_new_creator": return {
+      subject: `Novi kreator: @${d.instagram}${d.followers ? " · " + d.followers + " pratilaca" : ""}`,
+      html: layout({ pre: `${d.name} se prijavio/la kao kreator.`, eyebrow: "Admin · kreatori", title: "@" + esc(d.instagram),
+        body: rows([["Ime", d.name], ["Email", d.email], ["Telefon", d.phone], ["Grad", d.city], ["Pratilaca (kaže)", d.followers], ["Sadržaj", d.niche], ["Poruka", d.note], ["Kod za DM", d.verify_code]]) +
+          p(`<span style="color:${C.muted};font-size:14px">Kad pošalje kod u DM, u adminu se pojavi oznaka "DM potvrđen".</span>`) +
+          button("Otvori kreatore", `${admin}#kreatori`) }) };
+    case "admin_creator_committed": return {
+      subject: `Kreator potvrdio pravila: @${d.instagram} · kod ${d.ref_code}`,
+      html: layout({ pre: `@${d.instagram} je potvrdio/la pravila. Kod ${d.ref_code} je aktivan.`, eyebrow: "Admin · kreatori", title: `Kod <em style="color:${C.gold}">${esc(d.ref_code)}</em> je aktivan`,
+        body: rows([["Kreator", d.name], ["Instagram", "@" + d.instagram], ["Kod", d.ref_code]]) + button("Otvori kreatore", `${admin}#kreatori`) }) };
     // ---------- to Melvis ----------
     case "admin_new_account": return {
       subject: `Novi račun: ${d.full_name || d.email} (${KIND[d.account_type] ?? d.account_type})${d.approval_status === "na_cekanju" ? " · čeka odobrenje" : ""}`,
