@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <link rel="canonical" href="https://cpsarajevo.ba/prica/">
+<link rel="alternate" hreflang="bs" href="https://cpsarajevo.ba/prica/">
+<link rel="alternate" hreflang="ar" href="https://cpsarajevo.ba/ar/prica/">
+<link rel="alternate" hreflang="x-default" href="https://cpsarajevo.ba/prica/">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Priča o MESO-u · Collection Premium Sarajevo</title>
 <meta name="description" content="Gdje je sve počelo: putovanje kroz vrijeme i miris, od Mezopotamije do Sarajeva.">
@@ -27,7 +30,7 @@ img{display:block;max-width:100%}
 nav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:18px clamp(16px,4vw,48px);background:linear-gradient(rgba(14,11,9,.85),transparent)}
 nav a.back{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;text-decoration:none;color:var(--cream-2);transition:color 200ms ease}
 nav img{height:30px;width:auto}
-.lang{background:none;border:0;color:var(--muted);font:inherit;font-size:.72rem;letter-spacing:.2em;cursor:pointer;padding:.5rem}
+.lang{display:flex;color:var(--muted);font-size:.72rem;letter-spacing:.2em}.lang a{color:inherit;text-decoration:none;padding:.5rem .4rem}.lang a[lang=ar]{letter-spacing:0;font-size:.82rem}
 .lang .on{color:var(--gold-2)}
 @media (hover:hover) and (pointer:fine){nav a.back:hover{color:var(--gold-2)}}
 .hero{position:relative;height:100vh;height:100svh;min-height:560px;display:grid;align-items:end;overflow:hidden}
@@ -130,7 +133,7 @@ footer{border-top:1px solid var(--line);padding:28px 20px;text-align:center;font
 <nav>
   <a class='back' data-en='← Back' href='/#prica'>← Nazad</a>
   <a aria-label='Collection Premium' href='/'><img src="/img/brand/logo-nav.webp" alt="Collection Premium"></a>
-  <button class="lang" id="lang" aria-label="Promijeni jezik / Change language"><span data-l="bs">BS</span> / <span data-l="en">EN</span></button>
+  <div class="lang" id="lang" role="group" aria-label="Jezik / Language / اللغة"><a data-l="bs" href="/prica/?lang=bs" lang="bs">BS</a><a data-l="en" href="/prica/?lang=en" lang="en">EN</a><a data-l="ar" href="/ar/prica/" lang="ar">عربي</a></div>
 </nav>
 
 <header class="hero">
@@ -188,7 +191,7 @@ footer{border-top:1px solid var(--line);padding:28px 20px;text-align:center;font
 <text class="sea" x="449.9" y="531.7" text-anchor="middle" data-en="Mediterranean Sea">Sredozemno more</text>
 <text class="sea sm" x="143.5" y="214.0" text-anchor="middle" data-en="Adriatic">Jadran</text>
 <text class="rv-l" x="857.9" y="507.7" text-anchor="middle" transform="rotate(-28 857.9 507.7)" data-en="Euphrates">Eufrat</text>
-<text class="rv-l" x="992.4" y="507.8" text-anchor="middle" transform="rotate(-58 992.4 507.8)">Tigris</text>
+<text class="rv-l" x="992.4" y="507.8" text-anchor="middle" transform="rotate(-58 992.4 507.8)" data-en="Tigris">Tigris</text>
 <path class="route-base" d="M992.5,587.5C992.5,587.5,966.7,561.9,951.9,553.6C937.5,545.5,920.2,544.1,905.2,537.7C890.1,531.2,875.6,524.5,861.7,515C846.4,504.5,832.4,484.2,817.7,476.5C806.1,470.4,794.4,468.6,783,467.5C772.1,466.4,760.1,473.0,750.9,469.4C741.1,465.5,736.1,448.8,726.3,443.9C716.6,439.0,703.8,442.9,692.4,439.5C679.2,435.5,666.4,424.5,652.3,419.6C637.7,414.5,620.9,418.9,606.2,409.9C585.4,397.2,560.4,358.4,547.6,337.7C539.1,324.0,538.9,309.2,530.8,301C523.8,293.9,515.3,293.3,504.4,288.4C486.9,280.5,457.0,268.4,436,259.6C417.9,252.0,401.0,246.5,385.7,238.5C371.6,231.1,359.7,222.4,347.1,213.7C334.4,204.9,323.1,189.9,309.8,186C297.4,182.3,283.9,191.9,270.4,188.4C252.9,183.8,216,153.1,216,153.1"/>
 <path class="route-glow" d="M992.5,587.5C992.5,587.5,966.7,561.9,951.9,553.6C937.5,545.5,920.2,544.1,905.2,537.7C890.1,531.2,875.6,524.5,861.7,515C846.4,504.5,832.4,484.2,817.7,476.5C806.1,470.4,794.4,468.6,783,467.5C772.1,466.4,760.1,473.0,750.9,469.4C741.1,465.5,736.1,448.8,726.3,443.9C716.6,439.0,703.8,442.9,692.4,439.5C679.2,435.5,666.4,424.5,652.3,419.6C637.7,414.5,620.9,418.9,606.2,409.9C585.4,397.2,560.4,358.4,547.6,337.7C539.1,324.0,538.9,309.2,530.8,301C523.8,293.9,515.3,293.3,504.4,288.4C486.9,280.5,457.0,268.4,436,259.6C417.9,252.0,401.0,246.5,385.7,238.5C371.6,231.1,359.7,222.4,347.1,213.7C334.4,204.9,323.1,189.9,309.8,186C297.4,182.3,283.9,191.9,270.4,188.4C252.9,183.8,216,153.1,216,153.1" pathLength="1" filter="url(#glow)"/>
 <path class="route" id="routeP" d="M992.5,587.5C992.5,587.5,966.7,561.9,951.9,553.6C937.5,545.5,920.2,544.1,905.2,537.7C890.1,531.2,875.6,524.5,861.7,515C846.4,504.5,832.4,484.2,817.7,476.5C806.1,470.4,794.4,468.6,783,467.5C772.1,466.4,760.1,473.0,750.9,469.4C741.1,465.5,736.1,448.8,726.3,443.9C716.6,439.0,703.8,442.9,692.4,439.5C679.2,435.5,666.4,424.5,652.3,419.6C637.7,414.5,620.9,418.9,606.2,409.9C585.4,397.2,560.4,358.4,547.6,337.7C539.1,324.0,538.9,309.2,530.8,301C523.8,293.9,515.3,293.3,504.4,288.4C486.9,280.5,457.0,268.4,436,259.6C417.9,252.0,401.0,246.5,385.7,238.5C371.6,231.1,359.7,222.4,347.1,213.7C334.4,204.9,323.1,189.9,309.8,186C297.4,182.3,283.9,191.9,270.4,188.4C252.9,183.8,216,153.1,216,153.1" pathLength="1"/>
@@ -201,8 +204,8 @@ footer{border-top:1px solid var(--line);padding:28px 20px;text-align:center;font
   <ol class="stops">
     <li data-i="meso"><b>01</b><strong data-en="Mesopotamia">Mezopotamija</strong><span data-en="The land between the Euphrates and the Tigris, where the first perfumes were made.">Zemlja između Eufrata i Tigrisa, gdje su nastali prvi parfemi.</span></li>
     <li data-i="alep"><b>02</b><strong data-en="Aleppo">Alep</strong><span data-en="Markets of spices and resins on the caravan road.">Tržnice začina i smola na putu karavana.</span></li>
-    <li data-i="ist"><b>03</b><strong>Istanbul</strong><span data-en="Where East meets West, and scents change hands and names.">Gdje se Istok sreće sa Zapadom, a mirisi mijenjaju ruke i imena.</span></li>
-    <li data-i="sar"><b>04</b><strong>Sarajevo</strong><span data-en="The inns of Baščaršija: the end of a long road, and a new beginning.">Hanovi na Baščaršiji: kraj dugog puta i novi početak.</span></li>
+    <li data-i="ist"><b>03</b><strong data-en="Istanbul">Istanbul</strong><span data-en="Where East meets West, and scents change hands and names.">Gdje se Istok sreće sa Zapadom, a mirisi mijenjaju ruke i imena.</span></li>
+    <li data-i="sar"><b>04</b><strong data-en="Sarajevo">Sarajevo</strong><span data-en="The inns of Baščaršija: the end of a long road, and a new beginning.">Hanovi na Baščaršiji: kraj dugog puta i novi početak.</span></li>
   </ol>
 </section>
 
@@ -236,12 +239,12 @@ footer{border-top:1px solid var(--line);padding:28px 20px;text-align:center;font
 <footer>Collection Premium Paris · by MESO · Sarajevo</footer>
 
 <script>
-(()=>{let LANG='bs';try{LANG=sessionStorage.getItem('lang')||'bs'}catch(e){}
+(()=>{const AR=document.documentElement.lang==='ar';let LANG=AR?'ar':'bs';if(!AR){try{const q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='bs'){sessionStorage.setItem('lang',q);history.replaceState(null,'',location.pathname+location.hash);}const s=sessionStorage.getItem('lang');if(s==='en'||s==='bs')LANG=s;}catch(e){}}
 const els=[...document.querySelectorAll('[data-en]')];els.forEach(el=>el.dataset.bs=el.innerHTML);
-const apply=()=>{document.documentElement.lang=LANG;els.forEach(el=>el.innerHTML=LANG==='en'?el.dataset.en:el.dataset.bs);
+const apply=()=>{if(AR){document.querySelectorAll('#lang [data-l]').forEach(s=>s.classList.toggle('on',s.dataset.l==='ar'));return;}document.documentElement.lang=LANG;els.forEach(el=>el.innerHTML=LANG==='en'?el.dataset.en:el.dataset.bs);
  document.querySelectorAll('#lang [data-l]').forEach(s=>s.classList.toggle('on',s.dataset.l===LANG));
  document.title=LANG==='en'?'The story of MESO · Collection Premium Sarajevo':'Priča o MESO-u · Collection Premium Sarajevo';};
-apply();document.getElementById('lang').onclick=()=>{LANG=LANG==='en'?'bs':'en';try{sessionStorage.setItem('lang',LANG)}catch(e){}apply();};
+apply();document.querySelectorAll('#lang [data-l]').forEach(a=>a.addEventListener('click',e=>{const l=a.dataset.l;if(l==='ar'||AR)return;e.preventDefault();LANG=l;try{sessionStorage.setItem('lang',LANG);history.replaceState(null,'',location.pathname)}catch(e){}apply();}));
 const bar=document.getElementById('bar');const up=()=>{const h=document.documentElement;bar.style.transform=`scaleX(${h.scrollTop/(h.scrollHeight-innerHeight)})`;};const nav=document.querySelector('nav');const up2=()=>nav.classList.toggle('solid',scrollY>40);addEventListener('scroll',()=>{up();up2();},{passive:true});up();up2();
 const mv=()=>{const m=document.querySelector('.map');if(m)m.setAttribute('viewBox',matchMedia('(max-width:720px)').matches?'110 70 980 612':'0 0 1200 720');};mv();matchMedia('(max-width:720px)').addEventListener('change',mv);
 const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');if(x.target.classList.contains('journey')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const a=document.getElementById('trav');try{a&&a.beginElement()}catch(e){}}io.unobserve(x.target);}}),{rootMargin:'0px 0px -10% 0px'});

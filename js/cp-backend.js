@@ -61,18 +61,27 @@
 
   function banner() {
     if (store.get(CONSENT_KEY) || isAdminPage) return;
+    const lang = (document.documentElement.lang || 'bs').slice(0, 2);
+    const T = {
+      bs: { aria: 'Kolačići', text: 'Koristimo kolačiće da vidimo šta je posjetiocima zanimljivo na stranici. Bez tvog pristanka ništa ne bilježimo.', priv: 'Privatnost', href: '/privatnost/', no: 'Odbijam', yes: 'Prihvatam' },
+      en: { aria: 'Cookies', text: 'We use cookies to see what visitors find interesting on the site. Nothing is recorded without your consent.', priv: 'Privacy', href: '/privatnost/', no: 'Decline', yes: 'Accept' },
+      ar: { aria: 'ملفات تعريف الارتباط', text: 'نستخدم ملفات تعريف الارتباط لنعرف ما يهمّ زوّار الموقع. لا نسجّل أي شيء دون موافقتك.', priv: 'الخصوصية', href: '/ar/privatnost/', no: 'أرفض', yes: 'أوافق' },
+    }[lang] || null;
+    const t = T || { aria: 'Kolačići', text: 'Koristimo kolačiće da vidimo šta je posjetiocima zanimljivo na stranici. Bez tvog pristanka ništa ne bilježimo.', priv: 'Privatnost', href: '/privatnost/', no: 'Odbijam', yes: 'Prihvatam' };
+    const ar = lang === 'ar';
     const b = document.createElement('div');
     b.setAttribute('role', 'dialog');
-    b.setAttribute('aria-label', 'Kolačići');
+    b.setAttribute('aria-label', t.aria);
+    b.setAttribute('data-cookie', '');
+    if (ar) b.setAttribute('dir', 'rtl');
     b.style.cssText = 'position:fixed;left:16px;right:16px;bottom:16px;z-index:110;max-width:560px;margin:0 auto;' +
       'background:#17120e;color:#f6efe3;border:1px solid #c9a46a55;border-radius:14px;padding:16px 18px;' +
-      'font:14px/1.5 Jost,system-ui,sans-serif;box-shadow:0 10px 40px #0008';
+      'font:' + (ar ? '15px/1.7 "IBM Plex Sans Arabic",' : '14px/1.5 Jost,') + 'system-ui,sans-serif;box-shadow:0 10px 40px #0008';
     b.innerHTML =
-      '<div style="margin-bottom:12px">Koristimo kolačiće da vidimo šta je posjetiocima zanimljivo na stranici. ' +
-      'Bez tvog pristanka ništa ne bilježimo. <a href="/privatnost" style="color:#e2c58f">Privatnost</a></div>' +
+      '<div style="margin-bottom:12px">' + t.text + ' <a href="' + t.href + '" style="color:#e2c58f">' + t.priv + '</a></div>' +
       '<div style="display:flex;gap:10px;justify-content:flex-end">' +
-      '<button data-c="no" style="background:none;border:1px solid #f6efe355;color:#f6efe3;border-radius:999px;padding:8px 16px;cursor:pointer">Odbijam</button>' +
-      '<button data-c="yes" style="background:#c9a46a;border:0;color:#0e0b09;border-radius:999px;padding:8px 18px;cursor:pointer;font-weight:600">Prihvatam</button></div>';
+      '<button data-c="no" style="font:inherit;background:none;border:1px solid #f6efe355;color:#f6efe3;border-radius:999px;padding:8px 16px;cursor:pointer">' + t.no + '</button>' +
+      '<button data-c="yes" style="font:inherit;background:#c9a46a;border:0;color:#0e0b09;border-radius:999px;padding:8px 18px;cursor:pointer;font-weight:600">' + t.yes + '</button></div>';
     b.addEventListener('click', (e) => {
       const c = e.target.getAttribute && e.target.getAttribute('data-c');
       if (!c) return;
@@ -113,7 +122,7 @@
   // every link, button and [data-track] element
   document.addEventListener('click', (e) => {
     const el = e.target.closest('[data-track], a, button');
-    if (!el || el.closest('[role="dialog"][aria-label="Kolačići"]')) return;
+    if (!el || el.closest('[data-cookie]')) return;
     const name = el.getAttribute('data-track') || el.id || (el.tagName === 'A' ? 'link' : 'button');
     const label = (el.getAttribute('aria-label') || el.textContent || '').trim().replace(/\s+/g, ' ');
     const href = el.tagName === 'A' ? el.getAttribute('href') : null;
@@ -143,7 +152,7 @@
     };
     // no .select(): guests may insert but not read the row back
     const { error } = await sb.from('reservations').insert(row);
-    if (error) return { error: 'Rezervacija nije prošla. Pokušaj ponovo ili nam piši na WhatsApp.' };
+    if (error) return { error: 'Rezervacija nije prošla. Pokušaj ponovo ili nam piši na WhatsApp.', detail: error.message };
     track('reserve_submit', { element: 'reservation', label: row.product_slug + ' x' + row.quantity });
     if (window.fbq) window.fbq('track', 'Lead', { content_name: row.product_slug });
     return { ok: true };

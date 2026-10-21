@@ -7,6 +7,7 @@
 <meta name="description" content="Collection Premium Paris u Sarajevu: 12 extrait de parfum mirisa sa do 30% mirisnih ulja, 50 ml. Otvaramo 1. januara. Rezerviši svoj miris bez plaćanja, dostava širom BiH.">
 <link rel="canonical" href="https://cpsarajevo.ba/">
 <link rel="alternate" hreflang="bs" href="https://cpsarajevo.ba/">
+<link rel="alternate" hreflang="ar" href="https://cpsarajevo.ba/ar/">
 <link rel="alternate" hreflang="x-default" href="https://cpsarajevo.ba/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:locale" content="bs_BA">
@@ -414,9 +415,12 @@ p.lead{font-size:clamp(1.02rem,1.35vw,1.2rem);color:var(--cream-2);max-width:34r
 .nav .btn{padding:.7rem 1.2rem;font-size:.72rem}
 @media (max-width:860px){.nav-links{display:none}}
 
-.lang{font-size:.72rem;letter-spacing:.14em;color:var(--muted);padding:.6rem .7rem;border-radius:999px;transition:color 200ms ease,transform 160ms var(--ease-out)}
-.lang:active{transform:scale(.96)}
+.lang{display:flex;align-items:center;font-size:.72rem;letter-spacing:.14em;color:var(--muted)}
+.lang a{color:inherit;text-decoration:none;padding:.6rem .42rem;border-radius:999px;transition:color 200ms ease,transform 160ms var(--ease-out)}
+.lang a[lang=ar]{letter-spacing:0;font-family:"IBM Plex Sans Arabic",var(--sans);font-size:.82rem}
+.lang a:active{transform:scale(.96)}
 .lang .on{color:var(--gold-2)}
+@media (hover:hover) and (pointer:fine){.lang a:hover{color:var(--cream)}}
 html[lang=en] .hero h1{font-size:clamp(2.4rem,5.2vw,4.9rem)}
 .stat b{white-space:nowrap}
 .stat b small{font-size:.38em;letter-spacing:.06em;margin-right:.25em;color:var(--muted)}
@@ -510,9 +514,9 @@ footer .cune{font-size:.9rem;opacity:.5}
 
 /* mobile-sized backgrounds */
 @media (max-width:860px){
- .story{background-image:linear-gradient(180deg,rgba(14,11,9,.9),rgba(14,11,9,.82)),url(img/scene/sarajevo-night-sm.webp)!important}
- section.trust{background-image:radial-gradient(70% 70% at 50% 45%,rgba(14,11,9,.82),rgba(14,11,9,.5)),url(img/scene/sarajevo-coffee-sm.webp)!important}
- .reviews{background-image:linear-gradient(180deg,rgba(23,18,14,.9),rgba(23,18,14,.82)),url(img/scene/sarajevo-couple-sm.webp)!important}
+ .story{background-image:linear-gradient(180deg,rgba(14,11,9,.9),rgba(14,11,9,.82)),url(/img/scene/sarajevo-night-sm.webp)!important}
+ section.trust{background-image:radial-gradient(70% 70% at 50% 45%,rgba(14,11,9,.82),rgba(14,11,9,.5)),url(/img/scene/sarajevo-coffee-sm.webp)!important}
+ .reviews{background-image:linear-gradient(180deg,rgba(23,18,14,.9),rgba(23,18,14,.82)),url(/img/scene/sarajevo-couple-sm.webp)!important}
 }
 /* film grain for depth & texture */
 body::after{content:"";position:fixed;inset:-50%;z-index:30;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
@@ -530,7 +534,7 @@ body::after{content:"";position:fixed;inset:-50%;z-index:30;pointer-events:none;
 .cinema-head p{color:var(--muted);margin:1.1rem auto 0;max-width:34rem}
 .screen{position:relative;max-width:1200px;margin:0 auto;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 0 0 1px var(--line),0 60px 120px -40px rgba(0,0,0,.9),0 0 140px -30px rgba(201,164,106,.18)}
 .screen video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
-.screen .cover{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:1.1rem;border:0;padding:0;cursor:pointer;color:var(--cream);background:#000 url(film/poster.webp) center/cover;transition:opacity 260ms cubic-bezier(.23,1,.32,1),visibility 260ms}
+.screen .cover{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:1.1rem;border:0;padding:0;cursor:pointer;color:var(--cream);background:#000 url(/film/poster.webp) center/cover;transition:opacity 260ms cubic-bezier(.23,1,.32,1),visibility 260ms}
 .screen .cover::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.15),rgba(0,0,0,.6) 75%)}
 .screen .cover>*{position:relative}
 .play{width:clamp(72px,8vw,96px);height:clamp(72px,8vw,96px);border-radius:50%;display:grid;place-items:center;background:rgba(14,11,9,.45);border:1px solid var(--gold);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:transform 160ms ease-out,background-color 200ms ease}
@@ -675,7 +679,7 @@ body.intro-go #bwrap>*{animation:bottleIn 1300ms cubic-bezier(.23,1,.32,1) both}
 #mi .glow{position:absolute;left:50%;top:48%;width:140vw;height:140vw;margin:-70vw 0 0 -70vw;border-radius:50%;z-index:2;background:radial-gradient(circle,rgba(227,154,98,.38),rgba(201,164,106,.1) 42%,transparent 68%);opacity:0;transform:scale(.8);transition:opacity 900ms ease,transform 1400ms cubic-bezier(.23,1,.32,1)}
 #mi .bt{position:absolute;left:50%;top:50%;height:44svh;aspect-ratio:524/1400;z-index:4;transform:translate(-50%,-46%) scale(.94);opacity:0;filter:blur(10px) brightness(.4);transition:opacity 700ms cubic-bezier(.23,1,.32,1),transform 1100ms cubic-bezier(.23,1,.32,1),filter 900ms cubic-bezier(.23,1,.32,1);transform-origin:50% 50%}
 #mi .bt img{width:100%;height:100%;display:block;object-fit:contain}
-#mi .bt i{position:absolute;inset:0;-webkit-mask:url(img/hero/dubai.webp) center/contain no-repeat;mask:url(img/hero/dubai.webp) center/contain no-repeat;background:linear-gradient(105deg,transparent 35%,rgba(255,240,210,.85) 50%,transparent 65%) no-repeat;background-size:300% 100%;background-position:120% 0;mix-blend-mode:screen;opacity:0}
+#mi .bt i{position:absolute;inset:0;-webkit-mask:url(/img/hero/dubai.webp) center/contain no-repeat;mask:url(/img/hero/dubai.webp) center/contain no-repeat;background:linear-gradient(105deg,transparent 35%,rgba(255,240,210,.85) 50%,transparent 65%) no-repeat;background-size:300% 100%;background-position:120% 0;mix-blend-mode:screen;opacity:0}
 #mi.p2 .glow{opacity:1;transform:none}
 #mi.p2 .bt{opacity:1;transform:translate(-50%,-50%);filter:none}
 #mi.p2 .bt i{opacity:1;animation:miSweep 1100ms cubic-bezier(.77,0,.175,1) 250ms forwards}
@@ -736,16 +740,16 @@ body.mi-go .hero-inner>*:nth-child(4){animation-delay:210ms}body.mi-go .hero-inn
 @media (max-width:860px){.cards{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr);row-gap:1.5rem}}
 
 /* scenes */
-.story{background:linear-gradient(90deg,rgba(14,11,9,.96) 0%,rgba(14,11,9,.86) 45%,rgba(14,11,9,.55) 100%),url(img/scene/sarajevo-night.webp) center/cover no-repeat}
-section.trust{background:radial-gradient(70% 70% at 50% 45%,rgba(14,11,9,.82),rgba(14,11,9,.5)),url(img/scene/sarajevo-coffee.webp) center/cover no-repeat}
+.story{background:linear-gradient(90deg,rgba(14,11,9,.96) 0%,rgba(14,11,9,.86) 45%,rgba(14,11,9,.55) 100%),url(/img/scene/sarajevo-night.webp) center/cover no-repeat}
+section.trust{background:radial-gradient(70% 70% at 50% 45%,rgba(14,11,9,.82),rgba(14,11,9,.5)),url(/img/scene/sarajevo-coffee.webp) center/cover no-repeat}
 .campaign{position:relative;z-index:2;min-height:78vh;display:flex;align-items:flex-end;padding:0 var(--pad) 10vh;
-  background:linear-gradient(90deg,rgba(14,11,9,.85) 0%,rgba(14,11,9,.35) 45%,rgba(14,11,9,0) 70%),url(img/scene/dubai-box.webp) 70% 28%/cover no-repeat}
+  background:linear-gradient(90deg,rgba(14,11,9,.85) 0%,rgba(14,11,9,.35) 45%,rgba(14,11,9,0) 70%),url(/img/scene/dubai-box.webp) 70% 28%/cover no-repeat}
 .campaign .in-txt{max-width:30rem}
 .campaign h2{margin:1rem 0 1.4rem}
 .gift-photo{border-radius:32px;overflow:hidden;aspect-ratio:1/1;box-shadow:0 40px 70px -35px rgba(60,40,20,.45)}
 .gift-photo img{width:100%;height:100%;object-fit:cover;object-position:46% 50%}
-@media (max-width:860px){.story{background:linear-gradient(180deg,rgba(14,11,9,.9),rgba(14,11,9,.82)),url(img/scene/sarajevo-night.webp) center/cover no-repeat}
- .campaign{min-height:auto;padding-top:calc(100vw + 40px);padding-bottom:9vh;background:linear-gradient(180deg,rgba(14,11,9,0) 30%,var(--ink) 58%),url(img/scene/dubai-box-m.webp) center 56px/100% auto no-repeat,var(--ink)}}
+@media (max-width:860px){.story{background:linear-gradient(180deg,rgba(14,11,9,.9),rgba(14,11,9,.82)),url(/img/scene/sarajevo-night.webp) center/cover no-repeat}
+ .campaign{min-height:auto;padding-top:calc(100vw + 40px);padding-bottom:9vh;background:linear-gradient(180deg,rgba(14,11,9,0) 30%,var(--ink) 58%),url(/img/scene/dubai-box-m.webp) center 56px/100% auto no-repeat,var(--ink)}}
 /* anatomy */
 .anatomy{background:var(--ink);padding:14vh var(--pad);position:relative;z-index:2;overflow:hidden}
 .anat-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,6vw,90px);align-items:center}
@@ -860,7 +864,7 @@ section.trust{background:radial-gradient(70% 70% at 50% 45%,rgba(14,11,9,.82),rg
 @media (prefers-reduced-motion:reduce){.qz-in,.qz-in .qz-o,.qz-card,.qz-think img{animation:none}.qz-o,.qz-fan img{transition:none}}
 
 /* reviews */
-.reviews{background:linear-gradient(180deg,rgba(23,18,14,.9),rgba(23,18,14,.82)),url(img/scene/sarajevo-couple.webp) center 35%/cover no-repeat;padding:14vh 0;position:relative;z-index:2;overflow:hidden}
+.reviews{background:linear-gradient(180deg,rgba(23,18,14,.9),rgba(23,18,14,.82)),url(/img/scene/sarajevo-couple.webp) center 35%/cover no-repeat;padding:14vh 0;position:relative;z-index:2;overflow:hidden}
 .reviews .head{padding:0 var(--pad);max-width:1280px;margin:0 auto 3rem}
 .marquee{display:flex;gap:16px;width:max-content;animation:mq 60s linear infinite}
 .marquee:hover{animation-play-state:paused}
@@ -964,9 +968,9 @@ form.order .fine{font-size:.78rem;color:var(--muted);text-align:center}
 </head>
 <body>
 <div id="mi" aria-hidden="true"><div class="shade"></div>
-<video muted playsinline preload="auto" poster="film/intro/poster.jpg"><source src="film/intro/intro.mp4" type="video/mp4"><source src="film/intro/intro.webm" type="video/webm"></video>
+<video muted playsinline preload="auto" poster="/film/intro/poster.jpg"><source src="/film/intro/intro.mp4" type="video/mp4"><source src="/film/intro/intro.webm" type="video/webm"></video>
 <div class="vig"></div><div class="word"></div><div class="glow"></div>
-<div class="bt"><img src="img/hero/dubai.webp" alt=""><i></i></div>
+<div class="bt"><img src="/img/hero/dubai.webp" alt=""><i></i></div>
 <div class="wm"></div><div class="dt">01 · 01 · 2027<small>Sarajevo</small></div>
 <div class="bar"></div><button class="skip" type="button">Preskoči</button></div>
 <script>
@@ -975,9 +979,9 @@ const force=/[?&]intro=1/.test(location.search);
 if(!force&&(seen||location.hash==='#kviz'||/[?&]kviz/.test(location.search)||innerWidth>=860||matchMedia('(prefers-reduced-motion: reduce)').matches)){el.remove();return;}
 try{localStorage.setItem('introSeen','1')}catch(e){}
 try{localStorage.removeItem('lang')}catch(e){}
-let en=false;try{en=sessionStorage.getItem('lang')==='en'}catch(e){}
-const words=en?['Spice','Sweetness','Amber','Smoke']:['Začin','Slast','Ambra','Dim'];
-if(en)el.querySelector('.skip').textContent='Skip';
+const ar=document.documentElement.lang==='ar';let en=false;try{en=!ar&&sessionStorage.getItem('lang')==='en'}catch(e){}
+const words=ar?['توابل','حلاوة','عنبر','دخان']:en?['Spice','Sweetness','Amber','Smoke']:['Začin','Slast','Ambra','Dim'];
+if(en)el.querySelector('.skip').textContent='Skip';if(ar)el.querySelector('.skip').textContent='تخطٍّ';
 const wm=el.querySelector('.wm');[...'Collection Premium'].forEach((c,i)=>{const s=document.createElement('span');s.textContent=c===' '?' ':c;s.style.transitionDelay=(120+i*38)+'ms';wm.appendChild(s);});
 const v=el.querySelector('video'),w=el.querySelector('.word'),bt=el.querySelector('.bt');
 document.body.classList.add('mi-wait');document.documentElement.style.overflow='hidden';el.classList.add('on');
@@ -1003,7 +1007,7 @@ at(5200,land);
 el.addEventListener('click',()=>{stage<2?p2():land();});
 el.querySelector('.skip').addEventListener('click',e=>{e.stopPropagation();land();});})();
 </script>
-<div id="intro" aria-hidden="true" hidden><div class="half top"></div><div class="half bot"></div><div class="mark"><img src="img/brand/logo-full.webp" alt=""><i></i><span>Sarajevo · 1. januar</span></div></div>
+<div id="intro" aria-hidden="true" hidden><div class="half top"></div><div class="half bot"></div><div class="mark"><img src="/img/brand/logo-full.webp" alt=""><i></i><span>Sarajevo · 1. januar</span></div></div>
 <script>(()=>{let seen=false;try{seen=!!localStorage.getItem('introSeen')}catch(e){}
 if(seen||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
 const el=document.getElementById('intro');el.hidden=false;document.body.classList.add('intro-wait');document.documentElement.style.overflow='hidden';
@@ -1032,10 +1036,10 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
   <canvas id="dust"></canvas>
   <div class="b-wrap" id="bwrap">
     <div class="b-tilt" id="btilt">
-      <img class="b on" src="img/hero/dubai.webp" alt="">
-      <img class="b" src="img/hero/oud-secret.webp" alt="">
-      <img class="b" src="img/hero/vanille.webp" alt="">
-      <img class="b" src="img/hero/safyr.webp" alt="">
+      <img class="b on" src="/img/hero/dubai.webp" alt="">
+      <img class="b" src="/img/hero/oud-secret.webp" alt="">
+      <img class="b" src="/img/hero/vanille.webp" alt="">
+      <img class="b" src="/img/hero/safyr.webp" alt="">
       <span class="sheen" id="sheen"></span>
     </div>
     <div class="b-shadow"></div>
@@ -1043,7 +1047,7 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
 </div>
 
 <nav class="nav" id="nav">
-  <a href="#top" class="logo" aria-label="Collection Premium Paris by MESO, Sarajevo"><img class="lg-full" src="img/brand/logo-full.webp" alt="Collection Premium Paris · Extrait de parfum · by MESO" width="900" height="677"><img class="lg-nav" src="img/brand/logo-nav.webp" alt="" width="600" height="185"></a>
+  <a href="#top" class="logo" aria-label="Collection Premium Paris by MESO, Sarajevo"><img class="lg-full" src="/img/brand/logo-full.webp" alt="Collection Premium Paris · Extrait de parfum · by MESO" width="900" height="677"><img class="lg-nav" src="/img/brand/logo-nav.webp" alt="" width="600" height="185"></a>
   <div class="nav-links">
     <a href="#svjetovi" data-en="Worlds">Svjetovi</a>
     <a href="#prica" data-en="Story">Priča</a>
@@ -1053,7 +1057,7 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
     <a href="#poklon" data-en="Gifts">Pokloni</a>
     <a href="#partneri" data-en="For business">Za firme</a>
   </div>
-  <div style="display:flex;gap:.5rem;align-items:center"><button class="lang" id="lang" aria-label="Promijeni jezik / Change language"><span data-l="bs">BS</span> / <span data-l="en">EN</span></button><button class="btn btn-gold" data-order="dubai" data-en="Reserve">Rezerviši</button></div>
+  <div style="display:flex;gap:.5rem;align-items:center"><div class="lang" id="lang" role="group" aria-label="Jezik / Language / اللغة"><a data-l="bs" href="/?lang=bs" hreflang="bs" lang="bs">BS</a><a data-l="en" href="/?lang=en" hreflang="en" lang="en">EN</a><a data-l="ar" href="/ar/" hreflang="ar" lang="ar">عربي</a></div><button class="btn btn-gold" data-order="dubai" data-en="Reserve">Rezerviši</button></div>
 </nav>
 
 <main id="top">
@@ -1086,13 +1090,13 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
       <span class="ing lo" style="left:36%;top:70%;--s:74px;--d:10s;--r0:10deg;--r1:-12deg"><svg><use href="#i-star"/></svg></span>
       <span class="ing" style="left:40%;top:14%;--s:60px;--d:7s"><svg><use href="#i-drop"/></svg></span>
     </div>
-    <div class="wb" aria-hidden="true"><img src="img/hero/dubai.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="wb" aria-hidden="true"><img src="/img/hero/dubai.webp" alt="" loading="lazy" decoding="async"></div>
     <div class="txt rv-in">
       <span class="num" data-en="01 — ORIENTAL">01 — ORIJENTALNO</span>
       <h3>Dubai</h3>
       <div class="fam" data-en="Warmth everyone notices.">Toplina koju svi primijete.</div>
       <p data-en="It opens with cinnamon, nutmeg and bergamot. Dates and praline sit at the heart, while vanilla, tonka and myrrh stay on the skin for hours.">Otvara se cimetom, muškatnim oraščićem i bergamotom. U srcu su datulje i praline, a vanilija, tonka i mira ostaju na koži satima.</p>
-      <div class="chips"><span class="chip" data-en="Cinnamon">Cimet</span><span class="chip" data-en="Dates">Datulje</span><span class="chip">Praline</span><span class="chip" data-en="Vanilla">Vanilija</span><span class="chip" data-en="Myrrh">Mira</span></div>
+      <div class="chips"><span class="chip" data-en="Cinnamon">Cimet</span><span class="chip" data-en="Dates">Datulje</span><span class="chip" data-en="Praline">Praline</span><span class="chip" data-en="Vanilla">Vanilija</span><span class="chip" data-en="Myrrh">Mira</span></div>
     </div>
   </article>
 
@@ -1102,13 +1106,13 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
       <span class="ing" style="left:38%;top:12%;--s:84px;--d:11s;--r0:0deg;--r1:4deg"><svg><use href="#i-smoke"/></svg></span>
       <span class="ing lo" style="left:34%;top:72%;--s:70px;--d:8s"><svg><use href="#i-rose"/></svg></span>
     </div>
-    <div class="wb" aria-hidden="true"><img src="img/hero/oud-secret.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="wb" aria-hidden="true"><img src="/img/hero/oud-secret.webp" alt="" loading="lazy" decoding="async"></div>
     <div class="txt rv-in">
-      <span class="num">02 — OUD</span>
+      <span class="num" data-en="02 — OUD">02 — OUD</span>
       <h3>Oud Secret</h3>
       <div class="fam" data-en="Wood, smoke and mystery.">Drvo, dim i tajna.</div>
       <p data-en="Passion fruit and saffron, then deep oud and patchouli, finishing with leather and vanilla. For evenings you will remember.">Marakuja i šafran, zatim duboki oud i pačuli, a na kraju koža i vanilija. Za večeri koje se pamte.</p>
-      <div class="chips"><span class="chip">Oud</span><span class="chip" data-en="Saffron">Šafran</span><span class="chip" data-en="Turkish rose">Turska ruža</span><span class="chip" data-en="Leather">Koža</span></div>
+      <div class="chips"><span class="chip" data-en="Oud">Oud</span><span class="chip" data-en="Saffron">Šafran</span><span class="chip" data-en="Turkish rose">Turska ruža</span><span class="chip" data-en="Leather">Koža</span></div>
     </div>
   </article>
 
@@ -1118,13 +1122,13 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
       <span class="ing lo" style="left:36%;top:66%;--s:96px;--d:10s;--r0:-2deg;--r1:6deg"><svg><use href="#i-pod"/></svg></span>
       <span class="ing" style="left:40%;top:14%;--s:62px;--d:7s"><svg><use href="#i-rose"/></svg></span>
     </div>
-    <div class="wb" aria-hidden="true"><img src="img/hero/vanille.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="wb" aria-hidden="true"><img src="/img/hero/vanille.webp" alt="" loading="lazy" decoding="async"></div>
     <div class="txt rv-in">
       <span class="num" data-en="03 — VANILLA">03 — VANILIJA</span>
       <h3>Vanille</h3>
       <div class="fam" data-en="Soft as a breath.">Mekano kao dah.</div>
       <p data-en="Sea salt and fresh air at first, Turkish rose and praline at the heart, then warm vanilla with amber. Salty-sweet, soft and irresistible.">Na početku morska so i svjež zrak, u srcu turska ruža i praline, a na kraju topla vanilija s ambrom. Slano-slatko, nježno i neodoljivo.</p>
-      <div class="chips"><span class="chip" data-en="Vanilla">Vanilija</span><span class="chip">Praline</span><span class="chip" data-en="Turkish rose">Turska ruža</span><span class="chip" data-en="Sea salt">Morska so</span></div>
+      <div class="chips"><span class="chip" data-en="Vanilla">Vanilija</span><span class="chip" data-en="Praline">Praline</span><span class="chip" data-en="Turkish rose">Turska ruža</span><span class="chip" data-en="Sea salt">Morska so</span></div>
     </div>
   </article>
 
@@ -1134,24 +1138,24 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
       <span class="ing lo" style="left:38%;top:70%;--s:80px;--d:8s;--r0:12deg;--r1:-6deg"><svg><use href="#i-leaf"/></svg></span>
       <span class="ing" style="left:40%;top:16%;--s:56px;--d:7s"><svg><use href="#i-drop"/></svg></span>
     </div>
-    <div class="wb" aria-hidden="true"><img src="img/hero/safyr.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="wb" aria-hidden="true"><img src="/img/hero/safyr.webp" alt="" loading="lazy" decoding="async"></div>
     <div class="txt rv-in">
       <span class="num" data-en="04 — FRESH">04 — SVJEŽE</span>
       <h3>Safyr</h3>
       <div class="fam" data-en="Like a morning by the sea.">Kao jutro na moru.</div>
       <p data-en="Calabrian bergamot, Sicilian citrus and mandarin. A fruity heart and clean white musk with Madagascar vanilla.">Kalabrijski bergamot, sicilijanski citrusi i mandarina. Voćno srce, čisti bijeli mošus i vanilija s Madagaskara.</p>
-      <div class="chips"><span class="chip">Bergamot</span><span class="chip" data-en="Mandarin">Mandarina</span><span class="chip" data-en="White musk">Bijeli mošus</span></div>
+      <div class="chips"><span class="chip" data-en="Bergamot">Bergamot</span><span class="chip" data-en="Mandarin">Mandarina</span><span class="chip" data-en="White musk">Bijeli mošus</span></div>
     </div>
   </article>
 </section>
 
 <!-- STORY -->
-<section class="saga" id="prica" aria-label="Priča · Karavan">
+<section class="saga" id="prica" aria-label="Priča · Karavan" data-al-en="Story · Karavan">
   <div class="saga-pin">
-    <video class="saga-vid" id="sagaVid" muted loop playsinline preload="none" poster="film/bg/caravan.jpg"><source src="film/bg/caravan.mp4" type="video/mp4"></video>
+    <video class="saga-vid" id="sagaVid" muted loop playsinline preload="none" poster="/film/bg/caravan.jpg"><source src="/film/bg/caravan.mp4" type="video/mp4"></video>
     <div class="saga-map" id="sagaMap"><div class="mapstage" id="mapstage">
-      <picture><source media="(max-width:860px)" srcset="img/scene/map-sm.webp"><img src="img/scene/map.webp" alt="" width="2000" height="1250" loading="lazy" decoding="async"></picture>
-      <svg class="route" viewBox="0 0 2000 1250" role="img" aria-label="Put karavana od Mezopotamije do Sarajeva">
+      <picture><source media="(max-width:860px)" srcset="/img/scene/map-sm.webp"><img src="/img/scene/map.webp" alt="" width="2000" height="1250" loading="lazy" decoding="async"></picture>
+      <svg class="route" viewBox="0 0 2000 1250" role="img" aria-label="Put karavana od Mezopotamije do Sarajeva" data-al-en="The caravan route from Mesopotamia to Sarajevo">
   <defs><filter id="glw" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
   <radialGradient id="hl"><stop offset="0" stop-color="#ffd99a" stop-opacity=".55"/><stop offset="1" stop-color="#ffd99a" stop-opacity="0"/></radialGradient></defs>
   <text class="sea" x="342" y="484" text-anchor="middle"><tspan data-en="Adriatic Sea">Jadransko more</tspan></text>
@@ -1199,13 +1203,13 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
 <section class="cinema" id="film">
   <div class="cinema-head rv-in">
     <span class="eyebrow" data-en="Short film">Kratki film</span>
-    <h2>KARAVAN</h2>
+    <h2 data-en="KARAVAN">KARAVAN</h2>
     <div class="tag" data-en="Invisible to the eye. <em>Unforgettable to the soul.</em>">Nevidljiv oku. <em>Nezaboravan duši.</em></div>
     <p data-en="A scent that travelled from the caravans of Mesopotamia to Sarajevo today. Fifty-one seconds, best with sound on.">Miris koji je putovao od karavana Mezopotamije do današnjeg Sarajeva. Pedeset i jedna sekunda, najbolje uz zvuk.</p>
   </div>
   <div class="screen rv-in" id="screen">
-    <video id="filmVideo" playsinline preload="none" poster="film/poster.webp"></video>
-    <button class="cover" type="button" id="filmPlay" aria-label="Pokreni film Karavan">
+    <video id="filmVideo" playsinline preload="none" poster="/film/poster.webp"></video>
+    <button class="cover" type="button" id="filmPlay" aria-label="Pokreni film Karavan" data-al-en="Play the film Karavan">
       <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span>
       <span class="cover-label" data-en="Watch the film">Pogledaj film</span>
     </button>
@@ -1219,7 +1223,7 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
 
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shName">
   <div class="panel" id="shPanel">
-    <button class="x" type="button" id="shClose" aria-label="Zatvori">×</button>
+    <button class="x" type="button" id="shClose" aria-label="Zatvori" data-al-en="Close">×</button>
     <div class="media" id="shMedia"><video id="shVideo" playsinline preload="none"></video>
       <button class="go" type="button" id="shPlay"><span class="ring"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span id="shFilm"></span></button></div>
     <div class="body">
@@ -1247,12 +1251,12 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
   <div class="cards">
     <div class="card rv-in"><span class="k">01</span><h3 data-en="Real concentration">Prava koncentracija</h3><p data-en="Extrait de parfum is the most concentrated form of perfume, with up to 30% high-quality perfume oils. One spray is enough.">Extrait de parfum je najkoncentrisaniji oblik parfema, sa do 30% visokokvalitetnih mirisnih ulja. Dovoljno je jedno prskanje.</p></div>
     <div class="card rv-in"><span class="k">02</span><h3 data-en="Straight from Paris">Direktno iz Pariza</h3><p data-en="Collection Premium Paris is a Paris perfume house founded in 2016. We are its official partner for Sarajevo, and every bottle comes straight from the house.">Collection Premium Paris je parfemska kuća iz Pariza, osnovana 2016. godine. Mi smo njen službeni partner za Sarajevo, a svaka bočica dolazi direktno od kuće.</p></div>
-    <div class="card rv-in"><span class="k">03</span><h3 data-en="Not sure which one?">Ne znaš koji odabrati?</h3><p data-en="Answer three questions and the quiz will suggest a scent. Still not sure? Ask us. We reply personally.">Odgovori na tri pitanja i kviz će ti preporučiti miris. Ako i dalje nisi siguran, pitaj nas. Odgovaramo lično.</p></div>
+    <div class="card rv-in"><span class="k">03</span><h3 data-en="Not sure which one?">Ne znaš koji odabrati?</h3><p data-en="Answer five quick questions and the quiz will suggest a scent. Still not sure? Ask us. We reply personally.">Odgovori na pet kratkih pitanja i kviz će ti preporučiti miris. Ako i dalje nisi siguran, pitaj nas. Odgovaramo lično.</p></div>
   </div>
   <div class="stats">
     <div class="stat"><b data-count="30" data-pre="do" data-pre-en="up to" data-suf="%"><small>do</small>30%</b><span data-en="perfume oils">mirisnih ulja</span></div>
-    <div class="stat"><b data-count="12" data-suf="+ h">12+ h</b><span data-en="on the skin">na koži</span></div>
-    <div class="stat"><b data-count="50" data-suf=" ml">50 ml</b><span data-en="in every bottle">u svakoj bočici</span></div>
+    <div class="stat"><b data-count="12" data-suf="+ h" data-suf-ar="+ ساعة">12+ h</b><span data-en="on the skin">na koži</span></div>
+    <div class="stat"><b data-count="50" data-suf=" ml" data-suf-ar=" مل">50 ml</b><span data-en="in every bottle">u svakoj bočici</span></div>
     <div class="stat"><b data-count="2016">2016</b><span data-en="founded in Paris">osnovano u Parizu</span></div>
   </div>
 </section>
@@ -1262,7 +1266,7 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
 <!-- ANATOMY -->
 <section class="anatomy" id="anatomija">
   <div class="anat-grid">
-    <div class="anat-visual rv-in"><div class="halo"></div><img src="img/dubai.webp" alt="DUBAI extrait de parfum" loading="lazy"></div>
+    <div class="anat-visual rv-in"><div class="halo"></div><img src="/img/dubai.webp" alt="DUBAI extrait de parfum" loading="lazy"></div>
     <div>
       <span class="eyebrow" data-en="Anatomy of a scent · Dubai">Anatomija mirisa · Dubai</span>
       <h2 style="margin-top:1rem" data-en="One scent, <em>three chapters.</em>">Jedan miris, <em>tri poglavlja.</em></h2>
@@ -1293,12 +1297,12 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
     </div>
     <p data-en="Twelve scents our customers choose again and again. All 50 ml, all extrait de parfum.">Dvanaest mirisa koje kupci uvijek iznova biraju. Svi u bočici od 50 ml, svi extrait de parfum.</p>
   </div>
-  <div class="filters" role="group" aria-label="Filtriraj mirise">
+  <div class="filters" role="group" aria-label="Filtriraj mirise" data-al-en="Filter scents">
     <button aria-pressed="true" data-f="all" data-en="All">Svi</button>
     <button aria-pressed="false" data-f="z" data-en="Women">Ženski</button>
     <button aria-pressed="false" data-f="m" data-en="Men">Muški</button>
-    <button aria-pressed="false" data-f="u">Unisex</button>
-    <button aria-pressed="false" data-f="oud">Oud</button>
+    <button aria-pressed="false" data-f="u" data-en="Unisex">Unisex</button>
+    <button aria-pressed="false" data-f="oud" data-en="Oud">Oud</button>
     <button aria-pressed="false" data-f="slatko" data-en="Sweet &amp; vanilla">Slatko i vanilija</button>
     <button aria-pressed="false" data-f="svjeze" data-en="Fresh">Svježe</button>
     <button aria-pressed="false" data-f="cvjetno" data-en="Floral">Cvjetno</button>
@@ -1330,7 +1334,7 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
 <!-- GIFT -->
 <section class="gift" id="poklon">
   <div class="gift-grid">
-    <figure class="gift-photo rv-in"><img src="img/scene/dubai-gift.webp" srcset="img/scene/dubai-gift-sm.webp 1280w, img/scene/dubai-gift.webp 2560w" sizes="(max-width:860px) 92vw, 46vw" alt="Ruke drže bijelu poklon kutiju DUBAI pored bočice, bosanske kahve i rahat lokuma" loading="lazy" width="1672" height="941"></figure>
+    <figure class="gift-photo rv-in"><img src="/img/scene/dubai-gift.webp" srcset="/img/scene/dubai-gift-sm.webp 1280w, /img/scene/dubai-gift.webp 2560w" sizes="(max-width:860px) 92vw, 46vw" alt="Ruke drže bijelu poklon kutiju DUBAI pored bočice, bosanske kahve i rahat lokuma" loading="lazy" width="1672" height="941"></figure>
     <div>
       <span class="eyebrow" data-en="Gifts">Pokloni</span>
       <h2 style="margin-top:1rem" data-en="A gift they’ll <em>remember.</em>">Poklon koji se <em>pamti.</em></h2>
@@ -1358,7 +1362,7 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
         <li data-en="Testers and scent strips for your space">Testeri i mirisne trake za vaš prostor</li>
         <li data-en="Delivery across Bosnia and Herzegovina">Dostava širom BiH</li>
       </ul>
-      <figure class="b2b-photo"><img src="img/scene/firme.webp" alt="Bijele poklon kutije sa zlatnom trakom i tri bočice Collection Premium: Dubai, Oud Secret i Safyr" width="900" height="720" loading="lazy"></figure>
+      <figure class="b2b-photo"><img src="/img/scene/firme.webp" alt="Bijele poklon kutije sa zlatnom trakom i tri bočice Collection Premium: Dubai, Oud Secret i Safyr" width="900" height="720" loading="lazy"></figure>
       <div class="b2b-kinds"><span data-en="Companies">Firme</span><span data-en="Salons">Saloni</span><span data-en="Boutiques">Butici</span><span data-en="Resellers">Preprodavači</span><span data-en="Hotels">Hoteli</span></div>
     </div>
     <div class="b2b-card" id="b2bCard">
@@ -1376,12 +1380,12 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
         </div>
         <div class="two">
           <label><span data-en="Phone">Telefon</span><input name="phone" type="tel" required autocomplete="tel" placeholder="+387 …"></label>
-          <label>Email<input name="email" type="email" autocomplete="email"></label>
+          <label><span data-en="Email">Email</span><input name="email" type="email" autocomplete="email"></label>
         </div>
         <div class="two">
           <label><span data-en="City">Grad</span><input name="city" autocomplete="address-level2" value="Sarajevo"></label>
           <label><span data-en="Approx. quantity">Okvirna količina</span><select name="volume">
-            <option value="do 10">do 10</option><option value="10–50">10–50</option><option value="50–200">50–200</option><option value="200+">200+</option><option value="ne znam još" data-en="not sure yet">ne znam još</option></select></label>
+            <option value="do 10" data-en="up to 10">do 10</option><option value="10–50">10–50</option><option value="50–200">50–200</option><option value="200+">200+</option><option value="ne znam još" data-en="not sure yet">ne znam još</option></select></label>
         </div>
         <label><span data-en="Message">Poruka</span><textarea name="note" rows="3" placeholder="Npr. pokloni za 40 zaposlenika do Nove godine" data-ph-en="E.g. gifts for 40 employees before New Year"></textarea></label>
         <label style="display:flex;gap:.6rem;align-items:flex-start;font-size:.86rem;line-height:1.4;text-transform:none;letter-spacing:0"><input type="checkbox" name="consent" required style="width:auto;margin-top:.2rem"><span data-en="I agree to be contacted about a business offer.">Slažem se da me kontaktirate u vezi s poslovnom ponudom.</span></label>
@@ -1396,13 +1400,13 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
 
 <!-- TRUST -->
 <section class="trust">
-  <img class="trust-logo" src="img/brand/logo-full.webp" alt="Collection Premium Paris · Extrait de parfum · by MESO" width="900" height="677" loading="lazy">
+  <img class="trust-logo" src="/img/brand/logo-full.webp" alt="Collection Premium Paris · Extrait de parfum · by MESO" width="900" height="677" loading="lazy">
   <div class="cune" aria-hidden="true" style="font-size:1.05rem;margin-bottom:2rem">𒀭 𒆠 𒂗 𒈠 𒁹 𒊩 𒌋 𒀸 𒂊 𒄿</div>
-  <span class="eyebrow">Sarajevo</span>
+  <span class="eyebrow" data-en="Sarajevo">Sarajevo</span>
   <h2 data-en="Paris in a bottle. <em>Sarajevo at heart.</em>">Pariz u bočici. <em>Sarajevo u srcu.</em></h2>
   <div class="pills">
     <span data-en="Official Collection Premium Paris partner">Službeni partner Collection Premium Paris</span>
-    <span>Extrait de parfum · 50 ml</span>
+    <span data-en="Extrait de parfum · 50 ml">Extrait de parfum · 50 ml</span>
     <span data-en="Delivery across Bosnia and Herzegovina">Dostava širom BiH</span>
     <span data-en="Personal support">Lična podrška</span>
   </div>
@@ -1419,7 +1423,7 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
 </section>
 
 <footer>
-  <img src="img/brand/logo-full.webp" alt="" width="900" height="677" loading="lazy" style="width:110px;height:auto;opacity:.85">
+  <img src="/img/brand/logo-full.webp" alt="" width="900" height="677" loading="lazy" style="width:110px;height:auto;opacity:.85">
   <span data-en="© 2026–2027 Collection Premium Sarajevo · Official partner of Collection Premium Paris by MESO®">© 2026–2027 Collection Premium Sarajevo · Službeni partner Collection Premium Paris by MESO®</span>
   <span class="cune" aria-hidden="true">𒀭 𒆠 𒂗</span>
   <span data-en="Invisible to the eye. Unforgettable to the soul.">Nevidljiv oku. Nezaboravan duši.</span>
@@ -1429,8 +1433,8 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
 <!-- ORDER DRAWER -->
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle" aria-hidden="true">
-  <header><h3 id="dTitle" data-en="Reservation">Rezervacija</h3><button class="x" id="dClose" aria-label="Zatvori">×</button></header>
-  <div class="d-prod"><img id="dImg" src="img/dubai.webp" alt=""><div><b id="dName">Dubai</b><span id="dPrice" style="color:var(--muted)"></span></div></div>
+  <header><h3 id="dTitle" data-en="Reservation">Rezervacija</h3><button class="x" id="dClose" aria-label="Zatvori" data-al-en="Close">×</button></header>
+  <div class="d-prod"><img id="dImg" src="/img/dubai.webp" alt=""><div><b id="dName">Dubai</b><span id="dPrice" style="color:var(--muted)"></span></div></div>
   <form class='order' method='POST' name='narudzba'>
     <input type="hidden" name="form-name" value="narudzba">
     <input type="hidden" name="jezik" value="bs">
@@ -1439,7 +1443,7 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
     <label><span data-en="Full name">Ime i prezime</span><input name="ime" required autocomplete="name"></label>
     <div class="two">
       <label><span data-en="Phone">Telefon</span><input name="telefon" type="tel" required autocomplete="tel" placeholder="+387 …"></label>
-      <label>Email<input name="email" type="email" autocomplete="email" placeholder="opcionalno" data-ph-en="optional"></label>
+      <label><span data-en="Email">Email</span><input name="email" type="email" autocomplete="email" placeholder="opcionalno" data-ph-en="optional"></label>
     </div>
     <div class="two">
       <label><span data-en="Scent">Miris</span><select name="miris" id="dSelect"></select></label>
@@ -1458,13 +1462,17 @@ el.addEventListener('click',open);setTimeout(open,2100);})();</script>
   <div class="done"><h3 data-en="Thank you!">Hvala!</h3><p data-en="Your scent is reserved. You’ll be among the first to hear from us before 1 January.">Tvoj miris je rezervisan. Među prvima ćeš čuti od nas prije 1. januara.</p></div>
 </aside>
 
-<script src="vendor/gsap.min.js"></script>
-<script src="vendor/ScrollTrigger.min.js"></script>
+<script src="/vendor/gsap.min.js"></script>
+<script src="/vendor/ScrollTrigger.min.js"></script>
 <script>
 /* ---------- LANGUAGE ---------- */
-let LANG='bs';
-try{ const saved=sessionStorage.getItem('lang'); if(saved==='en'||saved==='bs') LANG=saved; }catch(e){}
-const L=(bs,en)=>LANG==='en'?en:bs;
+const AR_PAGE=document.documentElement.lang==='ar';
+let LANG=AR_PAGE?'ar':'bs';
+if(!AR_PAGE){ try{ const q=new URLSearchParams(location.search).get('lang'); if(q==='en'||q==='bs'){ sessionStorage.setItem('lang',q); history.replaceState(null,'',location.pathname+location.hash); } const saved=sessionStorage.getItem('lang'); if(saved==='en'||saved==='bs') LANG=saved; }catch(e){} }
+/* Arabic: strings are looked up by their English text in window.AR (js/i18n-ar.js) */
+const tr=s=>{ if(LANG!=='ar'||s==null||s==='') return s; const k=String(s); if(window.AR&&k in AR) return AR[k]; (window.__arMissing=window.__arMissing||new Set()).add(k); return k; };
+const L=(bs,en,ar)=>LANG==='en'?en:LANG==='ar'?(ar!==undefined?ar:tr(en)):bs;
+const FL=()=>LANG==='bs'?'bs':'en'; /* film audio: Arabic page uses the English films */
 
 /* ---------- DATA ---------- */
 const PRICE = null; // cijena se objavljuje 1. januara
@@ -1486,7 +1494,7 @@ const P = [
 ];
 const GL = {z:['Ženski','Women'],m:['Muški','Men'],u:['Unisex','Unisex']};
 const byId = id => P.find(p=>p.id===id);
-const notes = p => p[LANG];
+const notes = p => LANG==='bs'?p.bs:LANG==='en'?p.en:p.en.map(tr);
 
 /* ---------- COLLECTION ---------- */
 const FILMS = {
@@ -1502,7 +1510,7 @@ function renderGrid(){
   <article class="p" style="--c:${p.c}" data-g="${p.g}" data-t="${p.t.join(' ')}" data-sheet="${p.id}" tabindex="0" role="button" aria-label="${p.name}: ${L('otvori priču','open the story')}">
    <span class="seen">${L('Otkriveno','Discovered')} ✓</span>
    <span class="tag">${L(...GL[p.g])}</span>
-   <div class="img"><img src="img/${p.id}.webp" alt="${p.name} extrait de parfum 50 ml" loading="lazy"></div>
+   <div class="img"><img src="/img/${p.id}.webp" alt="${p.name} extrait de parfum 50 ml" loading="lazy"></div>
    <h3>${p.name}</h3>
    <p class="n">${n[0]} · ${n[1]} · ${n[2]}</p>
    <div class="row"><span class="price seal">${SEAL}<small>${L('Cijena 1. januara','Price on 1 January')}</small></span><button class="btn btn-dark" data-order="${p.id}">${L('Rezerviši','Reserve')}</button></div>
@@ -1557,37 +1565,37 @@ const sw=(a,b)=>`linear-gradient(150deg,${a},${b})`;
 // option: [labelBs,labelEn, subBs,subEn, visual, effect]
 const Q=[
  {t:['Za koga <em>biraš?</em>','Who is it <em>for?</em>'],o:[
-  ['Za sebe','For me','ženski miris','a women’s scent',{ph:'img/quiz/za-sebe-ona.webp'},{who:'z'}],
-  ['Za sebe','For me','muški miris','a men’s scent',{ph:'img/quiz/za-sebe-on.webp'},{who:'m'}],
-  ['Poklon','A gift','za nekog posebnog','for someone special',{ph:'img/scene/dubai-gift-sm.webp'},{who:'gift'}],
-  ['Iznenadi me','Surprise me','bilo koji miris','any scent',{ph:'img/story/vial.webp'},{who:'any'}]]},
+  ['Za sebe','For me','ženski miris','a women’s scent',{ph:'/img/quiz/za-sebe-ona.webp'},{who:'z'}],
+  ['Za sebe','For me','muški miris','a men’s scent',{ph:'/img/quiz/za-sebe-on.webp'},{who:'m'}],
+  ['Poklon','A gift','za nekog posebnog','for someone special',{ph:'/img/scene/dubai-gift-sm.webp'},{who:'gift'}],
+  ['Iznenadi me','Surprise me','bilo koji miris','any scent',{ph:'/img/story/vial.webp'},{who:'any'}]]},
  {t:['Gdje ćeš ga <em>najviše nositi?</em>','Where will you <em>wear it most?</em>'],o:[
-  ['Posao i grad','Work and the city','kafa, sastanci, šetnja','coffee, meetings, walks',{ph:'img/scene/sarajevo-coffee-sm.webp'},{svjeze:2,drvo:2}],
-  ['Večer i izlasci','Evenings out','večere, muzika, noć','dinners, music, nights',{ph:'img/scene/sarajevo-night-sm.webp'},{oud:2,slatko:1.5,boost:{'arabian-nights':1.4}}],
-  ['Svadbe i Bajram','Weddings and Bajram','velike prilike','big occasions',{ph:'img/scene/dubai-box-m.webp'},{cvjetno:1.5,event:1}],
-  ['Ljeto i putovanja','Summer and travel','more, sunce, aerodrom','sea, sun, airports',{ph:'img/quiz/ljeto.webp'},{svjeze:2.5}]]},
+  ['Posao i grad','Work and the city','kafa, sastanci, šetnja','coffee, meetings, walks',{ph:'/img/scene/sarajevo-coffee-sm.webp'},{svjeze:2,drvo:2}],
+  ['Večer i izlasci','Evenings out','večere, muzika, noć','dinners, music, nights',{ph:'/img/scene/sarajevo-night-sm.webp'},{oud:2,slatko:1.5,boost:{'arabian-nights':1.4}}],
+  ['Svadbe i Bajram','Weddings and Bajram','velike prilike','big occasions',{ph:'/img/scene/dubai-box-m.webp'},{cvjetno:1.5,event:1}],
+  ['Ljeto i putovanja','Summer and travel','more, sunce, aerodrom','sea, sun, airports',{ph:'/img/quiz/ljeto.webp'},{svjeze:2.5}]]},
  {t:['Izaberi <em>desert.</em>','Pick a <em>dessert.</em>'],o:[
-  ['Baklava i kahva','Baklava and coffee','toplo i slatko','warm and sweet',{ph:'img/quiz/baklava.webp'},{slatko:3,boost:{'dubai':0.3,'love':0.5}}],
-  ['Limunada s mentom','Mint lemonade','svježe i lagano','fresh and light',{ph:'img/quiz/limunada.webp'},{svjeze:3}],
-  ['Tamna čokolada','Dark chocolate','gorko i duboko','bitter and deep',{ph:'img/quiz/cokolada.webp'},{oud:3,boost:{'arabian-nights':0.8,'oud-secret':0.4}}],
-  ['Ružin lokum','Rose lokum','nježno i cvjetno','soft and floral',{ph:'img/quiz/lokum.webp'},{cvjetno:3}]]},
+  ['Baklava i kahva','Baklava and coffee','toplo i slatko','warm and sweet',{ph:'/img/quiz/baklava.webp'},{slatko:3,boost:{'dubai':0.3,'love':0.5}}],
+  ['Limunada s mentom','Mint lemonade','svježe i lagano','fresh and light',{ph:'/img/quiz/limunada.webp'},{svjeze:3}],
+  ['Tamna čokolada','Dark chocolate','gorko i duboko','bitter and deep',{ph:'/img/quiz/cokolada.webp'},{oud:3,boost:{'arabian-nights':0.8,'oud-secret':0.4}}],
+  ['Ružin lokum','Rose lokum','nježno i cvjetno','soft and floral',{ph:'/img/quiz/lokum.webp'},{cvjetno:3}]]},
  {t:['Kakav trag <em>želiš ostaviti?</em>','What trail do you <em>want to leave?</em>'],o:[
-  ['Šapat','A whisper','osjeti se samo izbliza','close to the skin',{ph:'img/quiz/sapat.webp'},{svjeze:1.5,cvjetno:1}],
-  ['Kompliment','A compliment','da me primijete','so people notice',{ph:'img/quiz/kompliment.webp'},{slatko:1,cvjetno:1,drvo:1}],
-  ['Legenda','A legend','da me pamte satima','remembered for hours',{ph:'img/quiz/legenda.webp'},{oud:2,slatko:1}],
-  ['Iznenađenje','A surprise','nešto drugačije','something different',{ph:'img/quiz/iznenadjenje.webp'},{drvo:1.5,oud:1}]]},
+  ['Šapat','A whisper','osjeti se samo izbliza','close to the skin',{ph:'/img/quiz/sapat.webp'},{svjeze:1.5,cvjetno:1}],
+  ['Kompliment','A compliment','da me primijete','so people notice',{ph:'/img/quiz/kompliment.webp'},{slatko:1,cvjetno:1,drvo:1}],
+  ['Legenda','A legend','da me pamte satima','remembered for hours',{ph:'/img/quiz/legenda.webp'},{oud:2,slatko:1}],
+  ['Iznenađenje','A surprise','nešto drugačije','something different',{ph:'/img/quiz/iznenadjenje.webp'},{drvo:1.5,oud:1}]]},
  {t:['Jedna riječ <em>za tebe.</em>','One word <em>for you.</em>'],o:[
-  ['Toplina','Warmth','','',{ph:'img/quiz/toplina.webp'},{slatko:2}],
-  ['Misterija','Mystery','','',{ph:'img/quiz/misterija.webp'},{oud:2}],
-  ['Sloboda','Freedom','','',{ph:'img/quiz/sloboda.webp'},{svjeze:2}],
-  ['Nježnost','Tenderness','','',{ph:'img/quiz/njeznost.webp'},{cvjetno:2}]]}
+  ['Toplina','Warmth','','',{ph:'/img/quiz/toplina.webp'},{slatko:2}],
+  ['Misterija','Mystery','','',{ph:'/img/quiz/misterija.webp'},{oud:2}],
+  ['Sloboda','Freedom','','',{ph:'/img/quiz/sloboda.webp'},{svjeze:2}],
+  ['Nježnost','Tenderness','','',{ph:'/img/quiz/njeznost.webp'},{cvjetno:2}]]}
 ];
 let qi=0, qa=[], qzOpen=false;
 const mount=document.getElementById('quizMount');
 const qt=(type,label)=>{try{window.CP&&CP.track(type,{element:'kviz',label});}catch(e){}};
 function renderQ(){
   const fan=['love','dubai','arabian-nights','safyr','x'];
-  mount.innerHTML=`<div class="qz-start"><div class="qz-fan" aria-hidden="true">${fan.map((id,i)=>`<img src="img/${id}.webp" alt="" style="--r:${(i-2)*9}deg;--y:${Math.abs(i-2)*10}px" loading="lazy">`).join('')}</div>
+  mount.innerHTML=`<div class="qz-start"><div class="qz-fan" aria-hidden="true">${fan.map((id,i)=>`<img src="/img/${id}.webp" alt="" style="--r:${(i-2)*9}deg;--y:${Math.abs(i-2)*10}px" loading="lazy">`).join('')}</div>
    <button class="btn btn-gold qz-go" type="button" id="qzGo" data-track="kviz-start">${L('Započni kviz','Start the quiz')}</button>
    <span class="qz-meta">${L('5 pitanja · 30 sekundi · tvoj miris i tvoj tip','5 questions · 30 seconds · your scent and your type')}</span></div>`;
   document.getElementById('qzGo').onclick=openQuiz;
@@ -1598,7 +1606,7 @@ function ensureQz(){
   if(qz) return qz;
   qz=document.createElement('div'); qz.className='qz'; qz.setAttribute('role','dialog'); qz.setAttribute('aria-modal','true'); qz.setAttribute('aria-label',L('Kviz: koji si ti?','Quiz: which one are you?'));
   qz.innerHTML=`<div class="qz-bg"></div><div class="qz-top"><div class="qz-bars">${Q.map(()=>'<i></i>').join('')}</div>
-   <div class="qz-row"><button class="qz-icon" type="button" id="qzBack" aria-label="${L('Nazad','Back')}">‹</button><span class="qz-brand">Collection Premium</span><button class="qz-icon" type="button" id="qzClose" aria-label="${L('Zatvori','Close')}">×</button></div></div><div class="qz-body" id="qzBody"></div>`;
+   <div class="qz-row"><button class="qz-icon" type="button" id="qzBack" aria-label="${L('Nazad','Back')}">${LANG==='ar'?'›':'‹'}</button><span class="qz-brand">Collection Premium</span><button class="qz-icon" type="button" id="qzClose" aria-label="${L('Zatvori','Close')}">×</button></div></div><div class="qz-body" id="qzBody"></div>`;
   document.body.appendChild(qz);
   qz.querySelector('#qzClose').onclick=closeQuiz;
   qz.querySelector('#qzBack').onclick=()=>{ if(qi>0){qi--;qa.length=qi;drawQ();} };
@@ -1609,7 +1617,7 @@ function openQuiz(){ ensureQz(); qi=0; qa=[]; qzOpen=true; document.body.style.o
 function closeQuiz(){ if(!qz) return; qzOpen=false; qz.classList.remove('on'); document.body.style.overflow=''; const v=qz.querySelector('video'); if(v) v.pause(); }
 function visual(v){
   if(v.ph) return `<img class="ph" src="${v.ph}" alt="" loading="eager">`;
-  let h=''; if(v.bt) h+=`<img class="bt" src="img/${v.bt}.webp" alt="">`;
+  let h=''; if(v.bt) h+=`<img class="bt" src="/img/${v.bt}.webp" alt="">`;
   if(v.word) h+=`<span class="word" aria-hidden="true">${v.word}</span>`;
   if(v.ring) h+=`<span class="ring" aria-hidden="true" style="--n:${v.ring}"></span>`;
   return h;
@@ -1648,9 +1656,9 @@ function scoreAll(){
 }
 function think(){
   const body=qz.querySelector('#qzBody'); const order=[...P].sort(()=>Math.random()-.5);
-  body.innerHTML=`<div class="qz-think"><img id="qzSpin" src="img/${order[0].id}.webp" alt=""><p>${L('Tražim tvoj miris…','Finding your scent…')}</p></div>`;
+  body.innerHTML=`<div class="qz-think"><img id="qzSpin" src="/img/${order[0].id}.webp" alt=""><p>${L('Tražim tvoj miris…','Finding your scent…')}</p></div>`;
   let k=0; const img=body.querySelector('#qzSpin');
-  const iv=setInterval(()=>{k++; img.src=`img/${order[k%order.length].id}.webp`;},110);
+  const iv=setInterval(()=>{k++; img.src=`/img/${order[k%order.length].id}.webp`;},110);
   setTimeout(()=>{clearInterval(iv); const r=scoreAll(); showResult(r[0].p,r,Math.min(99,Math.max(88,Math.round(90+(r[0].s-r[1].s)*3))));},1500);
 }
 function showResult(p,r,pct){
@@ -1658,9 +1666,9 @@ function showResult(p,r,pct){
   qz.querySelector('.qz-bg').style.backgroundImage='none';
   qz.querySelectorAll('.qz-bars i').forEach(b=>b.classList.add('on'));
   qz.querySelector('#qzBack').hidden=true;
-  const film=`film/bottles/${p.id}-${LANG==='en'?'en':'bs'}.mp4`;
+  const film=`/film/bottles/${p.id}-${FL()}.mp4`;
   qz.querySelector('#qzBody').innerHTML=`<div class="qz-res" style="--c:${p.c}">
-    <img class="poster" src="img/${p.id}.webp" alt="" style="object-fit:contain;padding:9vh 22vw 50vh;transition:opacity 400ms ease;background:radial-gradient(circle at 50% 22%,${p.c}55,transparent 55%)">
+    <img class="poster" src="/img/${p.id}.webp" alt="" style="object-fit:contain;padding:9vh 22vw 50vh;transition:opacity 400ms ease;background:radial-gradient(circle at 50% 22%,${p.c}55,transparent 55%)">
     <video src="${film}" muted autoplay playsinline loop preload="auto" aria-hidden="true"></video>
     <div class="qz-card">
       <div class="qz-you">${L('Ti si','You are')}</div>
@@ -1687,22 +1695,22 @@ async function shareCard(p,T){
   try{await document.fonts.ready;}catch(e){}
   const g=x.createRadialGradient(W/2,720,60,W/2,820,1100); g.addColorStop(0,p.c); g.addColorStop(.55,'#2a1f17'); g.addColorStop(1,'#0e0b09');
   x.fillStyle=g; x.fillRect(0,0,W,H);
-  const img=await new Promise(res=>{const i=new Image(); i.onload=()=>res(i); i.onerror=()=>res(null); i.src=`img/${p.id}.webp`;});
+  const img=await new Promise(res=>{const i=new Image(); i.onload=()=>res(i); i.onerror=()=>res(null); i.src=`/img/${p.id}.webp`;});
   if(img){const h=860,w=img.width*h/img.height; x.save(); x.shadowColor='rgba(0,0,0,.55)'; x.shadowBlur=60; x.shadowOffsetY=40; x.drawImage(img,(W-w)/2,330,w,h); x.restore();}
   x.textAlign='center'; x.fillStyle='#c9a46a'; x.font='500 30px Jost, sans-serif';
   x.fillText('C O L L E C T I O N   P R E M I U M   ·   S A R A J E V O',W/2,170);
-  x.fillStyle='#e2c58f'; x.font='500 34px Jost, sans-serif'; x.fillText(L('J A    S A M','I    A M'),W/2,1330);
-  x.fillStyle='#f6efe3'; let fs=118; x.font=`500 ${fs}px "Playfair Display", Georgia, serif`;
-  const tt=L(T[0],T[1]); while(x.measureText(tt).width>W-120&&fs>60){fs-=6;x.font=`500 ${fs}px "Playfair Display", Georgia, serif`;}
+  const AF=LANG==='ar'?'"Amiri", serif':null; x.fillStyle='#e2c58f'; x.font=AF?'400 44px '+AF:'500 34px Jost, sans-serif'; x.fillText(L('J A    S A M','I    A M','أنا'),W/2,1330);
+  x.fillStyle='#f6efe3'; let fs=118; const HF=AF||'"Playfair Display", Georgia, serif'; x.font=`500 ${fs}px ${HF}`;
+  const tt=L(T[0],T[1]); while(x.measureText(tt).width>W-120&&fs>60){fs-=6;x.font=`500 ${fs}px ${HF}`;}
   x.fillText(tt,W/2,1470);
-  x.fillStyle='#ece1cf'; x.font='italic 400 44px "Playfair Display", Georgia, serif'; x.fillText(L('Moj miris je ','My scent is ')+p.name+'.',W/2,1560);
+  x.fillStyle='#ece1cf'; x.font=AF?'400 50px '+AF:'italic 400 44px "Playfair Display", Georgia, serif'; x.fillText(L('Moj miris je ','My scent is ',tr('My scent is ')+' ')+p.name+(LANG==='ar'?'':'.'),W/2,1560);
   x.fillStyle='rgba(201,164,106,.6)'; x.fillRect(W/2-60,1630,120,2);
-  x.fillStyle='#f6efe3'; x.font='500 46px Jost, sans-serif'; x.fillText(L('Koji si ti?','Which one are you?'),W/2,1720);
-  x.fillStyle='#c9a46a'; x.font='400 36px Jost, sans-serif'; x.fillText(location.host.replace(/^www\./,'')+'/#kviz',W/2,1785);
+  x.fillStyle='#f6efe3'; x.font=AF?'500 48px "IBM Plex Sans Arabic", sans-serif':'500 46px Jost, sans-serif'; x.fillText(L('Koji si ti?','Which one are you?'),W/2,1720);
+  x.fillStyle='#c9a46a'; x.font='400 36px Jost, sans-serif'; x.fillText(location.host.replace(/^www\./,'')+(LANG==='ar'?'/ar/':'/')+'#kviz',W/2,1785);
   const blob=await new Promise(res=>c.toBlob(res,'image/png'));
   const file=new File([blob],`moj-miris-${p.id}.png`,{type:'image/png'});
   qt('share',p.id);
-  if(navigator.canShare&&navigator.canShare({files:[file]})){ try{await navigator.share({files:[file],text:L('Moj miris je ','My scent is ')+p.name+'. '+L('Koji si ti?','Which one are you?')+' '+location.origin+'/#kviz'});return;}catch(e){ if(e&&e.name==='AbortError') return; } }
+  if(navigator.canShare&&navigator.canShare({files:[file]})){ try{await navigator.share({files:[file],text:L('Moj miris je ','My scent is ',tr('My scent is ')+' ')+p.name+'. '+L('Koji si ti?','Which one are you?')+' '+location.origin+(LANG==='ar'?'/ar/':'/')+'#kviz'});return;}catch(e){ if(e&&e.name==='AbortError') return; } }
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=file.name; document.body.appendChild(a); a.click(); a.remove();
 }
 if(location.hash==='#kviz'||/[?&]kviz/.test(location.search)) setTimeout(()=>{ const go=document.getElementById('qzGo'); if(go) openQuiz(); },900);
@@ -1710,32 +1718,39 @@ if(location.hash==='#kviz'||/[?&]kviz/.test(location.search)) setTimeout(()=>{ c
 /* ---------- APPLY LANGUAGE ---------- */
 function applyLang(){
   (window.langHooks||[]).forEach(f=>f());
-  document.documentElement.lang=LANG==='en'?'en':'bs';
+  document.documentElement.lang=LANG;
   document.querySelectorAll('[data-en]').forEach(el=>{
     if(el.dataset.bs===undefined) el.dataset.bs=el.innerHTML;
-    el.innerHTML=LANG==='en'?el.dataset.en:el.dataset.bs;
+    el.innerHTML=LANG==='en'?el.dataset.en:LANG==='ar'?tr(el.dataset.en):el.dataset.bs;
   });
   document.querySelectorAll('[data-ph-en]').forEach(el=>{
     if(el.dataset.phBs===undefined) el.dataset.phBs=el.placeholder;
-    el.placeholder=LANG==='en'?el.dataset.phEn:el.dataset.phBs;
+    el.placeholder=LANG==='en'?el.dataset.phEn:LANG==='ar'?tr(el.dataset.phEn):el.dataset.phBs;
+  });
+  document.querySelectorAll('[data-al-en]').forEach(el=>{
+    if(el.dataset.alBs===undefined) el.dataset.alBs=el.getAttribute('aria-label')||'';
+    el.setAttribute('aria-label',LANG==='en'?el.dataset.alEn:LANG==='ar'?tr(el.dataset.alEn):el.dataset.alBs);
   });
   document.querySelectorAll('[data-count]').forEach(el=>{
-    if(el.dataset.preEn!==undefined){ if(el.dataset.preBs===undefined) el.dataset.preBs=el.dataset.pre||''; el.dataset.pre=LANG==='en'?el.dataset.preEn:el.dataset.preBs; }
+    if(el.dataset.preEn!==undefined){ if(el.dataset.preBs===undefined) el.dataset.preBs=el.dataset.pre||''; el.dataset.pre=LANG==='en'?el.dataset.preEn:LANG==='ar'?tr(el.dataset.preEn):el.dataset.preBs; }
+    if(el.dataset.sufAr!==undefined){ if(el.dataset.sufBs===undefined) el.dataset.sufBs=el.dataset.suf||''; el.dataset.suf=LANG==='ar'?el.dataset.sufAr:el.dataset.sufBs; }
     el.innerHTML=(el.dataset.pre?`<small>${el.dataset.pre}</small>`:'')+el.dataset.count+(el.dataset.suf||'');
   });
   document.querySelectorAll('#lang [data-l]').forEach(s=>s.classList.toggle('on',s.dataset.l===LANG));
   renderGrid(); renderReviews(); renderQ(); if(window.__setProd&&window.__curProd) window.__setProd(window.__curProd);
 }
-document.getElementById('lang').addEventListener('click',()=>{
-  LANG=LANG==='bs'?'en':'bs'; try{sessionStorage.setItem('lang',LANG);}catch(e){} qi=Math.min(qi,Q.length); applyLang();
-});
+document.querySelectorAll('#lang [data-l]').forEach(b=>b.addEventListener('click',e=>{
+  const l=b.dataset.l; if(l==='ar'||AR_PAGE) return; /* links: Arabic lives at /ar/, BS/EN at / */
+  e.preventDefault(); if(l===LANG) return; LANG=l; try{sessionStorage.setItem('lang',LANG);}catch(e){}
+  try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){} qi=Math.min(qi,Q.length); applyLang();
+}));
 applyLang();
 
 /* ---------- ORDER DRAWER ---------- */
 const root=document.documentElement, drawer=document.getElementById('drawer'), sel=document.getElementById('dSelect');
 sel.innerHTML=P.map(p=>`<option value="${p.name}">${p.name}</option>`).join('');
 let lastFocus=null;
-function setProd(p){window.__curProd=p;document.getElementById('dImg').src=`img/${p.id}.webp`;document.getElementById('dName').textContent=p.name;document.getElementById('dPrice').textContent=L('50 ml · cijena se otkriva 1. januara','50 ml · price revealed on 1 January');sel.value=p.name;}
+function setProd(p){window.__curProd=p;document.getElementById('dImg').src=`/img/${p.id}.webp`;document.getElementById('dName').textContent=p.name;document.getElementById('dPrice').textContent=L('50 ml · cijena se otkriva 1. januara','50 ml · price revealed on 1 January');sel.value=p.name;}
 window.__setProd=setProd;
 function openOrder(id){
   try{window.CP&&CP.track('reserve_open',{label:id});}catch(e){}
@@ -1745,7 +1760,7 @@ function openOrder(id){
 }
 function closeOrder(){root.classList.remove('open');drawer.setAttribute('aria-hidden','true');document.body.style.overflow='';lastFocus&&lastFocus.focus({preventScroll:true});}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-order]'); if(b){e.preventDefault();openOrder(b.dataset.order);}});
-sel.addEventListener('change',()=>{const p=P.find(x=>x.name===sel.value); if(p){window.__curProd=p;document.getElementById('dImg').src=`img/${p.id}.webp`;document.getElementById('dName').textContent=p.name;}});
+sel.addEventListener('change',()=>{const p=P.find(x=>x.name===sel.value); if(p){window.__curProd=p;document.getElementById('dImg').src=`/img/${p.id}.webp`;document.getElementById('dName').textContent=p.name;}});
 document.getElementById('dClose').onclick=closeOrder; document.getElementById('scrim').onclick=closeOrder;
 addEventListener('keydown',e=>{if(e.key==='Escape'&&root.classList.contains('open'))closeOrder();});
 drawer.querySelector('form').addEventListener('submit',async e=>{
@@ -1815,15 +1830,16 @@ window.__P=P; window.__reduce=reduce;
 (()=>{
 const reduce=window.__reduce, stage=document.getElementById('stage'), wrap=document.getElementById('bwrap'), tilt=document.getElementById('btilt'),
       sheen=document.getElementById('sheen'), glow=document.getElementById('glow'), imgs=[...tilt.querySelectorAll('.b')];
-const SC=[{src:'img/hero/dubai.webp',glow:'rgba(227,154,98,.34)'},{src:'img/hero/oud-secret.webp',glow:'rgba(160,170,80,.26)'},{src:'img/hero/vanille.webp',glow:'rgba(242,198,107,.3)'},{src:'img/hero/safyr.webp',glow:'rgba(127,216,180,.24)'}];
+const SC=[{src:'/img/hero/dubai.webp',glow:'rgba(227,154,98,.34)'},{src:'/img/hero/oud-secret.webp',glow:'rgba(160,170,80,.26)'},{src:'/img/hero/vanille.webp',glow:'rgba(242,198,107,.3)'},{src:'/img/hero/safyr.webp',glow:'rgba(127,216,180,.24)'}];
 let cur=0;
 function mask(i){const u=`url(${SC[i].src})`;sheen.style.webkitMaskImage=u;sheen.style.maskImage=u;}
 mask(0);
 function setScent(i){ if(i===cur) return; cur=i; imgs.forEach((im,k)=>im.classList.toggle('on',k===i)); mask(i); glow.style.setProperty('--gc',SC[i].glow);
   if(!reduce) gsap.fromTo(st,{sh:-20},{sh:130,duration:1.4,ease:'power2.inOut'}); }
 const mobile=()=>innerWidth<860;
-const heroPose=()=>mobile()?{x:0,y:-innerHeight*.2,s:1}:{x:innerWidth*.2,y:innerHeight*.01,s:1};
-const worldPose=()=>mobile()?{x:0,y:-innerHeight*.22,s:.92}:{x:-innerWidth*.22,y:innerHeight*.01,s:.96};
+const RX=document.dir==='rtl'?-1:1; /* right-to-left pages mirror the bottle's path */
+const heroPose=()=>mobile()?{x:0,y:-innerHeight*.2,s:1}:{x:RX*innerWidth*.2,y:innerHeight*.01,s:1};
+const worldPose=()=>mobile()?{x:0,y:-innerHeight*.22,s:.92}:{x:-RX*innerWidth*.22,y:innerHeight*.01,s:.96};
 const st={...heroPose(),sh:-20};
 gsap.registerPlugin(ScrollTrigger);
 const moveTl=gsap.timeline({scrollTrigger:{trigger:'#svjetovi',start:()=>mobile()?'top 5%':'top bottom',end:()=>mobile()?'top -40%':'top+='+(innerHeight*.9)+' top',scrub:.8,invalidateOnRefresh:true}})
@@ -1874,7 +1890,7 @@ requestAnimationFrame(frame);
 </script>
 <script>
 (()=>{const sc=document.getElementById('screen'),v=document.getElementById("filmVideo"),b=document.getElementById('filmPlay');if(!sc)return;
-const pick=()=>'film/karavan'+(LANG==='en'?'':'-bs')+(matchMedia('(max-width:860px)').matches?'-720':'-web')+'.mp4';
+const pick=()=>'/film/karavan'+(LANG==='bs'?'-bs':'')+(matchMedia('(max-width:860px)').matches?'-720':'-web')+'.mp4';
 b.addEventListener('click',()=>{const want=pick();if(!v.src.endsWith(want))v.src=want;
 v.controls=true;sc.classList.add('playing');v.play().catch(()=>{});});
 (window.langHooks=window.langHooks||[]).push(()=>{if(v.src&&!v.src.endsWith(pick())){v.pause();v.removeAttribute('src');v.load();v.controls=false;sc.classList.remove('playing');}});
@@ -1925,22 +1941,22 @@ const $=id=>document.getElementById(id), sh=$('sheet'), v=$('shVideo'), media=$(
 let cur=null,last=null,seen=[];
 try{seen=JSON.parse(localStorage.getItem('seen')||'[]')}catch(e){}
 const mark=()=>{document.querySelectorAll('.p[data-sheet]').forEach(el=>el.classList.toggle('was',seen.includes(el.dataset.sheet)));};
-const src=id=>'film/bottles/'+id+'-'+(LANG==='en'?'en':'bs')+'.mp4';
+const src=id=>'/film/bottles/'+id+'-'+FL()+'.mp4';
 function fill(id){
-  const p=P.find(x=>x.id===id), d=D[id], i=P.indexOf(p), n=p[LANG], f=FILMS[id];
+  const p=P.find(x=>x.id===id), d=D[id], i=P.indexOf(p), n=notes(p), f=FILMS[id];
   if(!seen.includes(id)){seen.push(id);try{localStorage.setItem('seen',JSON.stringify(seen))}catch(e){}}
   cur=id; $('shPanel').style.setProperty('--c',p.c); try{window.CP&&CP.track('product_view',{element:'miris',label:id});}catch(e){}
   $('shTag').textContent=L(...GL[p.g])+' · Extrait de parfum'; $('shNum').textContent=String(i+1).padStart(2,'0')+' / 12';
   $('shName').textContent=p.name; $('shHook').textContent=L(...d.h); $('shDesc').textContent=L(...d.d);
   $('shPyr').innerHTML=[[L('Početak','Top'),n[0]],[L('Srce','Heart'),n[1]],[L('Baza','Base'),n[2]]].map(r=>`<div><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join('');
-  $('shWear').innerHTML=d.w[LANG==='en'?1:0].map(x=>`<span>${x}</span>`).join('');
-  $('shPrice').innerHTML=SEAL+`<small>${L('Cijena se otkriva 1. januara','Price revealed on 1 January')}</small>`; $('shOrder').textContent=L('Rezerviši '+p.name,'Reserve '+p.name);
-  const nx=P[(i+1)%P.length]; $('shNext').textContent=L('Sljedeći: ','Next: ')+nx.name+' →';
+  $('shWear').innerHTML=(LANG==='bs'?d.w[0]:d.w[1].map(tr)).map(x=>`<span>${x}</span>`).join('');
+  $('shPrice').innerHTML=SEAL+`<small>${L('Cijena se otkriva 1. januara','Price revealed on 1 January')}</small>`; $('shOrder').textContent=L('Rezerviši '+p.name,'Reserve '+p.name,tr('Reserve')+' '+p.name);
+  const nx=P[(i+1)%P.length]; $('shNext').textContent=L('Sljedeći: ','Next: ')+nx.name+(LANG==='ar'?' ←':' →');
   $('shFilm').textContent=L('Film · ','Film · ')+L(f[0],f[1]);
   $('shDots').innerHTML=P.map(q=>`<i class="${seen.includes(q.id)?'on':''}"></i>`).join('');
-  $('shProg').textContent=seen.length>=12?L('Otkrili ste svih 12 mirisa. Koji je vaš?','You’ve discovered all 12. Which one is yours?'):L(`Otkrili ste ${seen.length} od 12 mirisa`,`You’ve discovered ${seen.length} of 12 scents`);
+  $('shProg').textContent=seen.length>=12?L('Otkrili ste svih 12 mirisa. Koji je vaš?','You’ve discovered all 12. Which one is yours?'):L(`Otkrili ste ${seen.length} od 12 mirisa`,`You’ve discovered ${seen.length} of 12 scents`,`اكتشفتَ ${seen.length} من 12 عطرًا`);
   v.pause(); v.removeAttribute('src'); v.load(); v.controls=false; media.classList.remove('playing','loading');
-  media.style.backgroundImage='url(film/bottles/'+id+'.webp)'; v.poster='film/bottles/'+id+'.webp'; mark();
+  media.style.backgroundImage='url(/film/bottles/'+id+'.webp)'; v.poster='/film/bottles/'+id+'.webp'; mark();
 }
 function open(id,from){
   last=from||document.activeElement; fill(id);
@@ -1979,7 +1995,7 @@ const el=document.getElementById('dCode');if(el&&v)el.value=v;}catch(e){}})();
 if(window.gsap&&window.ScrollTrigger){const st=document.getElementById('stage');gsap.matchMedia().add('(max-width: 860px)',()=>{const t=gsap.to(st,{opacity:0,ease:'none',scrollTrigger:{trigger:'#svjetovi',start:'top 85%',end:'top 35%',scrub:true,onLeave:()=>st.style.visibility='hidden',onEnterBack:()=>st.style.visibility='visible'}});return()=>{t.scrollTrigger&&t.scrollTrigger.kill();t.kill();st.style.opacity='';st.style.visibility='';};});}})();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
-<script src="js/cp-backend.js" defer></script>
+<script src="/js/cp-backend.js" defer></script>
 <script>
 (()=>{const f=document.getElementById('b2bForm'),card=document.getElementById('b2bCard'),err=document.getElementById('b2bErr');
 if(location.hash==='#partneri'||/[?&]partneri/.test(location.search))setTimeout(()=>document.getElementById('partneri').scrollIntoView({behavior:'smooth'}),900);
@@ -1990,7 +2006,7 @@ f.addEventListener('submit',async e=>{e.preventDefault();err.textContent='';
   const b=f.querySelector('button[type=submit]');b.disabled=true;
   const r=window.CP&&CP.partner?await CP.partner({kind:d.kind,company:d.company,contact_name:d.contact_name,phone:d.phone,email:d.email,city:d.city,volume:d.volume,note:d.note,consent:!!d.consent}):{error:'offline'};
   b.disabled=false;
-  if(r.ok){card.classList.add('sent');}else{err.textContent=(document.documentElement.lang==='en'?'Sending failed. Please try again or message us on Instagram.':'Slanje nije uspjelo. Pokušajte ponovo ili nam pišite na Instagram.');}
+  if(r.ok){card.classList.add('sent');}else{err.textContent=L('Slanje nije uspjelo. Pokušajte ponovo ili nam pišite na Instagram.','Sending failed. Please try again or message us on Instagram.');}
 });})();
 </script>
 </body>

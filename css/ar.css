@@ -1,0 +1,53 @@
+/* Arabic (right-to-left) layer for /ar/ pages. Loaded after the page's own styles.
+   Latin words (bottle names, "Extrait de parfum") keep the original fonts;
+   Arabic letters fall back to Amiri (headings) and IBM Plex Sans Arabic (text). */
+html[lang=ar]{
+  --serif:"Playfair Display","Amiri",Georgia,serif;
+  --serif2:"Amiri","EB Garamond",Georgia,serif;
+  --sans:"Jost","IBM Plex Sans Arabic",system-ui,sans-serif;
+}
+html[lang=ar] body{font-family:var(--sans);line-height:1.85}
+
+/* Arabic letters join: tracking and caps break them */
+html[lang=ar] *:not(.cune):not(.qz-brand){letter-spacing:0!important;text-transform:none!important}
+/* Arabic has no true italic: emphasis is the gold colour only */
+html[lang=ar] em,html[lang=ar] i:not(.cd i),html[lang=ar] q,html[lang=ar] blockquote p,
+html[lang=ar] .num,html[lang=ar] .thanks,html[lang=ar] .sig{font-style:normal!important}
+
+/* Headings: Amiri needs more room above and below the line */
+html[lang=ar] h1,html[lang=ar] h2,html[lang=ar] h3{line-height:1.38;font-weight:400}
+html[lang=ar] h1{font-size:clamp(2.5rem,6.2vw,5.4rem)}
+html[lang=ar] h1 em,html[lang=ar] h2 em,html[lang=ar] .q em,html[lang=ar] .tag em{font-family:"Amiri",serif}
+html[lang=ar] p,html[lang=ar] li,html[lang=ar] dd,html[lang=ar] summary,html[lang=ar] label{line-height:1.85}
+
+/* small labels were tiny uppercase Latin; Arabic needs a readable size */
+html[lang=ar] .eyebrow,html[lang=ar] .num,html[lang=ar] .badge,html[lang=ar] .btn,html[lang=ar] .chip,
+html[lang=ar] .filters button,html[lang=ar] .nav-links a,html[lang=ar] .scroll-cue,html[lang=ar] .cue,
+html[lang=ar] .lbl,html[lang=ar] .pills span,html[lang=ar] .credits b,html[lang=ar] .step,html[lang=ar] .fine,
+html[lang=ar] .qz-meta,html[lang=ar] .qz-n,html[lang=ar] .qz-you,html[lang=ar] .qz-match,html[lang=ar] .soon span,
+html[lang=ar] .b2b-kinds span,html[lang=ar] .tag,html[lang=ar] .seen,html[lang=ar] .meta,html[lang=ar] .prog,
+html[lang=ar] .wear span,html[lang=ar] .fact b,html[lang=ar] figcaption,html[lang=ar] nav a.back,html[lang=ar] .cover-label,
+html[lang=ar] label > span,html[lang=ar] .stat span{font-size:max(.86rem,1em*.95)}
+html[lang=ar] .btn{font-size:.95rem;font-weight:500}
+html[lang=ar] .nav-links a{font-size:.92rem}
+
+/* Latin-only bits inside Arabic text stay left-to-right */
+html[lang=ar] input[type=tel],html[lang=ar] input[type=email],html[lang=ar] input[name=kod]{direction:ltr;text-align:right}
+html[lang=ar] .step,html[lang=ar] .qz-n,html[lang=ar] .dt,html[lang=ar] #shNum{direction:ltr;unicode-bidi:isolate}
+
+/* map, compass and the film keep real-world orientation */
+html[lang=ar] .saga-map,html[lang=ar] .route,html[lang=ar] .mapwrap,html[lang=ar] .compass,html[lang=ar] .screen{direction:ltr}
+
+/* layout mirrors */
+@media (min-width:861px){html[lang=ar] .campaign{justify-content:flex-end}}
+html[lang=ar] .p .tag{left:auto;right:14px}
+html[lang=ar] .p .seen{right:auto;left:14px}
+html[lang=ar] .drawer{right:auto;left:0;border-left:0;border-right:1px solid var(--line);transform:translateX(-100%)}
+html[lang=ar].open .drawer{transform:none}
+html[lang=ar] .marquee{direction:ltr}
+html[lang=ar] .marquee .rv{direction:rtl;text-align:right}
+html[lang=ar] .qz-notes em{margin-inline-end:.45em}
+/* story page: a drop cap would break the joined Arabic letters; quote bar goes to the right */
+html[lang=ar] .drop::first-letter{float:none;font:inherit;padding:0;color:inherit;line-height:inherit}
+html[lang=ar] blockquote{border-left:0;border-right:1px solid var(--gold);padding:0 clamp(18px,3vw,28px) 0 0}
+html[lang=ar] article p{line-height:2}
