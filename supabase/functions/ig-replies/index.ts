@@ -218,6 +218,8 @@ async function creatorReply(text: string, username: string | null): Promise<stri
     if (username && username.toLowerCase() !== c.instagram) {
       return `Kod ${code} je prijavljen za profil @${c.instagram}, a poruka je stigla s @${username}. Pošalji kod s profila @${c.instagram} da potvrdiš prijavu.`;
     }
+    // the same code again later: stay quiet, ManyChat and the bot must not reply over and over
+    if (c.dm_verified_at && Date.now() - new Date(c.dm_verified_at).getTime() > 120000) return "";
     return `Hvala${first ? ", " + first : ""}! Profil @${c.instagram} je potvrđen i tvoja prijava za kreatore je kompletna. Lično pregledamo profile i javljamo se emailom nakon 31. oktobra 🤍`;
   }
   if (/^\W*kreator(ka|i)?\W*$/i.test(text) || (/kreator/i.test(text) && text.length <= 60 && !/\?/.test(text))) {
@@ -241,6 +243,7 @@ async function handleDM(ownId: string, ev: any) {
   if (error) return;                                       // duplicate delivery from Meta
 
   const fixed = await creatorReply(text, username).catch(() => null);
+  if (fixed === "") { await sb.from("ig_messages").update({ status: "preskoceno", reason: "Kreatori: kod je već potvrđen" }).eq("id", row.id); return; }
   if (fixed) {
     try {
       await igSendDM(senderId, fixed);
@@ -363,6 +366,10 @@ async function manychat(body: any) {
     .insert({ kind: "dm", direction: "in", ig_user_id: "mc_" + userId, username: body.username ?? null, mid: "mc_" + userId + "_" + Date.now(), text })
     .select("id").single();
   const fixed = await creatorReply(text, body.username ?? null).catch(() => null);
+  if (fixed === "") {
+    await sb.from("ig_messages").update({ status: "preskoceno", reason: "Kreatori: kod je već potvrđen" }).eq("id", row!.id);
+    return json({ reply: "", auto: false });
+  }
   if (fixed) {
     await sb.from("ig_messages").update({ status: "poslano_auto", draft: fixed, reason: "Kreatori: automatski odgovor", sent_at: new Date().toISOString() }).eq("id", row!.id);
     return json({ reply: fixed, auto: true });
