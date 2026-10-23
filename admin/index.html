@@ -348,12 +348,12 @@
       <div class="ld-tools card" id="ldTools" hidden>
         <p class="sub">Claude pretraži web i zadrži samo firme čiji je email ili mobitel objavljen na njihovoj vlastitoj stranici (link je sačuvan kao dokaz). Ništa se ne šalje bez tvog klika.</p>
         <form class="panel ld-find" id="ldFind">
-          <label>Šta tražiš<select name="segment"><option value="preprodavac">Preprodavači (parfimerije, butici, saloni, drogerije)</option><option value="poklon">Firme za novogodišnje poklone</option></select></label>
-          <label>Grad<input name="city" list="ldCities" value="Sarajevo" required></label>
+          <label>Šta tražiš<select name="segment"><option value="veleprodaja">Veleprodaja, distributeri, lanci, agencije za poklone</option><option value="korporacije">Najveće firme (pokloni za stotine zaposlenih)</option><option value="preprodavac">Preprodavači (parfimerije, butici, saloni, drogerije)</option><option value="poklon">Firme za novogodišnje poklone</option></select></label>
+          <label>Grad<input name="city" list="ldCities" value="Cijela BiH" required></label>
           <label>Fokus (nije obavezno)<input name="category" placeholder="npr. frizerski saloni, banke, IT firme"></label>
           <label>Koliko<select name="count"><option>5</option><option selected>10</option><option>15</option></select></label>
           <button class="btn dark" type="submit">Pronađi</button>
-          <datalist id="ldCities"><option>Sarajevo</option><option>Tuzla</option><option>Zenica</option><option>Mostar</option><option>Banja Luka</option><option>Bihać</option><option>Travnik</option><option>Brčko</option><option>Bijeljina</option><option>Cazin</option><option>Visoko</option><option>Gračanica</option><option>Goražde</option><option>Livno</option><option>Konjic</option></datalist>
+          <datalist id="ldCities"><option>Cijela BiH</option><option>Sarajevo</option><option>Tuzla</option><option>Zenica</option><option>Mostar</option><option>Banja Luka</option><option>Bihać</option><option>Travnik</option><option>Brčko</option><option>Bijeljina</option><option>Cazin</option><option>Visoko</option><option>Gračanica</option><option>Goražde</option><option>Livno</option><option>Konjic</option></datalist>
         </form>
         <details class="ld-more"><summary>Dodaj ručno ili uvezi listu (CSV)</summary>
           <form class="panel ld-find" id="ldAdd">
@@ -366,7 +366,7 @@
             <label style="grid-column:1/-1">Šta znaš o njima (Claude to koristi u mailu)<input name="about"></label>
             <button class="btn dark" type="submit">Dodaj</button>
           </form>
-          <p class="sub" style="margin-top:10px">CSV s kolonama <code>firma, email, grad, djelatnost, web, telefon, kontakt, o_njima, segment</code> (segment: preprodavac ili poklon). Za kupljene liste (InfobelPRO, Bisnode) ili listu članica komore.</p>
+          <p class="sub" style="margin-top:10px">CSV s kolonama <code>firma, email, grad, djelatnost, web, telefon, kontakt, o_njima, segment</code> (segment: preprodavac, poklon, veleprodaja ili korporacije). Čita i izvoz iz CompanyWall-a ili liste komore (kolone naziv, mjesto, djelatnost, prihod, broj_zaposlenih). Firme koje već imamo se preskaču.</p>
           <input type="file" id="ldCsv" accept=".csv,text/csv">
         </details>
         <details class="ld-more" open><summary>Prilozi za mailove</summary>
@@ -396,7 +396,7 @@
         </div>
         <div class="ld-fil">
           <input type="search" id="ldSearch" placeholder="Traži firmu, grad, email" aria-label="Traži">
-          <select id="ldSeg" aria-label="Tip"><option value="">Svi tipovi</option><option value="preprodavac">Preprodavači</option><option value="poklon">Pokloni za firme</option></select>
+          <select id="ldSeg" aria-label="Tip"><option value="">Svi tipovi</option><option value="veleprodaja">Veleprodaja i lanci</option><option value="korporacije">Najveće firme</option><option value="preprodavac">Preprodavači</option><option value="poklon">Pokloni za firme</option></select>
           <select id="ldCity" aria-label="Grad"><option value="">Svi gradovi</option></select>
         </div>
       </div>
@@ -1054,7 +1054,8 @@
   const NEXT_STEP = { nova: 'Napiši mail', nacrt: 'Pročitaj i pošalji', followup: 'Podsjetnik spreman', greska: 'Provjeri grešku', u_redu: 'Šalje se', poslano: 'Čeka odgovor', odgovorili: 'Javi se nazad', zainteresovani: 'Dogovori sastanak' };
   function renderLeadList(rows) {
     const q = $('ldSearch').value.trim().toLowerCase(), seg = $('ldSeg').value, city = $('ldCity').value;
-    rows = rows.filter((l) => (!seg || l.segment === seg) && (!city || (l.city || '') === city) && (!q || [l.company, l.city, l.email, l.category, l.phone].join(' ').toLowerCase().includes(q)));
+    const segOk = (l) => !seg || (seg === 'veleprodaja' ? /^veleprodaja/i.test(l.category || '') : seg === 'korporacije' ? /^velika firma/i.test(l.category || '') : l.segment === seg);
+    rows = rows.filter((l) => segOk(l) &&(!city || (l.city || '') === city) && (!q || [l.company, l.city, l.email, l.category, l.phone].join(' ').toLowerCase().includes(q)));
     // most useful first: ready to send, then reminders, new, rest
     const ord = { nacrt: 0, followup: 1, greska: 2, nova: 3, zainteresovani: 4, odgovorili: 5, u_redu: 6, poslano: 7 };
     rows = rows.slice().sort((a, b) => (ord[a.status] ?? 9) - (ord[b.status] ?? 9) || String(a.city).localeCompare(String(b.city)) || a.company.localeCompare(b.company));
@@ -1183,16 +1184,23 @@
   async function loadJobs() {
     const r = await ldCall({ action: 'jobs' });
     const jobs = (r.jobs || []).slice(0, 4);
-    $('ldJobs').innerHTML = jobs.map((j) => '<div>' + when(j.at) + ' · ' + esc(j.segment === 'poklon' ? 'pokloni' : 'preprodavači') + ', ' + esc(j.city || '') + (j.category ? ' (' + esc(j.category) + ')' : '') + ': ' +
-      (!j.gotovo ? '<b>Claude traži… (1 do 3 minute)</b>' : j.greska ? '<span class="ld-bad">' + esc(j.greska) + '</span>' : 'pronašao ' + j.nadjeno + ', dodano ' + j.dodano + ' novih') + '</div>').join('');
+    const SEGL = { poklon: 'pokloni', preprodavac: 'preprodavači', veleprodaja: 'veleprodaja i lanci', korporacije: 'najveće firme' };
+    $('ldJobs').innerHTML = jobs.map((j) => '<div>' + when(j.at) + ' · ' + esc(SEGL[j.segment] || j.segment) + ', ' + esc(j.city || '') + (j.category ? ' (' + esc(j.category) + ')' : '') + ': ' +
+      (!j.gotovo ? '<b>Claude traži… (1 do 3 minute)</b>' : j.greska ? '<span class="ld-bad">' + esc(j.greska) + '</span>' : 'pronašao ' + j.nadjeno + ', dodano ' + j.dodano + ' novih' + (j.duplikati ? ', ' + j.duplikati + ' već imamo' : '')) + '</div>').join('');
+    const busy = jobs.some((j) => !j.gotovo);
+    const btn = $('ldFind').querySelector('button[type=submit]');
+    btn.disabled = busy; btn.textContent = busy ? 'Traži se…' : 'Pronađi';
     clearTimeout(jobTimer);
-    if (jobs.some((j) => !j.gotovo)) jobTimer = setTimeout(() => { loadJobs(); loadLeads(); }, 10000);
+    if (busy) jobTimer = setTimeout(() => { loadJobs(); loadLeads(); }, 10000);
   }
   $('ldFind').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]');
+    if (btn.disabled) return;
+    btn.disabled = true; btn.textContent = 'Traži se…';
     const f = Object.fromEntries(new FormData(e.target));
     const r = await ldCall({ action: 'find', ...f, count: Number(f.count) });
-    toast(r.error ? 'Nije uspjelo: ' + r.error : 'Claude traži firme. Lista se sama osvježi.');
+    toast(r.error ? 'Nije uspjelo: ' + r.error : r.already ? 'Jedna pretraga već traje. Sačekaj da završi.' : 'Claude traži firme. Lista se sama osvježi.');
     loadJobs();
   });
   $('ldAdd').addEventListener('submit', async (e) => {
@@ -1214,7 +1222,7 @@
       else cell += ch;
     }
     if (cell || row.length) { row.push(cell); rows.push(row); }
-    const head = rows.shift().map((h) => h.trim().toLowerCase());
+    const head = rows.shift().map((h) => h.trim().toLowerCase().replace(/^\ufeff/, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'dj').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, ''));
     return rows.filter((r) => r.some((c) => c.trim())).map((r) => Object.fromEntries(head.map((h, i) => [h, (r[i] || '').trim()])));
   }
   $('ldCsv').addEventListener('change', async (e) => {

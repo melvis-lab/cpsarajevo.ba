@@ -169,8 +169,10 @@ Vrati SAMO:
     : " U jednoj rečenici spomeni da u prilogu šalješ katalog sa svih 12 mirisa, a u njemu su i novi travel spray od 10 ml i 7 mirisa za dom od 250 ml. Zamoli ih da se registruju na stranici preko linka, jer cjenovnik uskoro šaljemo samo registrovanim firmama. Registracija je besplatna. Link stavi sam u svom redu, prije pozdrava.";
   const task = followup
     ? `Ovo je KRATAK podsjetnik (najviše 60 riječi) firmi koja nije odgovorila na prvi mail prije nekoliko dana. Ne ponavljaj cijeli prvi mail. Ljubazno, bez prigovora što nisu odgovorili, jedna nova korisna rečenica (npr. da se pokloni za kraj godine naručuju ranije, ili da možeš ostaviti uzorke), i lako pitanje na koje se odgovara jednom rečenicom. Predmet počinje s "Re: " i ponavlja stari predmet.\n\nPrvi mail:\n${prev}`
-    : lead.segment === "poklon"
-      ? "Napiši PRVI mail ovoj firmi: nudiš parfeme kao novogodišnje i praznične poklone za zaposlene i klijente, u većim količinama. NE spominji da javna prodaja počinje 1. januara (pokloni im trebaju prije)."
+    : /^veleprodaja/i.test(lead.category || "")
+      ? "Napiši PRVI mail ovoj firmi: to je veleprodaja, distributer, lanac ili agencija za poklone. Pitaš da li bi htjeli uvrstiti mirise u svoj asortiman i nuditi ih svojim kupcima ili poslovnicama širom BiH. Ponudi kratak sastanak s testerima i katalogom. Ne obećavaj ekskluzivu ni rabate."
+      : lead.segment === "poklon"
+      ? "Napiši PRVI mail ovoj firmi: nudiš parfeme kao novogodišnje i praznične poklone za zaposlene i klijente, u većim količinama." + (/^velika firma/i.test(lead.category || "") ? " Firma je velika: spomeni da možete pripremiti poklone za veći broj zaposlenih i dogovoriti dostavu na više lokacija." : "") + " NE spominji da javna prodaja počinje 1. januara (pokloni im trebaju prije)."
       : "Napiši PRVI mail ovoj firmi: pitaš da li bi htjeli biti preprodavač (imati mirise u ponudi).";
   let last = "";
   for (let attempt = 0; attempt < 2; attempt++) {
@@ -212,9 +214,14 @@ Vrati SAMO tekst poruke unutar <poruka></poruka>.`;
 
 // ---------- finding companies ----------
 const SEGMENT_HINT: Record<string, string> = {
-  preprodavac: "firme koje bi mogle PREPRODAVATI parfeme: parfimerije, drogerije, kozmetičke radnje, butici i concept store, saloni ljepote i frizerski saloni s prodajom, apoteke s kozmetikom, hotelski shopovi, poklon radnje",
+  preprodavac: "firme koje bi mogle PREPRODAVATI parfeme: parfimerije, drogerije, kozmetičke radnje, butici i concept store, saloni ljepote i frizerski saloni s prodajom, apoteke s kozmetikom, hotelski shopovi, poklon radnje. Preskoči cvjećare, štamparije, firme za odjeću bez kozmetike i firme koje parfeme nikad ne bi držale.",
   poklon: "firme koje kupuju NOVOGODIŠNJE POKLONE za zaposlene i klijente u većim količinama: banke, osiguranja, IT i softverske firme, telekomi, advokatske i konsultantske kancelarije, marketinške agencije, auto saloni, nekretnine, veće proizvodne i trgovinske firme, hoteli",
+  // stored as segment "preprodavac", category starts with "Veleprodaja"
+  veleprodaja: "VELEPRODAJA I LANCI koji kupuju veće količine i dalje prodaju širom BiH: distributeri i uvoznici parfema i kozmetike (djelatnost 46.45 trgovina na veliko parfemima i kozmetikom), veledrogerije i veleprodaje kozmetike, lanci parfumerija i drogerija s nabavkom u BiH, lanci apoteka, duty free i aerodromski shopovi, lanci hotela, veći online shopovi kozmetike, agencije za korporativne poklone i promotivni materijal (one prodaju poklone firmama). Traži firme s više poslovnica ili s prodajom po cijeloj BiH. Kontakt: nabavka@, prodaja@, komercijala@ ili ime direktora/komercijaliste ako je javno.",
+  // stored as segment "poklon"
+  korporacije: "NAJVEĆE FIRME u BiH (po prihodu ili broju zaposlenih, npr. s rang lista najvećih firmi FIA/APIF, CompanyWall, Bisnode) koje kupuju poklone za stotine zaposlenih ili ključne klijente: banke, telekomi, osiguranja, elektroprivrede, trgovački lanci, farmacija, IT firme s više od 100 zaposlenih, proizvođači, naftne kompanije. Kontakt: HR, marketing ili ured uprave (hr@, marketing@, kabinet@, info@).",
 };
+const SEGMENT_DB: Record<string, string> = { preprodavac: "preprodavac", poklon: "poklon", veleprodaja: "preprodavac", korporacije: "poklon" };
 const FIND_SYSTEM = `Ti si istraživač koji pronalazi stvarne firme u Bosni i Hercegovini za poslovnu saradnju. Imaš alat za pretragu weba, a ako imaš i web_fetch, otvori kontakt stranicu firme da vidiš email svojim očima.
 
 PRAVILA:
@@ -230,31 +237,65 @@ PRAVILA:
 Na kraju vrati SAMO JSON niz unutar <firme></firme>:
 <firme>[{"firma":"","djelatnost":"","grad":"","web":"","email":"","telefon":"","kontakt_osoba":"","o_njima":"","izvor":""}]</firme>`;
 
+// Read the JSON list even when the answer was cut off: keep every complete {...} object.
+function parseFirms(raw: string): any[] {
+  const body = tag(raw, "firme") || raw;
+  try { const v = JSON.parse(body); if (Array.isArray(v)) return v; } catch { /* fall through */ }
+  const out: any[] = [];
+  let depth = 0, start = -1, inStr = false, escNext = false;
+  for (let i = 0; i < body.length; i++) {
+    const c = body[i];
+    if (inStr) { if (escNext) escNext = false; else if (c === "\\") escNext = true; else if (c === '"') inStr = false; continue; }
+    if (c === '"') inStr = true;
+    else if (c === "{") { if (depth === 0) start = i; depth++; }
+    else if (c === "}" && depth > 0) { depth--; if (depth === 0 && start >= 0) { try { out.push(JSON.parse(body.slice(start, i + 1))); } catch { /* skip broken one */ } start = -1; } }
+  }
+  return out;
+}
+const normName = (s: string) => s.toLowerCase().replace(/\b(d\.?\s?o\.?\s?o\.?|d\.?\s?d\.?|a\.?\s?d\.?|s\.?\s?p\.?|obrt)\b/g, "").replace(/[^a-z0-9čćšđž]+/g, " ").trim();
+
 async function runFind(job: number, p: { segment: string; city: string; category?: string; count?: number }) {
   const n = Math.min(Math.max(Number(p.count) || 10, 3), 15);
+  const wide = p.segment === "veleprodaja" || p.segment === "korporacije";
+  const city = (p.city || "").trim();
+  const allBih = !city || /^(bih|cijela bih|sve|bosna)/i.test(city);
   try {
-    const { data: have } = await sb.from("leads").select("company").ilike("city", p.city || "%").limit(400);
-    const known = (have ?? []).map((r: any) => r.company).join("; ").slice(0, 3000);
-    const prompt = `Pronađi ${n} firmi u gradu: ${p.city || "Sarajevo"} (BiH).
-Tip: ${SEGMENT_HINT[p.segment] ?? SEGMENT_HINT.preprodavac}.${p.category ? `\nFokus na: ${p.category}.` : ""}
+    const { data: have } = await sb.from("leads").select("company").limit(2000);
+    const knownSet = new Set((have ?? []).map((r: any) => normName(r.company)));
+    const known = (have ?? []).map((r: any) => r.company).join("; ").slice(0, 6000);
+    const where = allBih ? "cijela Bosna i Hercegovina" : `${city} (BiH)${wide ? ", a ako ih tamo nema dovoljno, i sjedišta u drugim gradovima BiH koja pokrivaju taj grad" : ""}`;
+    const prompt = `Pronađi ${n} firmi. Područje: ${where}.
+Tip: ${SEGMENT_HINT[p.segment] ?? SEGMENT_HINT.preprodavac}${p.category ? `\nFokus na: ${p.category}.` : ""}
+Polje "o_njima" najviše 25 riječi. Ne piši ništa izvan <firme></firme> osim kratkih bilješki dok tražiš.
 Već imamo (ne ponavljaj): ${known || "ništa"}`;
-    const raw = await claude(FIND_SYSTEM, prompt, { max: 6000, tools: [{ type: "web_search_20250305", name: "web_search", max_uses: 6 }, { type: "web_fetch_20250910", name: "web_fetch", max_uses: 8, max_content_tokens: 5000 }] });
-    let list: any[] = [];
-    try { list = JSON.parse(tag(raw, "firme") || "[]"); } catch { throw new Error("Claude nije vratio listu firmi"); }
-    let added = 0;
+    const raw = await claude(FIND_SYSTEM, prompt, { max: 16000, tools: [{ type: "web_search_20250305", name: "web_search", max_uses: wide ? 8 : 6 }, { type: "web_fetch_20250910", name: "web_fetch", max_uses: 8, max_content_tokens: 5000 }] });
+    const list = parseFirms(raw);
+    if (!list.length) throw new Error("Claude nije vratio listu firmi. Pokušaj ponovo s manjim brojem (5 ili 10).");
+    const dbSeg = SEGMENT_DB[p.segment] ?? "preprodavac";
+    let added = 0, dup = 0;
     for (const f of list) {
       if (!f?.firma) continue;
+      const key = normName(String(f.firma));
+      if (knownSet.has(key)) { dup++; continue; }
+      knownSet.add(key);
       const email = String(f.email ?? "").trim().toLowerCase().replace(/^mailto:/, "");
+      // keep the filter clean: "Sarajevo (Ilidža)" -> "Sarajevo", the area goes into "about"
+      let fc = String(f.grad || city || "").trim();
+      let about = f.o_njima || null;
+      const m = fc.match(/^([^(]+?)\s*\(([^)]+)\)\s*$/);
+      if (m) { fc = m[1].trim(); about = [about, "Lokacija: " + m[2]].filter(Boolean).join(" "); }
+      const cat = p.segment === "veleprodaja" ? "Veleprodaja / lanac" + (f.djelatnost ? ": " + f.djelatnost : "")
+        : p.segment === "korporacije" ? "Velika firma" + (f.djelatnost ? ": " + f.djelatnost : "") : (f.djelatnost || p.category || null);
       const row = {
-        company: String(f.firma).trim(), segment: p.segment === "poklon" ? "poklon" : "preprodavac", category: f.djelatnost || p.category || null,
-        city: f.grad || p.city || null, website: f.web || null, email: /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/.test(email) ? email : null,
-        phone: f.telefon || null, contact_name: f.kontakt_osoba || null, about: f.o_njima || null, source_url: f.izvor || null,
+        company: String(f.firma).trim(), segment: dbSeg, category: cat,
+        city: fc || null, website: f.web || null, email: /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/.test(email) ? email : null,
+        phone: f.telefon || null, contact_name: f.kontakt_osoba || null, about, source_url: f.izvor || null,
         source: "Claude web pretraga", found_by: "claude",
       };
       const { data: ins, error } = await sb.from("leads").insert(row).select("id,email").maybeSingle();
       if (!error && ins) { added++; if (ins.email) await checkLead(ins.id, ins.email); }
     }
-    await sb.from("lead_log").update({ detail: JSON.stringify({ ...p, gotovo: true, nadjeno: list.length, dodano: added }) }).eq("id", job);
+    await sb.from("lead_log").update({ detail: JSON.stringify({ ...p, gotovo: true, nadjeno: list.length, dodano: added, duplikati: dup }) }).eq("id", job);
   } catch (e) {
     await sb.from("lead_log").update({ detail: JSON.stringify({ ...p, gotovo: true, greska: String((e as Error)?.message ?? e).slice(0, 300) }) }).eq("id", job);
   }
@@ -280,6 +321,11 @@ async function action(body: any) {
   const a = body.action;
 
   if (a === "find") {
+    // one search at a time: a double click used to start two identical searches
+    const { data: open } = await sb.from("lead_log").select("id,created_at,detail").eq("kind", "pretraga")
+      .gt("created_at", new Date(Date.now() - 6 * 60000).toISOString()).order("created_at", { ascending: false }).limit(5);
+    const running = (open ?? []).find((j: any) => { try { return !JSON.parse(j.detail || "{}").gotovo; } catch { return false; } });
+    if (running) return json({ started: running.id, already: true });
     const { data: job } = await sb.from("lead_log").insert({ kind: "pretraga", detail: JSON.stringify({ ...body, gotovo: false }) }).select("id").single();
     // @ts-ignore EdgeRuntime exists on Supabase
     EdgeRuntime.waitUntil(runFind(job!.id, body));
@@ -287,7 +333,12 @@ async function action(body: any) {
   }
   if (a === "jobs") {
     const { data } = await sb.from("lead_log").select("id,created_at,detail").eq("kind", "pretraga").order("created_at", { ascending: false }).limit(10);
-    return json({ jobs: (data ?? []).map((j: any) => ({ id: j.id, at: j.created_at, ...JSON.parse(j.detail || "{}") })) });
+    return json({ jobs: (data ?? []).map((j: any) => {
+      const d = JSON.parse(j.detail || "{}");
+      // the background worker has a time limit; a search that never reported back was stopped
+      if (!d.gotovo && Date.now() - new Date(j.created_at).getTime() > 7 * 60000) { d.gotovo = true; d.greska = "Pretraga je prekinuta (trajala predugo). Pokušaj ponovo s 5 ili 10 firmi."; }
+      return { id: j.id, at: j.created_at, ...d };
+    }) });
   }
   if (a === "check") {
     const q = sb.from("leads").select("id,email").not("email", "is", null);
@@ -297,15 +348,30 @@ async function action(body: any) {
     return json({ checked: out });
   }
   if (a === "import") {
-    const rows = (body.rows ?? []).slice(0, 2000).map((r: any) => ({
-      company: String(r.company ?? r.firma ?? "").trim(), segment: /poklon/i.test(r.segment ?? "") ? "poklon" : "preprodavac",
-      category: r.category ?? r.djelatnost ?? null, city: r.city ?? r.grad ?? null, website: r.website ?? r.web ?? null,
-      email: String(r.email ?? "").trim().toLowerCase() || null, phone: r.phone ?? r.telefon ?? null,
-      contact_name: r.contact_name ?? r.kontakt ?? null, about: r.about ?? r.o_njima ?? null,
-      source: r.source ?? body.source ?? "CSV import", found_by: "import",
-    })).filter((r: any) => r.company);
+    // also reads CompanyWall / komora exports: naziv, mjesto/sjediste, djelatnost, prihod, broj_zaposlenih
+    const { data: have } = await sb.from("leads").select("company").limit(5000);
+    const seen = new Set((have ?? []).map((x: any) => normName(x.company)));
+    const rows = (body.rows ?? []).slice(0, 2000).map((r: any) => {
+      const seg = String(r.segment ?? "").toLowerCase();
+      const extra = [r.prihod && `Prihod: ${r.prihod}`, (r.broj_zaposlenih ?? r.zaposleni) && `Zaposleni: ${r.broj_zaposlenih ?? r.zaposleni}`].filter(Boolean).join(", ");
+      const dj = r.category ?? r.djelatnost ?? null;
+      return {
+        company: String(r.company ?? r.firma ?? r.naziv ?? "").trim(),
+        segment: /poklon|korpor/.test(seg) ? "poklon" : "preprodavac",
+        category: /veleprod/.test(seg) ? "Veleprodaja / lanac" + (dj ? ": " + dj : "") : /korpor/.test(seg) ? "Velika firma" + (dj ? ": " + dj : "") : dj,
+        city: r.city ?? r.grad ?? r.mjesto ?? r.sjediste ?? null, website: r.website ?? r.web ?? null,
+        email: String(r.email ?? "").trim().toLowerCase() || null, phone: r.phone ?? r.telefon ?? null,
+        contact_name: r.contact_name ?? r.kontakt ?? r.direktor ?? null, about: [r.about ?? r.o_njima, extra].filter(Boolean).join(" ") || null,
+        source: r.source ?? body.source ?? "CSV import", found_by: "import",
+      };
+    }).filter((r: any) => r.company);
     let added = 0, skipped = 0;
-    for (const r of rows) { const { error } = await sb.from("leads").insert(r); error ? skipped++ : added++; }
+    for (const r of rows) {
+      const k = normName(r.company);
+      if (seen.has(k)) { skipped++; continue; }
+      seen.add(k);
+      const { error } = await sb.from("leads").insert(r); error ? skipped++ : added++;
+    }
     return json({ added, skipped });
   }
   if (a === "draft_due") {
