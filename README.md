@@ -34,3 +34,26 @@ English comes from the `data-en` attributes; Arabic is looked up by that English
 The form saves to Supabase (admin) and Netlify Forms (email) at the same time and shows "thank you"
 if either one worked. If both fail, the visitor gets a WhatsApp link with the reservation prefilled.
 Each attempt is logged as event `reserve_saved` with label `db/no-db form/no-form`.
+
+## Deploying (read before every deploy)
+
+The Netlify site is **not** linked to GitHub: pushing does not deploy. Deploy only with
+
+```
+git pull
+tools/deploy.sh          # production
+tools/deploy.sh --draft  # preview URL only
+```
+
+The script stops if there are uncommitted changes, if your folder is behind `origin/main`,
+if `en/`/`ar/` are out of date, or if a file in `social/MANIFEST.txt` is missing. It builds from
+`git archive HEAD` (never `.git`, 600+ MB, which makes the upload fail) and checks `/`, `/en/`, `/ar/`
+and every manifest file on cpsarajevo.ba and the netlify.app address afterwards.
+
+Rules:
+- Never deploy from an old working folder or by dragging a folder into Netlify. That is how `/en/`, `/ar/`
+  and Buffer media were wiped on 21 and 23 Oct 2026.
+- Buffer posts must use media on the Higgsfield CDN (d2ol7oe51mr4n9.cloudfront.net), never
+  cpsarajevo.ba or netlify.app URLs. Anything under `social/` must be committed and listed in
+  `social/MANIFEST.txt` (`find social -type f ! -name MANIFEST.txt | sort` after the header).
+- Pages in subfolders (`/prica/`, `/racun/` …) use root-relative paths (`/img/...`), never `img/...`.

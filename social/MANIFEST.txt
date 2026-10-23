@@ -1,0 +1,26 @@
+# Social media that must exist on every deploy (tools/deploy.sh checks this list).
+# Buffer posts must use the Higgsfield CDN, not these URLs. These are kept for links
+# that were already posted and as source copies.
+social/b2b/carousel_1.jpg
+social/b2b/carousel_2.jpg
+social/b2b/carousel_3.jpg
+social/b2b/carousel_4.jpg
+social/b2b/carousel_5.jpg
+social/b2b/carousel_6.jpg
+social/b2b/reel1_postani_partner.mp4
+social/b2b/reel2_jedan_partner_po_kvartu.mp4
+social/b2b/story_69_dana.jpg
+social/b2b/story_fri_1_teaser.jpg
+social/b2b/story_fri_2_salon.jpg
+social/b2b/story_fri_3_sutra.jpg
+social/b2b/story_sat_1_novi_reel.jpg
+social/b2b/story_sat_2_pitajte.jpg
+social/b2b/story_sat_3_partner_dm.jpg
+social/b2b/story_sun_1_kvart.jpg
+social/b2b/story_sun_2_68_dana.jpg
+social/c/keos_1.jpg
+social/c/keos_2.jpg
+social/c/keos_3.jpg
+social/dubai-reel.mp4
+social/r/story_partneri_1.mp4
+social/s2/fr3.mp4
