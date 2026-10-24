@@ -81,10 +81,9 @@
 
   <h2>Kako <em>ide</em></h2>
   <ol class="steps">
-    <li><span>Prijaviš se ispod. Traje dvije minute.</span></li>
-    <li><span>Dobiješ kod i pošalješ ga u DM na @collectionpremiumsarajevo sa svog profila. Tako znamo da je profil tvoj.</span></li>
+    <li><span>Prijaviš se ispod. Traje minutu.</span></li>
     <li><span>Lično pregledamo profile i biramo 10 kreatora nakon 31. oktobra.</span></li>
-    <li><span>Ako si izabran/a, na svojoj stranici potvrdiš pravila i dobiješ svoj kod i link.</span></li>
+    <li><span>Ako si izabran/a, emailom dobiješ svoj kod i link na svoju stranicu.</span></li>
     <li><span>Preuzmeš paket, snimiš klip i podijeliš svoj kod.</span></li>
   </ol>
 
@@ -112,15 +111,8 @@
     <div class="handle"><span aria-hidden="true">@</span><input id="c_ig" required autocapitalize="none" autocomplete="off" spellcheck="false" placeholder="tvojprofil"></div>
     <div class="two">
       <div><label for="c_email">Email</label><input id="c_email" type="email" required autocomplete="email" placeholder="ime@primjer.ba"></div>
-      <div><label for="c_phone">Telefon</label><input id="c_phone" type="tel" autocomplete="tel" placeholder="+387 …"></div>
-      <div><label for="c_city">Grad</label><input id="c_city" autocomplete="address-level2" value="Sarajevo"></div>
-      <div><label for="c_fol">Broj pratilaca</label><input id="c_fol" inputmode="numeric" placeholder="npr. 4.500"></div>
+      <div><label for="c_phone">Telefon</label><input id="c_phone" type="tel" required autocomplete="tel" placeholder="+387 …"></div>
     </div>
-    <label for="c_niche">Kakav sadržaj praviš</label>
-    <select id="c_niche">
-      <option>Ljepota i njega</option><option>Moda</option><option>Lifestyle</option><option>Porodica i mame</option>
-      <option>Hrana i kafa</option><option>Putovanja</option><option>Humor</option><option>Drugo</option>
-    </select>
     <label for="c_note">Zašto baš ti? (opcionalno)</label><textarea id="c_note" maxlength="600" placeholder="Kratko o tvom profilu i ideja za klip"></textarea>
     <div class="hp" aria-hidden="true"><label for="c_web">Web stranica</label><input id="c_web" tabindex="-1" autocomplete="off"></div>
     <label class="check"><input type="checkbox" id="c_rules" required><span>Pročitao/la sam pravila saradnje i prihvatam ih.</span></label>
@@ -130,15 +122,11 @@
   </form>
 
   <section class="card" id="crDone" hidden aria-live="polite">
-    <p class="eyebrow" style="margin:0">Još jedan korak</p>
-    <h2 style="margin:10px 0 8px">Potvrdi svoj <em>profil.</em></h2>
-    <p>Pošalji ovaj kod kao poruku (DM) sa <b id="doneIg"></b> na <b>@collectionpremiumsarajevo</b>. Prijava se potvrdi automatski.</p>
-    <div class="code" id="doneCode">CPS-0000</div>
-    <div class="row">
-      <a class="btn" href="https://ig.me/m/collectionpremiumsarajevo" target="_blank" rel="noopener" data-track="kreator-dm">Otvori Instagram poruke</a>
-      <button class="btn ghost" type="button" id="copyCode">Kopiraj kod</button>
-    </div>
-    <p class="muted" style="margin-top:16px">Kod smo ti poslali i na email, zajedno s linkom na tvoju stranicu. Javljamo se svima nakon 31. oktobra.</p>
+    <p class="eyebrow" style="margin:0">Prijava je stigla</p>
+    <h2 style="margin:10px 0 8px">Hvala, <em id="doneName"></em></h2>
+    <p>Profil <b id="doneIg"></b> je prijavljen. Potvrdu smo ti poslali na email.</p>
+    <p>Lično pregledamo sve profile i biramo 10 kreatora nakon 31. oktobra. Ako budeš izabran/a, emailom dobiješ svoj kod i link na svoju stranicu. Ništa više ne trebaš slati.</p>
+    <div class="row" style="margin-top:14px"><a class="btn ghost" href="/#kolekcija">Pogledaj kolekciju</a></div>
   </section>
 
   <footer>© 2026–2027 Collection Premium Sarajevo · <a href="/privatnost/">Privatnost</a> · <a href="mailto:info@cpsarajevo.ba">info@cpsarajevo.ba</a></footer>
@@ -161,22 +149,20 @@
     const msg = $('crMsg'); msg.textContent = '';
     if (!$('c_rules').checked) { msg.textContent = ERR.pravila; return; }
     if (!$('c_consent').checked) { msg.textContent = 'Za prijavu nam treba tvoja saglasnost za podatke.'; return; }
+    if ($('c_phone').value.replace(/\D/g, '').length < 6) { msg.textContent = 'Upiši broj telefona, da te možemo dobiti za paket.'; return; }
     const b = e.submitter || $('crForm').querySelector('button'); b.disabled = true; b.textContent = 'Šaljem…';
     const ig = $('c_ig').value.trim().replace(/^@/, '');
     const { data, error } = await CP.sb.rpc('creator_register', { p: {
-      full_name: $('c_name').value, instagram: ig, email: $('c_email').value, phone: $('c_phone').value, city: $('c_city').value,
-      followers: $('c_fol').value, niche: $('c_niche').value, note: $('c_note').value, website: $('c_web').value, rules: true,
+      full_name: $('c_name').value, instagram: ig, email: $('c_email').value, phone: $('c_phone').value,
+      note: $('c_note').value, website: $('c_web').value, rules: true,
     } });
     b.disabled = false; b.textContent = 'Pošalji prijavu';
     if (error || !data || !data.ok) { msg.textContent = ERR[data && data.error] || 'Slanje nije uspjelo. Pokušaj ponovo ili piši na info@cpsarajevo.ba.'; return; }
     try { CP.track('kreator_prijava', { label: ig }); } catch { /* tracking is optional */ }
     $('doneIg').textContent = '@' + ig.toLowerCase().replace(/^.*instagram\.com\//, '').replace(/[/?#].*$/, '');
-    $('doneCode').textContent = data.verify_code;
+    $('doneName').textContent = ($('c_name').value.trim().split(/\s+/)[0] || '') + '.';
     $('crForm').hidden = true; $('crDone').hidden = false;
     $('crDone').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-  $('copyCode').addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText($('doneCode').textContent); $('copyCode').textContent = 'Kopirano'; } catch { /* old browser */ }
   });
 })();
 </script>

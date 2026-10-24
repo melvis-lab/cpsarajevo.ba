@@ -59,22 +59,12 @@
 
   <div id="state"></div>
 
-  <!-- before approval: verification status -->
+  <!-- before approval -->
   <section id="pending" hidden>
     <div class="card">
       <b id="dmLine"></b>
-      <div id="dmHow" hidden>
-        <p class="muted" style="margin:8px 0 0">Pošalji ovaj kod kao poruku (DM) sa svog profila na @collectionpremiumsarajevo:</p>
-        <div class="code" id="vCode"></div>
-        <a class="btn" href="https://ig.me/m/collectionpremiumsarajevo" target="_blank" rel="noopener">Otvori Instagram poruke</a>
-      </div>
-      <p class="muted" style="margin:14px 0 0">Lično pregledamo sve prijave i biramo 10 kreatora nakon 31. oktobra. Javljamo se emailom.</p>
+      <p class="muted" style="margin:8px 0 0">Lično pregledamo sve prijave i biramo 10 kreatora nakon 31. oktobra. Ako budeš izabran/a, ovdje i u emailu dobiješ svoj kod. Ništa ne trebaš slati.</p>
     </div>
-  </section>
-
-  <!-- approved, not yet committed -->
-  <section id="commit" hidden>
-    <p>Izabran/a si za saradnju. Prije nego što dobiješ svoj kod, pročitaj pravila i potvrdi da ih prihvataš.</p>
   </section>
 
   <!-- active -->
@@ -127,11 +117,6 @@
       <li><b>Dijeljenje.</b> Tvoj klip smijemo podijeliti na našim kanalima uz oznaku tvog profila. Za plaćene oglase s tvojim klipom pitamo te posebno.</li>
       <li><b>Rok.</b> Prijave traju do 31. oktobra 2026. Biramo 10 kreatora i svima se javljamo emailom.</li>
     </ol>
-    <div id="commitBox" hidden>
-      <label class="check"><input type="checkbox" id="agree"><span>Pročitao/la sam pravila i obavezujem se da ću ih poštovati.</span></label>
-      <button type="button" id="commitBtn" disabled style="margin-top:16px" data-track="kreator-potvrda">Potvrđujem i aktiviram kod</button>
-      <div class="msg" id="commitMsg" role="status"></div>
-    </div>
   </div>
 
   <footer>© 2026–2027 Collection Premium Sarajevo · <a href="mailto:info@cpsarajevo.ba">info@cpsarajevo.ba</a> · <a href="/privatnost/">Privatnost</a></footer>
@@ -153,22 +138,15 @@
     if (error || !data || !data.ok) { $('hello').innerHTML = 'Link nije <em>ispravan.</em>'; banner('no', 'Ovaj link ne postoji ili je istekao. Piši na <a href="mailto:info@cpsarajevo.ba">info@cpsarajevo.ba</a>.'); $('rulesH').hidden = $('rules').hidden = true; return; }
     d = data;
     $('hello').innerHTML = 'Zdravo, <em>' + esc(d.name) + '.</em>';
-    ['pending', 'commit', 'active'].forEach((id) => { $(id).hidden = true; });
-    $('commitBox').hidden = true; $('state').innerHTML = '';
+    ['pending', 'active'].forEach((id) => { $(id).hidden = true; });
+    $('state').innerHTML = '';
 
     if (d.status === 'odbijen') { banner('no', 'Hvala na prijavi. Ovaj put smo izabrali druge profile, jer je mjesta samo za 10 kreatora. Javit ćemo ti se kad otvorimo sljedeći krug.'); return; }
     if (d.status === 'pauza') { banner('wait', 'Saradnja je trenutno pauzirana. Javit ćemo ti se emailom.'); return; }
     if (!d.approved) {
       $('pending').hidden = false;
-      if (d.dm_verified) { $('dmLine').textContent = '✓ Profil @' + d.instagram + ' je potvrđen.'; $('dmHow').hidden = true; }
-      else { $('dmLine').textContent = 'Profil @' + d.instagram + ' još nije potvrđen.'; $('vCode').textContent = d.verify_code; $('dmHow').hidden = false; }
+      $('dmLine').textContent = 'Profil @' + d.instagram + ' je prijavljen.';
       banner('wait', 'Prijava je primljena i čeka pregled.');
-      return;
-    }
-    if (!d.committed) {
-      banner('ok', 'Izabran/a si. Još samo potvrdi pravila.');
-      $('commit').hidden = false; $('commitBox').hidden = false;
-      $('rules').scrollIntoView({ behavior: 'smooth', block: 'start' });
       return;
     }
     $('active').hidden = false;
@@ -183,15 +161,6 @@
     $('bonusLine').textContent = d.bonus_sent ? 'Bonus bočica je tvoja. Hvala!' : left === 0 ? 'Bravo! Imaš 10 rezervacija: bonus bočica je tvoja, javljamo ti se.' : 'Još ' + left + ' do bonus bočice po izboru.';
     $('rulesH').textContent = 'Pravila saradnje'; // stays visible as a reminder
   }
-
-  $('agree').addEventListener('change', () => { $('commitBtn').disabled = !$('agree').checked; });
-  $('commitBtn').addEventListener('click', async () => {
-    $('commitBtn').disabled = true; $('commitMsg').textContent = '';
-    const { data, error } = await CP.sb.rpc('creator_commit', { p_token: token });
-    if (error || !data || !data.ok) { $('commitMsg').textContent = 'Potvrda nije uspjela. Pokušaj ponovo ili piši na info@cpsarajevo.ba.'; $('commitBtn').disabled = false; return; }
-    try { CP.track('kreator_potvrda'); } catch { /* optional */ }
-    await load(); window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
 
   document.addEventListener('click', async (e) => {
     const b = e.target.closest('[data-copy]'); if (!b || !d) return;
