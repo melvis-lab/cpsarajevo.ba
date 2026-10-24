@@ -206,26 +206,23 @@ async function notifyAdmin(row: { id: number; kind: string; username: string | n
 }
 
 // ---------- creators: fixed replies, no Claude needed ----------
-// "CPS-1234" verifies a creator (the database trigger marks the profile), "KREATOR" gets the sign-up link.
+// The DM code step is gone (24 Oct 2026). Old "CPS-1234" codes still get one friendly answer,
+// "KREATOR" gets the sign-up link. Each fixed reply goes to a person at most once per 24 h.
 const CODE = /CPS[\s-]?(\d{4})/i;
-async function creatorReply(text: string, username: string | null): Promise<string | null> {
-  const m = text.match(CODE);
-  if (m) {
-    const code = "CPS-" + m[1];
-    const { data: c } = await sb.from("creators").select("full_name,instagram,dm_verified_at").eq("verify_code", code).maybeSingle();
-    if (!c) return `Kod ${code} ne prepoznajemo. Provjeri kod iz emaila ili se prijavi ovdje: ${SITE}/kreatori/`;
-    const first = String(c.full_name ?? "").split(" ")[0];
-    if (username && username.toLowerCase() !== c.instagram) {
-      return `Kod ${code} je prijavljen za profil @${c.instagram}, a poruka je stigla s @${username}. Pošalji kod s profila @${c.instagram} da potvrdiš prijavu.`;
-    }
-    // the same code again later: stay quiet, ManyChat and the bot must not reply over and over
-    if (c.dm_verified_at && Date.now() - new Date(c.dm_verified_at).getTime() > 120000) return "";
-    return `Hvala${first ? ", " + first : ""}! Profil @${c.instagram} je potvrđen i tvoja prijava za kreatore je kompletna. Lično pregledamo profile i javljamo se emailom nakon 31. oktobra 🤍`;
+async function creatorReply(text: string): Promise<string | null> {
+  if (CODE.test(text)) {
+    return `Hvala, prijava je stigla 🤍 Kod više ne treba slati, sve ide preko emaila. Izbor kreatora objavljujemo nakon 31. oktobra.`;
   }
   if (/^\W*kreator(ka|i)?\W*$/i.test(text) || (/kreator/i.test(text) && text.length <= 60 && !/\?/.test(text))) {
-    return `Super, drago nam je! Prijava za kreatore traje dvije minute: ${SITE}/kreatori/ Nakon prijave dobiješ kod koji nam pošalješ ovdje u poruci, i to je to. Prijave traju do 31. oktobra.`;
+    return `Super! Prijava za kreatore traje dvije minute: ${SITE}/kreatori/ Prijave traju do 31. oktobra.`;
   }
   return null;
+}
+async function sentFixedRecently(igUserId: string, reply: string) {
+  const since = new Date(Date.now() - 86400000).toISOString();
+  const { count } = await sb.from("ig_messages").select("id", { count: "exact", head: true })
+    .eq("ig_user_id", igUserId).eq("draft", reply).eq("status", "poslano_auto").gte("created_at", since);
+  return (count ?? 0) > 0;
 }
 
 // ---------- handlers ----------
@@ -242,7 +239,7 @@ async function handleDM(ownId: string, ev: any) {
     .select("id").single();
   if (error) return;                                       // duplicate delivery from Meta
 
-  const fixed = await creatorReply(text, username).catch(() => null);
+  const fixed = await creatorReply(text).catch(() => null);
   if (fixed === "") { await sb.from("ig_messages").update({ status: "preskoceno", reason: "Kreatori: kod je već potvrđen" }).eq("id", row.id); return; }
   if (fixed) {
     try {
@@ -353,51 +350,70 @@ async function adminAction(body: any) {
 
 // ---------- ManyChat bridge ----------
 // ManyChat Pro "External Request": POST {source:"manychat", user_id, username, text} with header x-manychat-key.
-// Returns {reply, auto}. ManyChat sends `reply` when it is not empty.
-const HOLD = "Hvala ti na poruci 🤍 Ovo ću ti lično provjeriti i javljam ti se uskoro ovdje.";
+// Returns {reply, auto}. ManyChat only sends `reply` when it is NOT empty (condition step in the flow).
+// Rules (24 Oct 2026): the bot is silent unless it has a sure, useful answer.
+//  - never a "we'll get back to you" holding line
+//  - silent when a person already waits for Melvis or Melvis answered them himself from the admin
+//  - at most 3 automatic replies per person per 24 h
+//  - silent for "hvala", emoji, stickers and anything Claude marks as "skip" or "needs a human"
 async function manychat(body: any) {
   const text = String(body.text ?? "").trim();
   const userId = String(body.user_id ?? "");
-  if (!text || !userId) return json({ reply: "", auto: false });
-  // daily safety cap so a flood of messages can never run up the Claude bill
-  const since = new Date(Date.now() - 86400000).toISOString();
-  const { count } = await sb.from("ig_messages").select("id", { count: "exact", head: true }).gte("created_at", since);
-  const { data: row } = await sb.from("ig_messages")
-    .insert({ kind: "dm", direction: "in", ig_user_id: "mc_" + userId, username: body.username ?? null, mid: "mc_" + userId + "_" + Date.now(), text })
-    .select("id").single();
-  const fixed = await creatorReply(text, body.username ?? null).catch(() => null);
-  if (fixed === "") {
-    await sb.from("ig_messages").update({ status: "preskoceno", reason: "Kreatori: kod je već potvrđen" }).eq("id", row!.id);
+  const silent = (id?: number, status = "preskoceno", reason = "") => {
+    if (id) sb.from("ig_messages").update({ status, reason }).eq("id", id).then(() => {});
     return json({ reply: "", auto: false });
-  }
+  };
+  if (!text || !userId) return json({ reply: "", auto: false });
+  const igId = "mc_" + userId;
+  const { data: row } = await sb.from("ig_messages")
+    .insert({ kind: "dm", direction: "in", ig_user_id: igId, username: body.username ?? null, mid: igId + "_" + Date.now(), text })
+    .select("id").single();
+  const id = row?.id as number | undefined;
+
+  const fixed = await creatorReply(text).catch(() => null);
   if (fixed) {
-    await sb.from("ig_messages").update({ status: "poslano_auto", draft: fixed, reason: "Kreatori: automatski odgovor", sent_at: new Date().toISOString() }).eq("id", row!.id);
+    if (await sentFixedRecently(igId, fixed)) return silent(id, "preskoceno", "Kreatori: isti odgovor već poslan danas");
+    await sb.from("ig_messages").update({ status: "poslano_auto", draft: fixed, reason: "Kreatori: automatski odgovor", sent_at: new Date().toISOString() }).eq("id", id);
     return json({ reply: fixed, auto: true });
   }
-  if ((count ?? 0) > 600) {
-    await sb.from("ig_messages").update({ status: "ceka", reason: "Dnevni limit dostignut" }).eq("id", row!.id);
-    return json({ reply: HOLD, auto: false });
-  }
+  // short thanks / emoji / one-word messages never get a bot reply
+  if (text.length < 3 || /^[\p{Emoji}\s.!]+$/u.test(text) || /^(hvala|fala|thanks|thank you|ok|okej|super|top|može|moze|važi|vazi)\W*$/i.test(text))
+    return silent(id, "preskoceno", "Kratka poruka, bez odgovora");
+
+  const day = new Date(Date.now() - 86400000).toISOString();
+  const twoDays = new Date(Date.now() - 2 * 86400000).toISOString();
+  const { data: recent } = await sb.from("ig_messages").select("status,created_at")
+    .eq("ig_user_id", igId).neq("id", id ?? 0).gte("created_at", twoDays);
+  const r = recent ?? [];
+  if (r.some((m: any) => m.status === "ceka" || m.status === "poslano"))
+    return silent(id, "ceka", "Razgovor vodi Melvis, bot šuti");
+  if (r.filter((m: any) => m.status === "poslano_auto" && m.created_at >= day).length >= 3)
+    return silent(id, "ceka", "Već 3 automatska odgovora danas, bot šuti");
+
+  // daily safety cap so a flood of messages can never run up the Claude bill
+  const { count } = await sb.from("ig_messages").select("id", { count: "exact", head: true }).gte("created_at", day);
+  if ((count ?? 0) > 600) return silent(id, "ceka", "Dnevni limit dostignut");
+
   const { data: hist } = await sb.from("ig_messages").select("status,text,draft")
-    .eq("ig_user_id", "mc_" + userId).lt("id", row!.id).order("created_at", { ascending: false }).limit(8);
+    .eq("ig_user_id", igId).lt("id", id ?? 0).order("created_at", { ascending: false }).limit(8);
   try {
     const ai = await askClaude("dm", text, (hist ?? []).reverse());
     if (ai.skip) {
-      await sb.from("ig_messages").update({ status: "preskoceno", draft: ai.reply || null, reason: ai.reason }).eq("id", row!.id);
+      await sb.from("ig_messages").update({ status: "preskoceno", draft: ai.reply || null, reason: ai.reason }).eq("id", id);
       return json({ reply: "", auto: false });
     }
     const auto = (await secret("ig_ai_auto_send")) === "true";
     if (!ai.needs_human && auto && ai.reply) {
-      await sb.from("ig_messages").update({ status: "poslano_auto", draft: ai.reply, reason: ai.reason, sent_at: new Date().toISOString() }).eq("id", row!.id);
+      await sb.from("ig_messages").update({ status: "poslano_auto", draft: ai.reply, reason: ai.reason, sent_at: new Date().toISOString() }).eq("id", id);
       return json({ reply: ai.reply, auto: true });
     }
     const reason = ai.needs_human ? ai.reason : "Automatsko slanje je isključeno";
-    await sb.from("ig_messages").update({ status: "ceka", draft: ai.reply, reason }).eq("id", row!.id);
-    await notifyAdmin({ id: row!.id, kind: "dm", username: body.username ?? null, text, draft: ai.reply, reason });
-    return json({ reply: HOLD, auto: false });
+    await sb.from("ig_messages").update({ status: "ceka", draft: ai.reply, reason }).eq("id", id);
+    if (id) await notifyAdmin({ id, kind: "dm", username: body.username ?? null, text, draft: ai.reply, reason });
+    return json({ reply: "", auto: false });
   } catch (e) {
-    await sb.from("ig_messages").update({ status: "greska", error: String(e).slice(0, 500) }).eq("id", row!.id);
-    return json({ reply: HOLD, auto: false });
+    await sb.from("ig_messages").update({ status: "greska", error: String(e).slice(0, 500) }).eq("id", id);
+    return json({ reply: "", auto: false });
   }
 }
 
