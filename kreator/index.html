@@ -134,6 +134,11 @@
 
   async function load() {
     if (!/^[0-9a-f-]{36}$/i.test(token)) { $('hello').innerHTML = 'Link nije <em>ispravan.</em>'; banner('no', 'Otvori link iz emaila koji smo ti poslali. Ako ga nemaš, piši na <a href="mailto:info@cpsarajevo.ba">info@cpsarajevo.ba</a>.'); $('rulesH').hidden = $('rules').hidden = true; return; }
+    if (new URLSearchParams(location.search).get('potvrdi') === '1' && !load.confirmed) {
+      load.confirmed = true;
+      const r = await CP.sb.rpc('creator_confirm', { p_token: token });
+      if (!r.error && r.data && r.data.ok) { try { CP.track('kreator_potvrda_email'); } catch { /* optional */ } history.replaceState(null, '', location.pathname + '?k=' + token); }
+    }
     const { data, error } = await CP.sb.rpc('creator_page', { p_token: token });
     if (error || !data || !data.ok) { $('hello').innerHTML = 'Link nije <em>ispravan.</em>'; banner('no', 'Ovaj link ne postoji ili je istekao. Piši na <a href="mailto:info@cpsarajevo.ba">info@cpsarajevo.ba</a>.'); $('rulesH').hidden = $('rules').hidden = true; return; }
     d = data;
@@ -143,10 +148,14 @@
 
     if (d.status === 'odbijen') { banner('no', 'Hvala na prijavi. Ovaj put smo izabrali druge profile, jer je mjesta samo za 10 kreatora. Javit ćemo ti se kad otvorimo sljedeći krug.'); return; }
     if (d.status === 'pauza') { banner('wait', 'Saradnja je trenutno pauzirana. Javit ćemo ti se emailom.'); return; }
+    if (!d.confirmed) {
+      banner('wait', 'Prijava još nije potvrđena. Otvori email koji smo ti poslali i klikni na <b>Potvrdi prijavu</b>.');
+      return;
+    }
     if (!d.approved) {
       $('pending').hidden = false;
-      $('dmLine').textContent = 'Profil @' + d.instagram + ' je prijavljen.';
-      banner('wait', 'Prijava je primljena i čeka pregled.');
+      $('dmLine').textContent = '✓ Prijava za @' + d.instagram + ' je potvrđena.';
+      banner('ok', 'Hvala! Prijava je kompletna i ulazi u izbor.');
       return;
     }
     $('active').hidden = false;

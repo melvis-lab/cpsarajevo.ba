@@ -122,11 +122,10 @@
   </form>
 
   <section class="card" id="crDone" hidden aria-live="polite">
-    <p class="eyebrow" style="margin:0">Prijava je stigla</p>
-    <h2 style="margin:10px 0 8px">Hvala, <em id="doneName"></em></h2>
-    <p>Profil <b id="doneIg"></b> je prijavljen. Potvrdu smo ti poslali na email.</p>
-    <p>Lično pregledamo sve profile i biramo 10 kreatora nakon 31. oktobra. Ako budeš izabran/a, emailom dobiješ svoj kod i link na svoju stranicu. Ništa više ne trebaš slati.</p>
-    <div class="row" style="margin-top:14px"><a class="btn ghost" href="/#kolekcija">Pogledaj kolekciju</a></div>
+    <p class="eyebrow" style="margin:0">Još samo jedan klik</p>
+    <h2 style="margin:10px 0 8px">Provjeri <em>email.</em></h2>
+    <p>Poslali smo ti email na <b id="doneEmail"></b>. Klikni na dugme <b>Potvrdi prijavu</b> u njemu i prijava za <b id="doneIg"></b> ulazi u izbor.</p>
+    <p class="muted">Nema emaila? Pogledaj i folder Promocije ili Spam. Nepotvrđene prijave brišemo nakon 48 sati.</p>
   </section>
 
   <footer>© 2026–2027 Collection Premium Sarajevo · <a href="/privatnost/">Privatnost</a> · <a href="mailto:info@cpsarajevo.ba">info@cpsarajevo.ba</a></footer>
@@ -143,6 +142,8 @@
     email: 'Upiši ispravan email.',
     ime: 'Upiši ime i prezime.',
     postoji: 'Ovaj Instagram profil je već prijavljen. Ako je tvoj, piši nam na info@cpsarajevo.ba.',
+    telefon: 'Upiši broj telefona, da te možemo dobiti za paket.',
+    limit: 'S ovim brojem ili emailom već postoje dvije prijave danas. Pokušaj sutra ili piši na info@cpsarajevo.ba.',
   };
   $('crForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -160,7 +161,7 @@
     if (error || !data || !data.ok) { msg.textContent = ERR[data && data.error] || 'Slanje nije uspjelo. Pokušaj ponovo ili piši na info@cpsarajevo.ba.'; return; }
     try { CP.track('kreator_prijava', { label: ig }); } catch { /* tracking is optional */ }
     $('doneIg').textContent = '@' + ig.toLowerCase().replace(/^.*instagram\.com\//, '').replace(/[/?#].*$/, '');
-    $('doneName').textContent = ($('c_name').value.trim().split(/\s+/)[0] || '') + '.';
+    $('doneEmail').textContent = $('c_email').value.trim();
     $('crForm').hidden = true; $('crDone').hidden = false;
     $('crDone').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });

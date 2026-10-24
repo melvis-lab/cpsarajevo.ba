@@ -174,6 +174,12 @@ async function render(t: string, d: Record<string, any>, to: string): Promise<{ 
         footer: `Primaš ovo jer si se prijavio/la na odbrojavanje. <a href="${unsub}" style="color:#bcae99">Odjavi se</a>` }) };
     }
     // ---------- creators (kreatori) ----------
+    case "creator_confirm": return {
+      subject: "Potvrdi prijavu za kreatore · Collection Premium Sarajevo",
+      html: layout({ pre: "Jedan klik i tvoja prijava je kompletna.", eyebrow: "Kreatori · potvrda", title: `${hi(d.name)}potvrdi<br><em style="color:${C.gold}">svoju prijavu.</em>`,
+        body: p(`Primili smo prijavu za profil <b>@${esc(d.instagram)}</b>. Klikni na dugme ispod da potvrdiš da je ovo tvoj email. Tek tada prijava ulazi u izbor.`) +
+          button("Potvrdi prijavu", `${SITE}/kreator/?k=${esc(d.token)}&potvrdi=1`) +
+          p(`<span style="color:${C.muted};font-size:14px">Ako se nisi ti prijavio/la, samo ignoriši ovaj email. Nepotvrđene prijave brišemo nakon 48 sati.</span>`) }) };
     case "creator_received": return {
       subject: "Prijava je stigla · Collection Premium Sarajevo",
       html: layout({ pre: "Hvala na prijavi. Izbor kreatora objavljujemo nakon 31. oktobra.", eyebrow: "Kreatori · prijava", title: `${hi(d.name)}hvala<br><em style="color:${C.gold}">na prijavi.</em>`,
