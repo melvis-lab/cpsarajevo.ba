@@ -65,12 +65,15 @@ async function screen(c: any) {
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "anthropic-workspace-id": WORKSPACE, "content-type": "application/json" },
-    body: JSON.stringify({ model: MODEL, max_tokens: 200, system: SYSTEM, messages: [{ role: "user", content: facts }] }),
+    body: JSON.stringify({ model: MODEL, max_tokens: 400, system: SYSTEM, messages: [{ role: "user", content: facts }] }),
   });
   if (!r.ok) throw new Error(`Claude ${r.status}: ${(await r.text()).slice(0, 200)}`);
   const raw = ((await r.json()).content ?? []).map((x: any) => x.text ?? "").join("");
   const tag = (n: string) => raw.match(new RegExp(`<${n}>([\\s\\S]*?)</${n}>`))?.[1]?.trim() ?? "";
-  let score = Math.max(0, Math.min(100, parseInt(tag("ocjena"), 10) || 0));
+  const num = parseInt(tag("ocjena").replace(/\D/g, ""), 10);
+  // never judge on a broken answer: no score means no decision
+  if (!Number.isFinite(num)) throw new Error("odgovor bez ocjene: " + raw.replace(/\s+/g, " ").slice(0, 120));
+  let score = Math.max(0, Math.min(100, num));
   // the label always follows the score, so the admin never shows "maybe" next to 30
   let fit = score >= 70 ? "dobar" : score >= 40 ? "mozda" : "ne";
   let reason = tag("razlog").replace(/\s*[—–]\s*/g, ", ").slice(0, 200);
