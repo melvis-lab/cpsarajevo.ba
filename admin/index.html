@@ -111,7 +111,10 @@
   .who .meta { color:var(--muted); font-size:13px; }
   .actions { display:flex; gap:6px; flex-wrap:wrap; }
   a.btn, button.btn { display:inline-flex; align-items:center; gap:6px; text-decoration:none; border:1px solid var(--line); background:var(--bg); color:var(--ink); border-radius:8px; padding:7px 11px; font:inherit; font-size:13px; cursor:pointer; }
-  a.btn:hover, button.btn:hover { background:var(--soft); }
+  a.btn, button.btn { transition:background-color .15s ease, border-color .15s ease, color .15s ease, transform .16s cubic-bezier(.23,1,.32,1); }
+  @media (hover:hover) and (pointer:fine) { a.btn:hover, button.btn:hover { background:var(--soft); } .btn.dark:hover { background:#000; } }
+  a.btn:active, button.btn:active { transform:scale(.97); }
+  button.btn:disabled { opacity:.55; cursor:default; transform:none; }
   .btn.wa { border-color:#bfe3c9; color:var(--ok); }
   .btn.dark { background:var(--ink); color:#fff; border-color:var(--ink); }
   .empty { padding:22px 16px; color:var(--muted); }
@@ -328,26 +331,54 @@
     </section>
 
     <section data-panel="kreatori" hidden>
-      <h2>Kreatori</h2>
-      <p class="sub">Prijave s <a href="/kreatori/" target="_blank" rel="noopener">/kreatori/</a>. Pratioci i angažman se provjeravaju sami; ispod 1% angažmana je često znak kupljenih pratilaca. <b>Odaberi</b> odmah aktivira kod i šalje kreatoru email s kodom. <b>Ne ovaj put</b> šalje kratku zahvalu 1. novembra, ne prije; odbijene prijave se brišu 30 dana kasnije.</p>
       <style>
-        .cr-list{display:grid;gap:12px}
-        .cr-card{display:grid;grid-template-columns:52px 1fr;gap:14px;padding:16px;border:1px solid var(--line,#e6d9c4);border-radius:14px;background:var(--card,#fff)}
-        .cr-card img,.cr-card .ph{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#0001}
-        .cr-top{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
-        .cr-stats{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0;font-size:14px}
-        .cr-stats b{font-size:16px}
-        .cr-warn{margin:6px 0;padding:8px 10px;border-radius:8px;background:#f0c3b633;font-size:13px}
-        .cr-card .actions{margin-top:10px}
-        .cr-code{font-weight:600;letter-spacing:.06em}
+        .crh{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px}
+        .crh .seg button{display:inline-flex;align-items:center;gap:6px}
+        .crh .seg .c{font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;color:inherit;opacity:.65}
+        .crgoal{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+        .crgoal .bar{width:120px;height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+        .crgoal .bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .3s cubic-bezier(.23,1,.32,1)}
+        .crgoal b{color:var(--ink);font-variant-numeric:tabular-nums}
+        .crl{background:var(--bg);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+        .crr{display:grid;grid-template-columns:36px minmax(0,1fr) 220px 170px 432px;gap:14px;align-items:center;padding:12px 14px;border-top:1px solid var(--line)}
+        .crr:first-child{border-top:0}
+        .crr.off{background:#fcfcfd}
+        .crr.off .who,.crr.off .crs{opacity:.6}
+        .crr .av{width:36px;height:36px;border-radius:50%;object-fit:cover;background:var(--soft);display:grid;place-items:center;color:var(--muted);font-weight:600;font-size:13px}
+        .crr .who{min-width:0}
+        .crr .who .n{display:flex;align-items:baseline;gap:8px;min-width:0}
+        .crr .who .n b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .crr .who .n a{color:var(--muted);text-decoration:none;white-space:nowrap;font-size:13px}
+        @media (hover:hover){.crr .who .n a:hover{color:var(--accent)}}
+        .crr .meta{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .crs{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;font-variant-numeric:tabular-nums}
+        .crs span{display:inline-flex;align-items:center;gap:5px;color:var(--muted)}
+        .crs span b{color:var(--ink);font-weight:600}
+        .crs svg,.ic{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+        .er{border-radius:6px;padding:0 6px;font-weight:600}
+        .er.lo{background:var(--bad-soft);color:var(--bad)!important}.er.mid{background:var(--warn-soft);color:var(--warn)!important}.er.hi{background:var(--ok-soft);color:var(--ok)!important}
+        .crw{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:12px;color:var(--warn)}
+        .crst{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted);min-width:0}
+        .crst .pill{align-self:flex-start}
+        .crst .code{font:600 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.04em;color:var(--ink)}
+        .cra{display:flex;flex-wrap:wrap;align-items:center;gap:4px;justify-content:flex-end}
+        .cra .btn{white-space:nowrap}
+        .cra .btn{padding:6px 10px}
+        .cra .btn.i{width:32px;height:32px;padding:0;justify-content:center}
+        .cra .btn.i svg{width:15px;height:15px}
+        .cra .sep{width:1px;height:20px;background:var(--line);margin:0 4px}
+        .btn.ok{background:var(--ink);color:#fff;border-color:var(--ink)}
+        .btn.no{color:var(--bad)}
+        .btn.del.armed{background:var(--bad);border-color:var(--bad);color:#fff;width:auto!important;padding:0 10px!important}
+        @media (max-width:1280px){.crr{grid-template-columns:36px minmax(0,1fr) auto;}.crr .crs,.crr .crst{grid-column:2/4}.crr .cra{grid-column:1/4;justify-content:flex-start}.crst{flex-direction:row;align-items:center;gap:8px}}
       </style>
-      <div class="toolbar" style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px" id="crFilter" role="group" aria-label="Filter">
-        <button class="btn" type="button" data-crf="sve" aria-pressed="true">Svi</button>
-        <button class="btn" type="button" data-crf="novi" aria-pressed="false">Nove prijave</button>
-        <button class="btn" type="button" data-crf="aktivni" aria-pressed="false">Izabrani</button>
-        <button class="btn" type="button" data-crf="odbijen" aria-pressed="false">Odbijeni</button>
+      <h2>Kreatori</h2>
+      <p class="sub">Prijave s <a href="/kreatori/" target="_blank" rel="noopener">/kreatori/</a>. <b>Odaberi</b> aktivira kod i šalje email s kodom. <b>Ne ovaj put</b> šalje zahvalu 1. novembra. Angažman ispod 1% je često znak kupljenih pratilaca.</p>
+      <div class="crh">
+        <div class="seg" id="crFilter" role="group" aria-label="Filter"></div>
+        <div class="crgoal" id="crGoal"></div>
       </div>
-      <div class="cr-list" id="crTable"></div>
+      <div class="crl" id="crTable"></div>
     </section>
 
     <!-- PROSPEKTI (sourcing) -->
@@ -841,35 +872,60 @@
     renderCreators();
     cr.filter((r) => !r.ig_checked_at).slice(0, 5).forEach((r) => checkIg(r.id, true));
   }
+  const CI = {
+    check: '<path d="M20 6 9 17l-5-5"/>', x: '<path d="M18 6 6 18M6 6l12 12"/>',
+    ig: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/>',
+    wa: '<path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.4A8.4 8.4 0 1 1 21 11.5Z"/>',
+    mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+    refresh: '<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/>',
+    page: '<path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M19 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5"/>',
+    film: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M17 9h4M3 15h4M17 15h4"/>',
+    gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v9h14v-9M7.5 8a2.5 2.5 0 1 1 4.5-1.5V8M16.5 8A2.5 2.5 0 1 0 12 6.5"/>',
+    trash: '<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',
+    users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18.5 20a6.5 6.5 0 0 0-3-5.5"/>',
+    grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+    heart: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/>',
+    alert: '<path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17h.01"/>',
+    tag: '<path d="M20 12 12 20l-9-9V3h8l9 9Z"/><circle cx="7.5" cy="7.5" r="1.2"/>',
+  };
+  const ic = (n) => '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + CI[n] + '</svg>';
+  const ibtn = (icon, title, attrs, cls) => '<button class="btn i ' + (cls || '') + '" type="button" title="' + title + '" aria-label="' + title + '" ' + attrs + '>' + ic(icon) + '</button>';
+  const ilink = (icon, title, href, cls) => '<a class="btn i ' + (cls || '') + '" href="' + href + '" target="_blank" rel="noopener" title="' + title + '" aria-label="' + title + '">' + ic(icon) + '</a>';
   function renderCreators() {
-    document.querySelectorAll('#crFilter [data-crf]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.crf === crFilter)));
     const ACT = ['odobren', 'klip_primljen', 'objavljen'];
+    const cnt = { sve: cr.length, novi: cr.filter((r) => r.status === 'novi').length, aktivni: cr.filter((r) => ACT.includes(r.status)).length, odbijen: cr.filter((r) => r.status === 'odbijen').length };
+    const F = [['sve', 'Svi'], ['novi', 'Nove'], ['aktivni', 'Izabrani'], ['odbijen', 'Ne ovaj put']];
+    $('crFilter').innerHTML = F.map(([k, l]) => '<button type="button" data-crf="' + k + '" aria-pressed="' + (k === crFilter) + '">' + l + (cnt[k] ? ' <span class="c">' + cnt[k] + '</span>' : '') + '</button>').join('');
+    const active = cnt.aktivni;
+    $('crGoal').innerHTML = ic('users') + ' Izabrano <b>' + active + '</b> od 10 <span class="bar"><i style="width:' + Math.min(100, active * 10) + '%"></i></span>';
     const rows = cr.filter((r) => crFilter === 'sve' || (crFilter === 'aktivni' ? ACT.includes(r.status) : r.status === crFilter));
-    const active = cr.filter((r) => ACT.includes(r.status)).length;
-    $('crFilter').title = active + ' od 10 izabrano';
-    if (!rows.length) { $('crTable').innerHTML = '<div class="panel empty">' + (crFilter === 'sve' ? 'Još nema prijava kreatora. Podijeli link cpsarajevo.ba/kreatori/ u storiju ili bio.' : 'Nema kreatora u ovom filteru.') + '</div>'; return; }
-    $('crTable').innerHTML = (crFilter !== 'odbijen' ? '<p class="muted" style="margin:0">Izabrano: <b>' + active + '</b> od 10</p>' : '') + rows.map((r) => {
-      const warn = crSuspect(r), isAct = ACT.includes(r.status);
-      const ig = r.ig_error && !r.ig_followers ? '<span class="muted">' + esc(r.ig_error) + '</span>'
-        : r.ig_followers == null ? '<span class="muted">Provjeravam Instagram…</span>'
-        : '<span><b>' + fmtN(r.ig_followers) + '</b> pratilaca</span><span>' + fmtN(r.ig_posts) + ' objava</span><span>⌀ ' + fmtN(r.ig_avg_likes) + ' lajkova</span>' + erPill(r.ig_er);
-      const status = r.status === 'odbijen' ? '<span class="pill p-otkazana">Ne ovaj put</span> <span class="muted">' + (new Date() < new Date('2026-11-01T07:00:00+01:00') ? 'email ide 1. novembra' : 'email poslan') + '</span>'
-        : isAct ? '<span class="pill p-potvrdjena">' + esc(CR_ST[r.status]) + '</span> <span class="cr-code">' + esc(r.ref_code || '') + '</span> · <b>' + r.reservations + '</b>/10 rezervacija' + (r.reservations >= 10 ? (r.bonus_sent_at ? ' · bonus poslan' : ' <span class="pill p-potvrdjena">Bonus!</span>') : '')
-        : '<span class="pill p-nova">' + esc(CR_ST[r.status] || r.status) + '</span>';
-      const btns = (r.status === 'novi' || r.status === 'pauza' ? '<button class="btn dark" type="button" data-cr="odobren" data-id="' + r.id + '">Odaberi</button><button class="btn" type="button" data-cr="odbijen" data-id="' + r.id + '">Ne ovaj put</button>'
-          : r.status === 'odbijen' ? '<button class="btn" type="button" data-cr="odobren" data-id="' + r.id + '">Ipak odaberi</button>' : '') +
-        (isAct ? '<button class="btn" type="button" data-crclip="' + r.id + '">' + (r.clip_url ? 'Klip ✓' : 'Dodaj klip') + '</button>' + (r.reservations >= 10 && !r.bonus_sent_at ? '<button class="btn" type="button" data-crbonus="' + r.id + '">Bonus poslan</button>' : '') + '<a class="btn" href="/kreator/?k=' + esc(r.page_token) + '" target="_blank" rel="noopener">Njegova stranica</a>' : '') +
-        (r.phone ? '<a class="btn wa" href="https://wa.me/' + phoneDigits(r.phone) + '" target="_blank" rel="noopener">WhatsApp</a>' : '') +
-        '<button class="btn" type="button" data-crig="' + r.id + '">Osvježi IG</button>';
-      return '<article class="cr-card">' + (r.ig_pic ? '<img src="' + esc(r.ig_pic) + '" alt="" width="52" height="52" referrerpolicy="no-referrer">' : '<span class="ph" aria-hidden="true"></span>') +
-        '<div><div class="cr-top"><b>' + esc(r.full_name) + '</b><a href="https://instagram.com/' + encodeURIComponent(r.instagram) + '" target="_blank" rel="noopener">@' + esc(r.instagram) + '</a><span class="muted">' + when(r.created_at) + '</span></div>' +
-        '<div class="cr-stats">' + ig + '</div>' +
-        (warn.length ? '<div class="cr-warn">Pazi: ' + esc(warn.join('; ')) + '</div>' : '') +
-        (r.note ? '<div class="muted">"' + esc(r.note) + '"</div>' : '') +
-        '<div class="muted">' + esc(r.email) + (r.phone ? ' · ' + esc(r.phone) : '') + '</div>' +
-        '<div style="margin-top:6px">' + status + '</div>' +
-        (r.clip_url ? '<div class="muted"><a href="' + esc(r.clip_url) + '" target="_blank" rel="noopener">Otvori klip</a></div>' : '') +
-        '<div class="actions">' + btns + '</div></div></article>';
+    if (!rows.length) { $('crTable').innerHTML = '<div class="empty">' + (crFilter === 'sve' ? 'Još nema prijava. Podijeli cpsarajevo.ba/kreatori/ u storiju ili bio.' : 'Nema nikoga u ovom filteru.') + '</div>'; return; }
+    const held = new Date() < new Date('2026-11-01T07:00:00+01:00');
+    $('crTable').innerHTML = rows.map((r) => {
+      const warn = crSuspect(r), isAct = ACT.includes(r.status), off = r.status === 'odbijen';
+      const init = esc(String(r.full_name || '?').trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase());
+      const av = r.ig_pic ? '<img class="av" src="' + esc(r.ig_pic) + '" alt="" width="36" height="36" referrerpolicy="no-referrer" onerror="this.outerHTML=\'<span class=&quot;av&quot;>' + init + '</span>\'">' : '<span class="av">' + init + '</span>';
+      const er = r.ig_er == null ? '' : '<span class="er ' + (r.ig_er < 1 ? 'lo' : r.ig_er < 2 ? 'mid' : 'hi') + '" title="Angažman: prosjek lajkova i komentara po objavi / pratioci">' + ic('heart') + String(r.ig_er).replace('.', ',') + '%</span>';
+      const stats = r.ig_error && !r.ig_followers ? '<span title="' + esc(r.ig_error) + '">' + ic('alert') + (/postoji/i.test(r.ig_error) ? 'Profil ne postoji' : 'Instagram nedostupan') + '</span>'
+        : r.ig_followers == null ? '<span>' + ic('refresh') + 'Provjeravam…</span>'
+        : '<span title="Pratioci">' + ic('users') + '<b>' + fmtN(r.ig_followers) + '</b></span><span title="Objave">' + ic('grid') + '<b>' + fmtN(r.ig_posts) + '</b></span>' + er;
+      const st = off ? '<span class="pill p-otkazana">Ne ovaj put</span>' + (held ? 'email 1. novembra' : 'email poslan')
+        : isAct ? '<span class="pill p-potvrdjena">' + esc(CR_ST[r.status]) + '</span><span><span class="code">' + esc(r.ref_code || '') + '</span> · <b>' + r.reservations + '</b>/10 rez.' + (r.reservations >= 10 && !r.bonus_sent_at ? ' · bonus!' : '') + '</span>'
+        : '<span class="pill p-nova">Nova prijava</span>' + when(r.created_at);
+      const decide = r.status === 'novi' || r.status === 'pauza'
+        ? '<button class="btn ok" type="button" data-cr="odobren" data-id="' + r.id + '">' + ic('check') + 'Odaberi</button><button class="btn no" type="button" data-cr="odbijen" data-id="' + r.id + '">' + ic('x') + 'Ne ovaj put</button><span class="sep"></span>'
+        : off ? '<button class="btn" type="button" data-cr="odobren" data-id="' + r.id + '" title="Ipak odaberi">' + ic('check') + 'Ipak odaberi</button><span class="sep"></span>' : '';
+      const tools = (isAct ? ibtn('film', r.clip_url ? 'Klip: ' + esc(r.clip_url) : 'Dodaj link na klip', 'data-crclip="' + r.id + '"', r.clip_url ? 'wa' : '') + (r.reservations >= 10 && !r.bonus_sent_at ? ibtn('gift', 'Označi bonus kao poslan', 'data-crbonus="' + r.id + '"') : '') + ilink('page', 'Njegova stranica', '/kreator/?k=' + esc(r.page_token)) : '') +
+        ilink('ig', 'Otvori @' + esc(r.instagram), 'https://instagram.com/' + encodeURIComponent(r.instagram)) +
+        (r.phone ? ilink('wa', 'WhatsApp ' + esc(r.phone), 'https://wa.me/' + phoneDigits(r.phone), 'wa') : '') +
+        ilink('mail', 'Email ' + esc(r.email), 'mailto:' + esc(r.email)) +
+        ibtn('refresh', 'Osvježi Instagram podatke', 'data-crig="' + r.id + '"') +
+        ibtn('trash', 'Obriši prijavu', 'data-crdel="' + r.id + '"', 'del');
+      return '<div class="crr' + (off ? ' off' : '') + '">' + av +
+        '<div class="who"><div class="n"><b>' + esc(r.full_name) + '</b><a href="https://instagram.com/' + encodeURIComponent(r.instagram) + '" target="_blank" rel="noopener">@' + esc(r.instagram) + '</a></div>' +
+        '<div class="meta" title="' + esc(r.note || '') + '">' + esc(r.note ? '"' + r.note + '"' : (r.email + (r.phone ? ' · ' + r.phone : ''))) + '</div>' +
+        (warn.length ? '<div class="crw" title="' + esc(warn.join('; ')) + '">' + ic('alert') + esc(warn[0]) + (warn.length > 1 ? ' +' + (warn.length - 1) : '') + '</div>' : '') + '</div>' +
+        '<div class="crs">' + stats + '</div><div class="crst">' + st + '</div><div class="cra">' + decide + tools + '</div></div>';
     }).join('');
   }
   async function checkIg(id, quiet) {
@@ -884,7 +940,14 @@
   }
   $('crFilter').addEventListener('click', (e) => { const b = e.target.closest('[data-crf]'); if (!b) return; crFilter = b.dataset.crf; renderCreators(); });
   $('crTable').addEventListener('click', async (e) => {
-    const ig = e.target.closest('[data-crig]'); if (ig) { ig.disabled = true; ig.textContent = 'Provjeravam…'; await checkIg(Number(ig.dataset.crig)); return; }
+    const ig = e.target.closest('[data-crig]'); if (ig) { ig.disabled = true; await checkIg(Number(ig.dataset.crig)); return; }
+    const del = e.target.closest('[data-crdel]');
+    if (del) {
+      if (!del.classList.contains('armed')) { del.classList.add('armed'); del.insertAdjacentText('beforeend', 'Obriši?'); setTimeout(() => { if (del.isConnected) { del.classList.remove('armed'); del.lastChild.nodeType === 3 && del.lastChild.remove(); } }, 3000); return; }
+      del.disabled = true;
+      const { error } = await sb.from('creators').delete().eq('id', del.dataset.crdel);
+      toast(error ? 'Brisanje nije uspjelo.' : 'Prijava obrisana.'); loadCreators(); return;
+    }
     const clip = e.target.closest('[data-crclip]');
     if (clip) {
       const row = cr.find((x) => x.id === Number(clip.dataset.crclip));
