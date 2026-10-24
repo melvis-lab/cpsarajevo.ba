@@ -361,6 +361,9 @@
         .crs svg,.ic{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
         .er{border-radius:6px;padding:0 6px;font-weight:600}
         .er.lo{background:var(--bad-soft);color:var(--bad)!important}.er.mid{background:var(--warn-soft);color:var(--warn)!important}.er.hi{background:var(--ok-soft);color:var(--ok)!important}
+        .crfit{margin-top:4px;font-size:12px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .crfit b{display:inline-block;border-radius:6px;padding:0 6px;margin-right:4px;font-weight:600;background:var(--soft);color:var(--ink)}
+        .crfit.dobar b{background:var(--ok-soft);color:var(--ok)}.crfit.mozda b{background:var(--warn-soft);color:var(--warn)}.crfit.ne b{background:var(--bad-soft);color:var(--bad)}
         .crw{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:12px;color:var(--warn)}
         .crst{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted);min-width:0}
         .crst .pill{align-self:flex-start}
@@ -377,7 +380,7 @@
         @media (max-width:1280px){.crr{grid-template-columns:36px minmax(0,1fr) auto;}.crr .crs,.crr .crst{grid-column:2/4}.crr .cra{grid-column:1/4;justify-content:flex-start}.crst{flex-direction:row;align-items:center;gap:8px}}
       </style>
       <h2>Kreatori</h2>
-      <p class="sub">Prijave s <a href="/kreatori/" target="_blank" rel="noopener">/kreatori/</a>. <b>Odaberi</b> aktivira kod i šalje email s kodom. <b>Ne ovaj put</b> šalje zahvalu 1. novembra. Angažman ispod 1% je često znak kupljenih pratilaca.</p>
+      <p class="sub">Prijave s <a href="/kreatori/" target="_blank" rel="noopener">/kreatori/</a>. Svaka potvrđena prijava dobije automatsku procjenu (prvi krug); jasni promašaji, npr. fitness ili prazan profil, sami idu u <b>Ne ovaj put</b>, a ti ih možeš vratiti. <b>Odaberi</b> aktivira kod i šalje email s kodom.</p>
       <div class="crh">
         <div class="seg" id="crFilter" role="group" aria-label="Filter"></div>
         <div class="crgoal" id="crGoal"></div>
@@ -897,12 +900,14 @@
   const ilink = (icon, title, href, cls) => '<a class="btn i ' + (cls || '') + '" href="' + href + '" target="_blank" rel="noopener" title="' + title + '" aria-label="' + title + '">' + ic(icon) + '</a>';
   function renderCreators() {
     const ACT = ['odobren', 'klip_primljen', 'objavljen'];
-    const cnt = { sve: cr.length, novi: cr.filter((r) => r.status === 'novi').length, aktivni: cr.filter((r) => ACT.includes(r.status)).length, odbijen: cr.filter((r) => r.status === 'odbijen').length };
-    const F = [['sve', 'Svi'], ['novi', 'Nove'], ['aktivni', 'Izabrani'], ['odbijen', 'Ne ovaj put']];
+    const cnt = { sve: cr.length, top: cr.filter((r) => r.status === 'novi' && r.screen_fit === 'dobar').length, novi: cr.filter((r) => r.status === 'novi').length, aktivni: cr.filter((r) => ACT.includes(r.status)).length, odbijen: cr.filter((r) => r.status === 'odbijen').length };
+    const F = [['sve', 'Svi'], ['top', 'Preporučeni'], ['novi', 'Nove'], ['aktivni', 'Izabrani'], ['odbijen', 'Ne ovaj put']];
     $('crFilter').innerHTML = F.map(([k, l]) => '<button type="button" data-crf="' + k + '" aria-pressed="' + (k === crFilter) + '">' + l + (cnt[k] ? ' <span class="c">' + cnt[k] + '</span>' : '') + '</button>').join('');
     const active = cnt.aktivni;
     $('crGoal').innerHTML = ic('users') + ' Izabrano <b>' + active + '</b> od 10 <span class="bar"><i style="width:' + Math.min(100, active * 10) + '%"></i></span>';
-    const rows = cr.filter((r) => crFilter === 'sve' || (crFilter === 'aktivni' ? ACT.includes(r.status) : r.status === crFilter));
+    const ORD = { novi: 0, odobren: 1, klip_primljen: 1, objavljen: 1, pauza: 2, odbijen: 3 };
+    const rows = cr.filter((r) => crFilter === 'sve' || (crFilter === 'top' ? r.status === 'novi' && r.screen_fit === 'dobar' : crFilter === 'aktivni' ? ACT.includes(r.status) : r.status === crFilter))
+      .sort((a, b) => (ORD[a.status] ?? 9) - (ORD[b.status] ?? 9) || (b.screen_score ?? -1) - (a.screen_score ?? -1) || String(b.created_at).localeCompare(String(a.created_at)));
     if (!rows.length) { $('crTable').innerHTML = '<div class="empty">' + (crFilter === 'sve' ? 'Još nema prijava. Podijeli cpsarajevo.ba/kreatori/ u storiju ili bio.' : 'Nema nikoga u ovom filteru.') + '</div>'; return; }
     const held = new Date() < new Date('2026-11-01T07:00:00+01:00');
     $('crTable').innerHTML = rows.map((r) => {
@@ -913,7 +918,7 @@
       const stats = r.ig_error && !r.ig_followers ? '<span title="' + esc(r.ig_error) + '">' + ic('alert') + (/postoji/i.test(r.ig_error) ? 'Profil ne postoji' : 'Instagram nedostupan') + '</span>'
         : r.ig_followers == null ? '<span>' + ic('refresh') + 'Provjeravam…</span>'
         : '<span title="Pratioci">' + ic('users') + '<b>' + fmtN(r.ig_followers) + '</b></span><span title="Objave">' + ic('grid') + '<b>' + fmtN(r.ig_posts) + '</b></span>' + er;
-      const st = off ? '<span class="pill p-otkazana">Ne ovaj put</span>' + (held ? 'email 1. novembra' : 'email poslan')
+      const st = off ? '<span class="pill p-otkazana">Ne ovaj put</span>' + (/^Automatski/.test(r.admin_note || '') ? 'automatski · ' : '') + (held ? 'email 1. novembra' : 'email poslan')
         : isAct ? '<span class="pill p-potvrdjena">' + esc(CR_ST[r.status]) + '</span><span><span class="code">' + esc(r.ref_code || '') + '</span> · <b>' + r.reservations + '</b>/10 rez.' + (r.reservations >= 10 && !r.bonus_sent_at ? ' · bonus!' : '') + '</span>'
         : '<span class="pill p-nova">Nova prijava</span>' + when(r.created_at);
       const decide = r.status === 'novi' || r.status === 'pauza'
@@ -928,6 +933,7 @@
       return '<div class="crr' + (off ? ' off' : '') + '">' + av +
         '<div class="who"><div class="n"><b>' + esc(r.full_name) + '</b><a href="https://instagram.com/' + encodeURIComponent(r.instagram) + '" target="_blank" rel="noopener">@' + esc(r.instagram) + '</a></div>' +
         '<div class="meta" title="' + esc(r.note || '') + '">' + esc(r.note ? '"' + r.note + '"' : (r.email + (r.phone ? ' · ' + r.phone : ''))) + '</div>' +
+        (r.screen_fit ? '<div class="crfit ' + esc(r.screen_fit) + '" title="Automatska procjena (prvi krug)"><b>' + ({ dobar: 'Dobar fit', mozda: 'Možda', ne: 'Ne odgovara' }[r.screen_fit] || '') + ' · ' + (r.screen_score ?? '?') + '</b> ' + esc(r.screen_reason || '') + '</div>' : (r.screened_at ? '<div class="crfit"><b>Procjena</b> ' + esc(r.screen_reason || '') + '</div>' : '<div class="crfit"><b>Procjena…</b></div>')) +
         (warn.length ? '<div class="crw" title="' + esc(warn.join('; ')) + '">' + ic('alert') + esc(warn[0]) + (warn.length > 1 ? ' +' + (warn.length - 1) : '') + '</div>' : '') + '</div>' +
         '<div class="crs">' + stats + '</div><div class="crst">' + st + '</div><div class="cra">' + decide + tools + '</div></div>';
     }).join('');

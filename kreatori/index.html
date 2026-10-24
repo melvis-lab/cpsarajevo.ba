@@ -113,6 +113,13 @@
       <div><label for="c_email">Email</label><input id="c_email" type="email" required autocomplete="email" placeholder="ime@primjer.ba"></div>
       <div><label for="c_phone">Telefon</label><input id="c_phone" type="tel" required autocomplete="tel" placeholder="+387 …"></div>
     </div>
+    <label for="c_niche">Kakav sadržaj najviše praviš</label>
+    <select id="c_niche" required>
+      <option value="" selected disabled>Izaberi</option>
+      <option>Ljepota i make-up</option><option>Njega kože</option><option>Moda i stil</option><option>Lifestyle</option>
+      <option>Mama i porodica</option><option>Luksuz i putovanja</option><option>Dom i uređenje</option><option>Hrana i kafa</option>
+      <option>Fitness i sport</option><option>Humor</option><option>Drugo</option>
+    </select>
     <label for="c_note">Zašto baš ti? (opcionalno)</label><textarea id="c_note" maxlength="600" placeholder="Kratko o tvom profilu i ideja za klip"></textarea>
     <div class="hp" aria-hidden="true"><label for="c_web">Web stranica</label><input id="c_web" tabindex="-1" autocomplete="off"></div>
     <label class="check"><input type="checkbox" id="c_rules" required><span>Pročitao/la sam pravila saradnje i prihvatam ih.</span></label>
@@ -151,11 +158,12 @@
     if (!$('c_rules').checked) { msg.textContent = ERR.pravila; return; }
     if (!$('c_consent').checked) { msg.textContent = 'Za prijavu nam treba tvoja saglasnost za podatke.'; return; }
     if ($('c_phone').value.replace(/\D/g, '').length < 6) { msg.textContent = 'Upiši broj telefona, da te možemo dobiti za paket.'; return; }
+    if (!$('c_niche').value) { msg.textContent = 'Izaberi kakav sadržaj najviše praviš.'; return; }
     const b = e.submitter || $('crForm').querySelector('button'); b.disabled = true; b.textContent = 'Šaljem…';
     const ig = $('c_ig').value.trim().replace(/^@/, '');
     const { data, error } = await CP.sb.rpc('creator_register', { p: {
       full_name: $('c_name').value, instagram: ig, email: $('c_email').value, phone: $('c_phone').value,
-      note: $('c_note').value, website: $('c_web').value, rules: true,
+      niche: $('c_niche').value, note: $('c_note').value, website: $('c_web').value, rules: true,
     } });
     b.disabled = false; b.textContent = 'Pošalji prijavu';
     if (error || !data || !data.ok) { msg.textContent = ERR[data && data.error] || 'Slanje nije uspjelo. Pokušaj ponovo ili piši na info@cpsarajevo.ba.'; return; }
