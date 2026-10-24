@@ -329,7 +329,7 @@
 
     <section data-panel="kreatori" hidden>
       <h2>Kreatori</h2>
-      <p class="sub">Prijave s <a href="/kreatori/" target="_blank" rel="noopener">/kreatori/</a>. DM potvrđen znači da je kod stigao u Instagram poruke s tog profila. Angažman ispod 1% je često znak kupljenih pratilaca. Kod se aktivira tek kad kreator na svojoj stranici potvrdi pravila.</p>
+      <p class="sub">Prijave s <a href="/kreatori/" target="_blank" rel="noopener">/kreatori/</a>. DM potvrđen znači da je kod stigao u Instagram poruke s tog profila. Angažman ispod 1% je često znak kupljenih pratilaca. Kod se aktivira tek kad kreator na svojoj stranici potvrdi pravila. Odbijeni dobijaju email samo ako je DM potvrđen; odbijene prijave se brišu nakon 30 dana.</p>
       <div class="toolbar" style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px" id="crFilter" role="group" aria-label="Filter">
         <button class="btn" type="button" data-crf="sve" aria-pressed="true">Svi</button>
         <button class="btn" type="button" data-crf="novi" aria-pressed="false">Nove prijave</button>
@@ -809,6 +809,15 @@
     const cls = er < 1 ? 'otkazana' : er < 2 ? 'nova' : 'potvrdjena';
     return ' <span class="pill p-' + cls + '" title="Prosječno lajkova i komentara po objavi, podijeljeno s brojem pratilaca">' + String(er).replace('.', ',') + '% angažman</span>';
   }
+  // signs of a fake or prank sign-up: typed-in followers far from the real count, an empty profile, or a DM from another account
+  function crSuspect(r) {
+    const why = [];
+    if (r.ig_followers != null && r.followers_claimed && (r.followers_claimed > Math.max(r.ig_followers * 2, r.ig_followers + 200) || r.followers_claimed < r.ig_followers / 2))
+      why.push('upisao/la ' + fmtN(r.followers_claimed) + ', a ima ' + fmtN(r.ig_followers) + ' pratilaca');
+    if (r.ig_posts === 0) why.push('profil nema nijednu objavu');
+    if (r.dm_username && r.dm_username.toLowerCase() !== r.instagram) why.push('DM je stigao s drugog profila');
+    return why;
+  }
   async function loadCreators() {
     const { data, error } = await sb.from('admin_creators').select('*').order('created_at', { ascending: false }).limit(1000);
     if (error) { $('crTable').innerHTML = '<tr><td class="empty">Kreatori još nisu uključeni u bazi.</td></tr>'; return; }
@@ -825,7 +834,7 @@
     table($('crTable'), [
       { h: 'Kada', html: (r) => when(r.created_at) },
       { h: 'Kreator', html: (r) => '<div style="display:flex;gap:10px;align-items:flex-start">' + (r.ig_pic ? '<img src="' + esc(r.ig_pic) + '" alt="" width="36" height="36" referrerpolicy="no-referrer" style="border-radius:50%;flex:none;object-fit:cover">' : '') +
-          '<div><b>' + esc(r.full_name) + '</b><div><a href="https://instagram.com/' + encodeURIComponent(r.instagram) + '" target="_blank" rel="noopener">@' + esc(r.instagram) + '</a></div><div class="muted">' + esc([r.niche, r.city].filter(Boolean).join(' · ')) + '</div>' +
+          '<div><b>' + esc(r.full_name) + '</b>' + (crSuspect(r).length ? ' <span class="pill p-otkazana" title="' + esc('Sumnjivo: ' + crSuspect(r).join('; ')) + '">Sumnjivo</span>' : '') + '<div><a href="https://instagram.com/' + encodeURIComponent(r.instagram) + '" target="_blank" rel="noopener">@' + esc(r.instagram) + '</a></div><div class="muted">' + esc([r.niche, r.city].filter(Boolean).join(' · ')) + '</div>' +
           (r.note ? '<div class="muted" style="max-width:260px">' + esc(r.note) + '</div>' : '') + '<div class="muted">' + esc(r.email) + (r.phone ? ' · ' + esc(r.phone) : '') + '</div></div></div>' },
       { h: 'Instagram', html: (r) => r.ig_error && !r.ig_followers ? '<span class="muted">' + esc(r.ig_error) + '</span>' :
           (r.ig_followers == null ? '<span class="muted">Provjeravam…</span>' : '<b>' + fmtN(r.ig_followers) + '</b> pratilaca' + (r.ig_private ? ' <span class="pill p-otkazana">privatan</span>' : '') +
@@ -834,7 +843,7 @@
       { h: 'DM', html: (r) => r.dm_verified_at ? '<span class="pill p-potvrdjena">DM potvrđen</span>' + (r.dm_username && r.dm_username.toLowerCase() !== r.instagram ? '<div class="muted">Poslao/la @' + esc(r.dm_username) + ', ne @' + esc(r.instagram) + '!</div>' : '') :
           '<span class="pill p-nova">Čeka DM</span><div class="muted">' + esc(r.verify_code) + '</div>' },
       { h: 'Status', html: (r) => '<select data-crst="' + r.id + '" aria-label="Status">' + Object.keys(CR_ST).map((v) => '<option value="' + v + '"' + (v === r.status ? ' selected' : '') + '>' + CR_ST[v] + '</option>').join('') + '</select>' },
-      { h: 'Kod', html: (r) => r.ref_code ? '<b>' + esc(r.ref_code) + '</b><div class="muted">' + (r.committed_at ? 'Pravila potvrđena' : 'Čeka potvrdu pravila') + '</div>' : '<span class="muted">Nakon odabira</span>' },
+      { h: 'Kod', html: (r) => r.status === 'odbijen' ? '<span class="muted">' + (r.rejected_at ? 'Briše se ' + new Date(new Date(r.rejected_at).getTime() + 30 * 864e5).toLocaleDateString('bs-BA') : 'Odbijen/a') + '</span>' : r.ref_code ? '<b>' + esc(r.ref_code) + '</b><div class="muted">' + (r.committed_at ? 'Pravila potvrđena' : 'Čeka potvrdu pravila') + '</div>' : '<span class="muted">Nakon odabira</span>' },
       { h: 'Rezervacije', num: true, html: (r) => r.ref_code ? '<b>' + r.reservations + '</b> / 10' + (r.reservations >= 10 ? (r.bonus_sent_at ? '<div class="muted">Bonus poslan</div>' : '<div><span class="pill p-potvrdjena">Bonus!</span></div>') : '') : '' },
       { h: '', html: (r) => '<div class="actions">' +
           (r.status === 'novi' || r.status === 'odbijen' ? '<button class="btn dark" type="button" data-cr="odobren" data-id="' + r.id + '">Izaberi</button>' : '') +
@@ -874,7 +883,10 @@
     const bonus = e.target.closest('[data-crbonus]');
     if (bonus) { const { error } = await sb.from('creators').update({ bonus_sent_at: new Date().toISOString() }).eq('id', bonus.dataset.crbonus); toast(error ? 'Nije sačuvano.' : 'Bonus označen kao poslan.'); loadCreators(); return; }
     const b = e.target.closest('[data-cr]'); if (!b) return;
-    if (b.dataset.cr === 'odbijen' && !confirmBox(b, 'Sigurno odbiti? Kreator dobija email.')) return;
+    if (b.dataset.cr === 'odbijen') {
+      const row = cr.find((x) => x.id === Number(b.dataset.id));
+      if (!confirmBox(b, row && row.dm_verified_at ? 'Sigurno odbiti? Kreator dobija kratak email zahvale.' : 'Sigurno odbiti? DM nije potvrđen, pa se email ne šalje.')) return;
+    }
     if (b.dataset.cr === 'odobren') {
       const row = cr.find((x) => x.id === Number(b.dataset.id));
       const active = cr.filter((r) => ['odobren', 'klip_primljen', 'objavljen'].includes(r.status)).length;
