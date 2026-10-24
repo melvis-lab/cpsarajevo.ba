@@ -329,14 +329,25 @@
 
     <section data-panel="kreatori" hidden>
       <h2>Kreatori</h2>
-      <p class="sub">Prijave s <a href="/kreatori/" target="_blank" rel="noopener">/kreatori/</a>. DM potvrđen znači da je kod stigao u Instagram poruke s tog profila. Angažman ispod 1% je često znak kupljenih pratilaca. Kod se aktivira tek kad kreator na svojoj stranici potvrdi pravila. Odbijeni dobijaju email samo ako je DM potvrđen; odbijene prijave se brišu nakon 30 dana.</p>
+      <p class="sub">Prijave s <a href="/kreatori/" target="_blank" rel="noopener">/kreatori/</a>. Pratioci i angažman se provjeravaju sami; ispod 1% angažmana je često znak kupljenih pratilaca. <b>Odaberi</b> odmah aktivira kod i šalje kreatoru email s kodom. <b>Ne ovaj put</b> šalje kratku zahvalu 1. novembra, ne prije; odbijene prijave se brišu 30 dana kasnije.</p>
+      <style>
+        .cr-list{display:grid;gap:12px}
+        .cr-card{display:grid;grid-template-columns:52px 1fr;gap:14px;padding:16px;border:1px solid var(--line,#e6d9c4);border-radius:14px;background:var(--card,#fff)}
+        .cr-card img,.cr-card .ph{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#0001}
+        .cr-top{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+        .cr-stats{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0;font-size:14px}
+        .cr-stats b{font-size:16px}
+        .cr-warn{margin:6px 0;padding:8px 10px;border-radius:8px;background:#f0c3b633;font-size:13px}
+        .cr-card .actions{margin-top:10px}
+        .cr-code{font-weight:600;letter-spacing:.06em}
+      </style>
       <div class="toolbar" style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px" id="crFilter" role="group" aria-label="Filter">
         <button class="btn" type="button" data-crf="sve" aria-pressed="true">Svi</button>
         <button class="btn" type="button" data-crf="novi" aria-pressed="false">Nove prijave</button>
         <button class="btn" type="button" data-crf="aktivni" aria-pressed="false">Izabrani</button>
         <button class="btn" type="button" data-crf="odbijen" aria-pressed="false">Odbijeni</button>
       </div>
-      <div class="panel scroll"><table id="crTable"></table></div>
+      <div class="cr-list" id="crTable"></div>
     </section>
 
     <!-- PROSPEKTI (sourcing) -->
@@ -814,8 +825,11 @@
     const why = [];
     if (r.ig_followers != null && r.followers_claimed && (r.followers_claimed > Math.max(r.ig_followers * 2, r.ig_followers + 200) || r.followers_claimed < r.ig_followers / 2))
       why.push('upisao/la ' + fmtN(r.followers_claimed) + ', a ima ' + fmtN(r.ig_followers) + ' pratilaca');
+    if (r.ig_followers != null && r.ig_followers < 1000) why.push('manje od 1.000 pratilaca');
+    if (r.ig_followers != null && r.ig_followers > 30000) why.push('više od 30.000 pratilaca');
     if (r.ig_posts === 0) why.push('profil nema nijednu objavu');
-    if (r.dm_username && r.dm_username.toLowerCase() !== r.instagram) why.push('DM je stigao s drugog profila');
+    if (r.ig_private) why.push('profil je privatan');
+    if (r.ig_er != null && r.ig_er < 1) why.push('angažman ispod 1%');
     return why;
   }
   async function loadCreators() {
@@ -829,33 +843,34 @@
   }
   function renderCreators() {
     document.querySelectorAll('#crFilter [data-crf]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.crf === crFilter)));
-    const rows = cr.filter((r) => crFilter === 'sve' || (crFilter === 'aktivni' ? ['odobren', 'klip_primljen', 'objavljen'].includes(r.status) : r.status === crFilter));
-    const active = cr.filter((r) => ['odobren', 'klip_primljen', 'objavljen'].includes(r.status)).length;
-    table($('crTable'), [
-      { h: 'Kada', html: (r) => when(r.created_at) },
-      { h: 'Kreator', html: (r) => '<div style="display:flex;gap:10px;align-items:flex-start">' + (r.ig_pic ? '<img src="' + esc(r.ig_pic) + '" alt="" width="36" height="36" referrerpolicy="no-referrer" style="border-radius:50%;flex:none;object-fit:cover">' : '') +
-          '<div><b>' + esc(r.full_name) + '</b>' + (crSuspect(r).length ? ' <span class="pill p-otkazana" title="' + esc('Sumnjivo: ' + crSuspect(r).join('; ')) + '">Sumnjivo</span>' : '') + '<div><a href="https://instagram.com/' + encodeURIComponent(r.instagram) + '" target="_blank" rel="noopener">@' + esc(r.instagram) + '</a></div><div class="muted">' + esc([r.niche, r.city].filter(Boolean).join(' · ')) + '</div>' +
-          (r.note ? '<div class="muted" style="max-width:260px">' + esc(r.note) + '</div>' : '') + '<div class="muted">' + esc(r.email) + (r.phone ? ' · ' + esc(r.phone) : '') + '</div></div></div>' },
-      { h: 'Instagram', html: (r) => r.ig_error && !r.ig_followers ? '<span class="muted">' + esc(r.ig_error) + '</span>' :
-          (r.ig_followers == null ? '<span class="muted">Provjeravam…</span>' : '<b>' + fmtN(r.ig_followers) + '</b> pratilaca' + (r.ig_private ? ' <span class="pill p-otkazana">privatan</span>' : '') +
-          '<div class="muted">' + fmtN(r.ig_posts) + ' objava · ⌀ ' + fmtN(r.ig_avg_likes) + ' lajkova · ⌀ ' + fmtN(r.ig_avg_comments) + ' kom.</div><div>' + erPill(r.ig_er) + '</div>') +
-          (r.followers_claimed && r.ig_followers && Math.abs(r.followers_claimed - r.ig_followers) > r.ig_followers * 0.3 ? '<div class="muted">Upisao/la: ' + fmtN(r.followers_claimed) + '</div>' : '') },
-      { h: 'DM', html: (r) => r.dm_verified_at ? '<span class="pill p-potvrdjena">DM potvrđen</span>' + (r.dm_username && r.dm_username.toLowerCase() !== r.instagram ? '<div class="muted">Poslao/la @' + esc(r.dm_username) + ', ne @' + esc(r.instagram) + '!</div>' : '') :
-          '<span class="pill p-nova">Čeka DM</span><div class="muted">' + esc(r.verify_code) + '</div>' },
-      { h: 'Status', html: (r) => '<select data-crst="' + r.id + '" aria-label="Status">' + Object.keys(CR_ST).map((v) => '<option value="' + v + '"' + (v === r.status ? ' selected' : '') + '>' + CR_ST[v] + '</option>').join('') + '</select>' },
-      { h: 'Kod', html: (r) => r.status === 'odbijen' ? '<span class="muted">' + (r.rejected_at ? 'Briše se ' + new Date(new Date(r.rejected_at).getTime() + 30 * 864e5).toLocaleDateString('bs-BA') : 'Odbijen/a') + '</span>' : r.ref_code ? '<b>' + esc(r.ref_code) + '</b><div class="muted">' + (r.committed_at ? 'Pravila potvrđena' : 'Čeka potvrdu pravila') + '</div>' : '<span class="muted">Nakon odabira</span>' },
-      { h: 'Rezervacije', num: true, html: (r) => r.ref_code ? '<b>' + r.reservations + '</b> / 10' + (r.reservations >= 10 ? (r.bonus_sent_at ? '<div class="muted">Bonus poslan</div>' : '<div><span class="pill p-potvrdjena">Bonus!</span></div>') : '') : '' },
-      { h: '', html: (r) => '<div class="actions">' +
-          (r.status === 'novi' || r.status === 'odbijen' ? '<button class="btn dark" type="button" data-cr="odobren" data-id="' + r.id + '">Izaberi</button>' : '') +
-          (r.status === 'novi' ? '<button class="btn" type="button" data-cr="odbijen" data-id="' + r.id + '">Odbij</button>' : '') +
-          '<button class="btn" type="button" data-crig="' + r.id + '">Provjeri IG</button>' +
-          (r.ref_code ? '<button class="btn" type="button" data-crclip="' + r.id + '">' + (r.clip_url ? 'Klip ✓' : 'Klip') + '</button>' : '') +
-          (r.reservations >= 10 && !r.bonus_sent_at ? '<button class="btn" type="button" data-crbonus="' + r.id + '">Bonus poslan</button>' : '') +
-          '<a class="btn" href="/kreator/?k=' + esc(r.page_token) + '" target="_blank" rel="noopener">Stranica</a>' +
-          (r.phone ? '<a class="btn wa" href="https://wa.me/' + phoneDigits(r.phone) + '" target="_blank" rel="noopener">WhatsApp</a>' : '') + '</div>' +
-          (r.clip_url ? '<div class="muted"><a href="' + esc(r.clip_url) + '" target="_blank" rel="noopener">Otvori klip</a></div>' : '') },
-    ], rows, crFilter === 'sve' ? 'Još nema prijava kreatora. Podijeli link cpsarajevo.ba/kreatori/ u storiju ili bio.' : 'Nema kreatora u ovom filteru.');
+    const ACT = ['odobren', 'klip_primljen', 'objavljen'];
+    const rows = cr.filter((r) => crFilter === 'sve' || (crFilter === 'aktivni' ? ACT.includes(r.status) : r.status === crFilter));
+    const active = cr.filter((r) => ACT.includes(r.status)).length;
     $('crFilter').title = active + ' od 10 izabrano';
+    if (!rows.length) { $('crTable').innerHTML = '<div class="panel empty">' + (crFilter === 'sve' ? 'Još nema prijava kreatora. Podijeli link cpsarajevo.ba/kreatori/ u storiju ili bio.' : 'Nema kreatora u ovom filteru.') + '</div>'; return; }
+    $('crTable').innerHTML = (crFilter !== 'odbijen' ? '<p class="muted" style="margin:0">Izabrano: <b>' + active + '</b> od 10</p>' : '') + rows.map((r) => {
+      const warn = crSuspect(r), isAct = ACT.includes(r.status);
+      const ig = r.ig_error && !r.ig_followers ? '<span class="muted">' + esc(r.ig_error) + '</span>'
+        : r.ig_followers == null ? '<span class="muted">Provjeravam Instagram…</span>'
+        : '<span><b>' + fmtN(r.ig_followers) + '</b> pratilaca</span><span>' + fmtN(r.ig_posts) + ' objava</span><span>⌀ ' + fmtN(r.ig_avg_likes) + ' lajkova</span>' + erPill(r.ig_er);
+      const status = r.status === 'odbijen' ? '<span class="pill p-otkazana">Ne ovaj put</span> <span class="muted">' + (new Date() < new Date('2026-11-01T07:00:00+01:00') ? 'email ide 1. novembra' : 'email poslan') + '</span>'
+        : isAct ? '<span class="pill p-potvrdjena">' + esc(CR_ST[r.status]) + '</span> <span class="cr-code">' + esc(r.ref_code || '') + '</span> · <b>' + r.reservations + '</b>/10 rezervacija' + (r.reservations >= 10 ? (r.bonus_sent_at ? ' · bonus poslan' : ' <span class="pill p-potvrdjena">Bonus!</span>') : '')
+        : '<span class="pill p-nova">' + esc(CR_ST[r.status] || r.status) + '</span>';
+      const btns = (r.status === 'novi' || r.status === 'pauza' ? '<button class="btn dark" type="button" data-cr="odobren" data-id="' + r.id + '">Odaberi</button><button class="btn" type="button" data-cr="odbijen" data-id="' + r.id + '">Ne ovaj put</button>'
+          : r.status === 'odbijen' ? '<button class="btn" type="button" data-cr="odobren" data-id="' + r.id + '">Ipak odaberi</button>' : '') +
+        (isAct ? '<button class="btn" type="button" data-crclip="' + r.id + '">' + (r.clip_url ? 'Klip ✓' : 'Dodaj klip') + '</button>' + (r.reservations >= 10 && !r.bonus_sent_at ? '<button class="btn" type="button" data-crbonus="' + r.id + '">Bonus poslan</button>' : '') + '<a class="btn" href="/kreator/?k=' + esc(r.page_token) + '" target="_blank" rel="noopener">Njegova stranica</a>' : '') +
+        (r.phone ? '<a class="btn wa" href="https://wa.me/' + phoneDigits(r.phone) + '" target="_blank" rel="noopener">WhatsApp</a>' : '') +
+        '<button class="btn" type="button" data-crig="' + r.id + '">Osvježi IG</button>';
+      return '<article class="cr-card">' + (r.ig_pic ? '<img src="' + esc(r.ig_pic) + '" alt="" width="52" height="52" referrerpolicy="no-referrer">' : '<span class="ph" aria-hidden="true"></span>') +
+        '<div><div class="cr-top"><b>' + esc(r.full_name) + '</b><a href="https://instagram.com/' + encodeURIComponent(r.instagram) + '" target="_blank" rel="noopener">@' + esc(r.instagram) + '</a><span class="muted">' + when(r.created_at) + '</span></div>' +
+        '<div class="cr-stats">' + ig + '</div>' +
+        (warn.length ? '<div class="cr-warn">Pazi: ' + esc(warn.join('; ')) + '</div>' : '') +
+        (r.note ? '<div class="muted">"' + esc(r.note) + '"</div>' : '') +
+        '<div class="muted">' + esc(r.email) + (r.phone ? ' · ' + esc(r.phone) : '') + '</div>' +
+        '<div style="margin-top:6px">' + status + '</div>' +
+        (r.clip_url ? '<div class="muted"><a href="' + esc(r.clip_url) + '" target="_blank" rel="noopener">Otvori klip</a></div>' : '') +
+        '<div class="actions">' + btns + '</div></div></article>';
+    }).join('');
   }
   async function checkIg(id, quiet) {
     try {
@@ -883,19 +898,13 @@
     const bonus = e.target.closest('[data-crbonus]');
     if (bonus) { const { error } = await sb.from('creators').update({ bonus_sent_at: new Date().toISOString() }).eq('id', bonus.dataset.crbonus); toast(error ? 'Nije sačuvano.' : 'Bonus označen kao poslan.'); loadCreators(); return; }
     const b = e.target.closest('[data-cr]'); if (!b) return;
-    if (b.dataset.cr === 'odbijen') {
-      const row = cr.find((x) => x.id === Number(b.dataset.id));
-      if (!confirmBox(b, row && row.dm_verified_at ? 'Sigurno odbiti? Kreator dobija kratak email zahvale.' : 'Sigurno odbiti? DM nije potvrđen, pa se email ne šalje.')) return;
-    }
     if (b.dataset.cr === 'odobren') {
-      const row = cr.find((x) => x.id === Number(b.dataset.id));
       const active = cr.filter((r) => ['odobren', 'klip_primljen', 'objavljen'].includes(r.status)).length;
-      if (!row.dm_verified_at && !b.dataset.sure) { b.dataset.sure = '1'; b.textContent = 'DM nije potvrđen. Klikni opet'; setTimeout(() => { delete b.dataset.sure; b.textContent = 'Izaberi'; }, 4000); return; }
-      if (active >= 10) toast('Već imaš ' + active + ' izabranih kreatora.');
+      if (active >= 10 && !b.dataset.sure) { b.dataset.sure = '1'; b.textContent = 'Već imaš 10. Klikni opet'; setTimeout(() => { delete b.dataset.sure; b.textContent = 'Odaberi'; }, 4000); return; }
     }
     b.disabled = true;
     const { error } = await sb.from('creators').update({ status: b.dataset.cr }).eq('id', b.dataset.id);
-    toast(error ? 'Nije sačuvano.' : (b.dataset.cr === 'odobren' ? 'Izabran/a. Kreator dobija email s linkom na svoju stranicu.' : 'Odbijeno. Email je na putu.'));
+    toast(error ? 'Nije sačuvano.' : (b.dataset.cr === 'odobren' ? 'Odabran/a. Kod je aktivan, email s kodom je na putu.' : 'Zabilježeno. Kratka zahvala ide emailom 1. novembra.'));
     loadCreators();
   });
   $('crTable').addEventListener('change', async (e) => {

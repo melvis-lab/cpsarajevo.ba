@@ -8,6 +8,8 @@ const SITE = Deno.env.get("SITE_URL") ?? "https://cpsarajevo.ba";
 const FN_URL = `${Deno.env.get("SUPABASE_URL")}/functions/v1/send-emails`;
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
 const OPENING = Date.UTC(2027, 0, 1);
+// files above this size go as a download link: attaching the 3.5 MB catalog ran the worker out of compute (23 Oct 2026)
+const MAX_ATTACH = 1_500_000;
 
 // ---------- design ----------
 const C = { ink: "#0e0b09", ink2: "#17120e", paper: "#f8f2e8", card: "#fffaf3", gold: "#b8935a", gold2: "#e2c58f", text: "#2a221b", muted: "#7a6b5a", line: "#e6d9c4" };
@@ -79,8 +81,15 @@ async function products() {
 
 // ---------- outreach: a plain personal email from Melvis, not a newsletter ----------
 const DOMAIN = SITE.replace(/^https?:\/\//, "").replace(/\/$/, "");
-function outreach(d: Record<string, any>, from: string) {
-  const body = String(d.body ?? "").trim();
+function outreach(d: Record<string, any>, from: string, links: { name: string; url: string }[] = []) {
+  let body = String(d.body ?? "").trim();
+  if (links.length) {
+    const intro = links.length > 1 ? "Priloge možete otvoriti i preuzeti ovdje:" : /katalog/i.test(links[0].name) ? "Katalog možete otvoriti i preuzeti ovdje:" : "Prilog možete otvoriti i preuzeti ovdje:";
+    const block = `${intro}\n${links.map((l) => l.url).join("\n")}`;
+    // put the link block just before the closing "Srdačan pozdrav," so it reads as part of the letter
+    const m = body.match(/\n\s*\n(Srdačan pozdrav,[\s\S]*)$/);
+    body = m ? `${body.slice(0, m.index)}\n\n${block}\n\n${m[1]}` : `${body}\n\n${block}`;
+  }
   const link = (h: string) => h.replace(/https?:\/\/[^\s<]+/g, (u) => `<a href="${u}" style="color:#8a6a3a">${u.replace(/^https?:\/\//, "").replace(/\?.*$/, "")}</a>`);
   const paras = body.split(/\n{2,}/).map((x) => `<p style="margin:0 0 14px">${link(esc(x)).replace(/\n/g, "<br>")}</p>`).join("");
   const sig = `<p style="margin:18px 0 0;color:#555;font-size:14px;line-height:1.5">Melvis Hadžić<br>Collection Premium Sarajevo<br>+387 61 802 462 · <a href="mailto:${from}" style="color:#8a6a3a">${from}</a><br>
@@ -166,20 +175,19 @@ async function render(t: string, d: Record<string, any>, to: string): Promise<{ 
     }
     // ---------- creators (kreatori) ----------
     case "creator_received": return {
-      subject: `Još jedan korak: tvoj kod ${d.verify_code} · Collection Premium Sarajevo`,
-      html: layout({ pre: `Pošalji kod ${d.verify_code} u DM sa @${d.instagram} i prijava je potvrđena.`, eyebrow: "Kreatori · prijava", title: `${hi(d.name)}hvala<br><em style="color:${C.gold}">na prijavi.</em>`,
-        body: p(`Još jedan korak: potvrdi da je <b>@${esc(d.instagram)}</b> tvoj profil. Pošalji nam ovaj kod kao poruku (DM) sa tog profila na <b>@collectionpremiumsarajevo</b>:`) +
-          `<p style="margin:18px 0;padding:18px;text-align:center;background:${C.paper};border:1px dashed ${C.gold};border-radius:14px;font-family:${serif};font-size:34px;letter-spacing:.08em;color:${C.text}">${esc(d.verify_code)}</p>` +
-          button("Otvori Instagram poruke", "https://ig.me/m/collectionpremiumsarajevo") +
-          p("Kad kod stigne, prijava je potvrđena automatski. Zatim lično pregledamo profil. Biramo 10 kreatora i javljamo se svima emailom nakon 31. oktobra.") +
+      subject: "Prijava je stigla · Collection Premium Sarajevo",
+      html: layout({ pre: "Hvala na prijavi. Izbor kreatora objavljujemo nakon 31. oktobra.", eyebrow: "Kreatori · prijava", title: `${hi(d.name)}hvala<br><em style="color:${C.gold}">na prijavi.</em>`,
+        body: p(`Profil <b>@${esc(d.instagram)}</b> je prijavljen. Ništa više ne trebaš slati.`) +
+          p("Lično pregledamo sve profile i biramo 10 kreatora nakon 31. oktobra. Ako budeš izabran/a, u emailu dobiješ svoj lični kod i link na svoju stranicu.") +
           p(`<span style="color:${C.muted};font-size:14px">Status prijave vidiš na <a href="${SITE}/kreator/?k=${esc(d.token)}" style="color:${C.gold}">svojoj stranici</a>.</span>`) }) };
     case "creator_approved": return {
-      subject: "Izabran/a si · Collection Premium Sarajevo",
-      html: layout({ pre: "Dobrodošao/la u tim kreatora. Tvoj kod čeka na tvojoj stranici.", eyebrow: "Kreatori · odobreno", title: `${hi(d.name)}dobrodošao/la<br><em style="color:${C.gold}">u tim.</em>`,
-        body: p("Izabrali smo te za saradnju s Collection Premium Sarajevo. Hvala ti što si se prijavio/la.") +
-          p("<b>Sljedeći korak:</b> otvori svoju stranicu, pročitaj pravila i potvrdi ih jednim klikom. Tada se aktivira tvoj lični kod i link, i vidiš koliko je rezervacija stiglo preko tebe.") +
+      subject: d.ref_code ? `Izabran/a si · tvoj kod je ${d.ref_code}` : "Izabran/a si · Collection Premium Sarajevo",
+      html: layout({ pre: `Dobrodošao/la u tim kreatora. Tvoj lični kod je aktivan.`, eyebrow: "Kreatori · izabran/a", title: `${hi(d.name)}dobrodošao/la<br><em style="color:${C.gold}">u tim.</em>`,
+        body: p("Izabrali smo te za saradnju s Collection Premium Sarajevo. Tvoj lični kod je aktivan od sada:") +
+          (d.ref_code ? `<p style="margin:18px 0;padding:18px;text-align:center;background:${C.paper};border:1px dashed ${C.gold};border-radius:14px;font-family:${serif};font-size:34px;letter-spacing:.08em;color:${C.text}">${esc(d.ref_code)}</p>` : "") +
+          p("Tvoji pratioci uz rezervaciju s ovim kodom dobijaju besplatan uzorak. Na svojoj stranici imaš link, tekst za opis klipa, uputstvo za klip i broj rezervacija koje su stigle preko tebe.") +
           button("Otvori svoju stranicu", `${SITE}/kreator/?k=${esc(d.token)}`) +
-          p(`<span style="color:${C.muted};font-size:14px">Za preuzimanje paketa javljamo ti se telefonom ili emailom. Pitanje? Samo odgovori na ovaj email.</span>`) }) };
+          p(`<span style="color:${C.muted};font-size:14px">Za preuzimanje paketa javljamo ti se telefonom. Pitanje? Samo odgovori na ovaj email.</span>`) }) };
     case "creator_rejected": return {
       subject: "Tvoja prijava · Collection Premium Sarajevo",
       html: layout({ pre: "Hvala na prijavi za saradnju.", eyebrow: "Kreatori", title: "Hvala na prijavi.",
@@ -189,8 +197,7 @@ async function render(t: string, d: Record<string, any>, to: string): Promise<{ 
     case "admin_new_creator": return {
       subject: `Novi kreator: @${d.instagram}${d.followers ? " · " + d.followers + " pratilaca" : ""}`,
       html: layout({ pre: `${d.name} se prijavio/la kao kreator.`, eyebrow: "Admin · kreatori", title: "@" + esc(d.instagram),
-        body: rows([["Ime", d.name], ["Email", d.email], ["Telefon", d.phone], ["Grad", d.city], ["Pratilaca (kaže)", d.followers], ["Sadržaj", d.niche], ["Poruka", d.note], ["Kod za DM", d.verify_code]]) +
-          p(`<span style="color:${C.muted};font-size:14px">Kad pošalje kod u DM, u adminu se pojavi oznaka "DM potvrđen".</span>`) +
+        body: rows([["Ime", d.name], ["Email", d.email], ["Telefon", d.phone], ["Grad", d.city], ["Pratilaca (kaže)", d.followers], ["Sadržaj", d.niche], ["Poruka", d.note]]) +
           button("Otvori kreatore", `${admin}#kreatori`) }) };
     case "admin_creator_committed": return {
       subject: `Kreator potvrdio pravila: @${d.instagram} · kod ${d.ref_code}`,
@@ -246,15 +253,19 @@ Deno.serve(async (req) => {
   for (const j of jobs) {
     try {
       if (j.template === "outreach") {
-        const o = outreach(j.data ?? {}, user);
-        const attachments = [];
+        const attachments = [], links: { name: string; url: string }[] = [];
         for (const a of (j.data?.attachments ?? []) as { name: string; url: string }[]) {
+          const h = await fetch(a.url, { method: "HEAD" });
+          if (!h.ok) throw new Error(`Prilog ${a.name} nije dostupan (${h.status})`);
+          const len = Number(h.headers.get("content-length") || 0);
+          if (!len || len > MAX_ATTACH) { links.push(a); continue; }
           const r = await fetch(a.url);
           if (!r.ok) throw new Error(`Prilog ${a.name} nije dostupan (${r.status})`);
           attachments.push({ filename: a.name, content: new Uint8Array(await r.arrayBuffer()), encoding: "binary" as const, contentType: r.headers.get("content-type") ?? "application/pdf" });
         }
+        const o = outreach(j.data ?? {}, user, links);
         await client.send({ from: `Melvis Hadžić <${user}>`, replyTo: user, to: j.to_email, subject: o.subject, content: o.text, html: o.html, attachments });
-        await sb.from("email_outbox").update({ status: "sent", sent_at: new Date().toISOString(), attempts: j.attempts + 1, error: null }).eq("id", j.id);
+        await sb.from("email_outbox").update({ status: "sent", sent_at: new Date().toISOString(), attempts: j.attempts + 1, error: links.length ? `Poslano s linkom umjesto priloga: ${links.map((l) => l.name).join(", ")}` : null }).eq("id", j.id);
         sent++; continue;
       }
       const { subject, html } = await render(j.template, j.data ?? {}, j.to_email);
